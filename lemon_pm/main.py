@@ -4,10 +4,11 @@ import sys
 import json
 import argparse
 import requests
+import importlib.resources
 
 def list_packages():
     """Lists all available packages."""
-    with open('packages.json', 'r') as f:
+    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
         packages = json.load(f)
     print("Available packages:")
     for name, data in packages.items():
@@ -15,7 +16,7 @@ def list_packages():
 
 def install_package(package_name):
     """Downloads and installs a package."""
-    with open('packages.json', 'r') as f:
+    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
         packages = json.load(f)
 
     if package_name not in packages:
