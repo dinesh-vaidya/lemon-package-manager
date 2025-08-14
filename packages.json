@@ -1,0 +1,18 @@
+{
+  "7-zip": {
+    "url": "https://www.7-zip.org/a/7z2501-x64.exe",
+    "version": "25.01"
+  },
+  "notepad++": {
+    "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.5/npp.8.8.5.Installer.x64.exe",
+    "version": "8.8.5"
+  },
+  "vlc": {
+    "url": "https://get.videolan.org/vlc/3.0.21/win64/vlc-3.0.21-win64.exe",
+    "version": "3.0.21"
+  },
+  "greenshot": {
+    "url": "https://github.com/greenshot/greenshot/releases/download/v1.3.296/Greenshot-INSTALLER-1.3.296-RELEASE.exe",
+    "version": "1.3.296"
+  }
+}
