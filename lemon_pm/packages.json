@@ -33,5 +33,15 @@
     "url": "https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=en-US",
     "version": "141.0.3",
     "uninstall_command": "\"%ProgramFiles%\\Mozilla Firefox\\uninstall\\helper.exe\" /S"
+  },
+  "git": {
+    "url": "https://github.com/git-for-windows/git/releases/download/v2.50.1.windows.1/Git-2.50.1-64-bit.exe",
+    "version": "2.50.1",
+    "uninstall_command": "\"%ProgramFiles%\\Git\\unins000.exe\" /VERYSILENT /NORESTART"
+  },
+  "discord": {
+    "url": "https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x64",
+    "version": "2025.03.25",
+    "uninstall_command": "\"%LocalAppData%\\Discord\\Update.exe\" --uninstall -s"
   }
 }

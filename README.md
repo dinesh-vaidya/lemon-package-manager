@@ -67,5 +67,7 @@ The following packages are currently available for installation:
 -   vscode
 -   chrome
 -   firefox
+-   git
+-   discord
 
 You can add more packages by editing the `packages.json` file.
