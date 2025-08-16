@@ -64,5 +64,8 @@ The following packages are currently available for installation:
 -   notepad++
 -   vlc
 -   greenshot
+-   vscode
+-   chrome
+-   firefox
 
 You can add more packages by editing the `packages.json` file.
