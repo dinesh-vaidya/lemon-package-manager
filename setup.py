@@ -17,6 +17,7 @@ setup(
     author="Jules the AI",
     license="MIT",
     classifiers=[
+        "Development Status :: 4 - Beta",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",

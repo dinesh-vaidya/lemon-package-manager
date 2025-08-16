@@ -67,13 +67,45 @@ def install_package(package_name):
         print(f"An error occurred during installation: {e}")
 
 def uninstall_package(package_name):
-    """Provides instructions to uninstall a package."""
-    # A real package manager would need to handle uninstalling from the system.
-    # This is a complex task on Windows, often involving the registry.
-    # For a simple manager, providing instructions is a safe and user-friendly approach.
-    print(f"To uninstall '{package_name}', please use the 'Add or Remove Programs' feature in Windows Settings.")
-    print("1. Open Settings > Apps > Apps & features.")
-    print(f"2. Find '{package_name}' in the list and select 'Uninstall'.")
+    """Uninstalls a package using its uninstall command, or provides instructions."""
+    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+        packages = json.load(f)
+
+    if package_name not in packages:
+        print(f"Package '{package_name}' not found.")
+        return
+
+    package_data = packages[package_name]
+    uninstall_command = package_data.get('uninstall_command')
+
+    if uninstall_command:
+        print(f"Attempting to silently uninstall {package_name}...")
+        print(f"Running command: {uninstall_command}")
+        try:
+            # Using shell=True is necessary to expand environment variables like %ProgramFiles%.
+            # This is safe here because the commands are defined by us in packages.json.
+            # This command will only work on Windows.
+            result = subprocess.run(uninstall_command, shell=True, check=True, capture_output=True, text=True)
+            print(f"Uninstallation command for {package_name} completed.")
+            if result.stdout:
+                print("Output:", result.stdout)
+            if result.stderr:
+                print("Errors:", result.stderr)
+        except FileNotFoundError:
+            print(f"Error: Uninstaller not found. It's possible '{package_name}' is not installed or the path is incorrect.")
+        except subprocess.CalledProcessError as e:
+            print(f"An error occurred during uninstallation for {package_name}.")
+            print(f"Return code: {e.returncode}")
+            if e.stdout:
+                print("Output:", e.stdout)
+            if e.stderr:
+                print("Errors:", e.stderr)
+    else:
+        # Fallback for packages without a defined uninstall command.
+        print(f"No automatic uninstall command found for '{package_name}'.")
+        print("Please uninstall it manually using the 'Add or Remove Programs' feature in Windows Settings.")
+        print("1. Open Settings > Apps > Apps & features.")
+        print(f"2. Find '{package_name}' in the list and select 'Uninstall'.")
 
 
 def main():

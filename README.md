@@ -1,6 +1,12 @@
 # lemon 🍋
 
+![version](https://img.shields.io/badge/version-1.0.0-blue) ![status](https://img.shields.io/badge/status-beta-orange)
+
 A simple, command-line package manager for Windows devices.
+
+## Status
+
+This project is currently in **Beta**. It is functional but may contain bugs and is undergoing active development.
 
 ## Features
 
