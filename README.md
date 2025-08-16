@@ -58,31 +58,48 @@ This will provide you with the steps to remove the application using the standar
 
 ## Available Packages
 
-The following packages are currently available for installation:
+The following packages are currently available for installation, grouped by category:
 
--   7-zip
+### Browsers
+-   chrome
+-   firefox
+
+### Communication
+-   discord
+-   slack
+-   telegram
+-   zoom
+
+### Development
+-   vscode
+-   git
+-   jdk
+-   notepad++
+
+### Gaming
+-   epic-games-launcher
+-   minecraft-launcher
+
+### Media & Creativity
+-   vlc
+-   gimp
+-   obs-studio
 -   audacity
 -   blender
--   chrome
--   cpu-z
--   discord
--   epic-games-launcher
--   firefox
--   gimp
--   git
--   greenshot
--   jdk
--   libreoffice
--   minecraft-launcher
--   notepad++
--   obs-studio
--   qbittorrent
--   slack
 -   spotify
--   telegram
--   vlc
--   vscode
+
+### Productivity
+-   libreoffice
+-   notion
+
+### Utilities
+-   7-zip
 -   winrar
--   zoom
+-   greenshot
+-   cpu-z
+-   qbittorrent
+
+### Virtualization
+-   virtualbox
 
 You can add more packages by editing the `packages.json` file.

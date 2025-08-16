@@ -118,5 +118,15 @@
     "url": "https://epicgames-download1.akamaized.net/Builds/UnrealEngineLauncher/Installers/EpicGamesLauncherInstaller.msi",
     "version": "16.2.7",
     "uninstall_command": "msiexec /x {F3FECF09-E5A3-4A9B-9BC3-33834B5C6E6E} /quiet"
+  },
+  "notion": {
+    "url": "https://www.notion.so/desktop/windows/download",
+    "version": "2.52",
+    "uninstall_command": "\"%LocalAppData%\\Notion\\Update.exe\" --uninstall -s"
+  },
+  "virtualbox": {
+    "url": "https://download.virtualbox.org/virtualbox/7.1.12/VirtualBox-7.1.12-169651-Win.exe",
+    "version": "7.1.12",
+    "uninstall_command": "\"%ProgramFiles%\\Oracle\\VirtualBox\\uninstall.exe\" --silent"
   }
 }
