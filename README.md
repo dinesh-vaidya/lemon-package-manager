@@ -61,13 +61,28 @@ This will provide you with the steps to remove the application using the standar
 The following packages are currently available for installation:
 
 -   7-zip
--   notepad++
--   vlc
--   greenshot
--   vscode
+-   audacity
+-   blender
 -   chrome
--   firefox
--   git
+-   cpu-z
 -   discord
+-   epic-games-launcher
+-   firefox
+-   gimp
+-   git
+-   greenshot
+-   jdk
+-   libreoffice
+-   minecraft-launcher
+-   notepad++
+-   obs-studio
+-   qbittorrent
+-   slack
+-   spotify
+-   telegram
+-   vlc
+-   vscode
+-   winrar
+-   zoom
 
 You can add more packages by editing the `packages.json` file.
