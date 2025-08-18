@@ -1,0 +1,164 @@
+{
+  "7-zip": {
+    "url": "https://www.7-zip.org/a/7z2501-x64.exe",
+    "version": "25.01",
+    "uninstall_command": "\"%ProgramFiles%\\7-Zip\\Uninstall.exe\" /S",
+    "type": "installer"
+  },
+  "notepad++": {
+    "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.5/npp.8.8.5.Installer.x64.exe",
+    "version": "8.8.5",
+    "uninstall_command": "\"%ProgramFiles%\\Notepad++\\uninstall.exe\" /S",
+    "type": "installer"
+  },
+  "vlc": {
+    "url": "https://get.videolan.org/vlc/3.0.21/win64/vlc-3.0.21-win64.exe",
+    "version": "3.0.21",
+    "uninstall_command": "\"%ProgramFiles%\\VideoLAN\\VLC\\uninstall.exe\" /S",
+    "type": "installer"
+  },
+  "greenshot": {
+    "url": "https://github.com/greenshot/greenshot/releases/download/v1.3.296/Greenshot-INSTALLER-1.3.296-RELEASE.exe",
+    "version": "1.3.296",
+    "uninstall_command": "\"%ProgramFiles%\\Greenshot\\unins000.exe\" /VERYSILENT /SUPPRESSMSGBOXES",
+    "type": "installer"
+  },
+  "vscode": {
+    "url": "https://update.code.visualstudio.com/1.103.1/win32-x64-user/stable",
+    "version": "1.103.1",
+    "uninstall_command": "\"%LocalAppData%\\Programs\\Microsoft VS Code\\unins000.exe\" /VERYSILENT /NORESTART",
+    "type": "installer"
+  },
+  "chrome": {
+    "url": "https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi",
+    "version": "131.0.6778.205",
+    "uninstall_command": "\"%ProgramFiles%\\Google\\Chrome\\Application\\chrome.exe\" --uninstall --system-level --force-uninstall",
+    "type": "installer"
+  },
+  "firefox": {
+    "url": "https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=en-US",
+    "version": "141.0.3",
+    "uninstall_command": "\"%ProgramFiles%\\Mozilla Firefox\\uninstall\\helper.exe\" /S",
+    "type": "installer"
+  },
+  "git": {
+    "url": "https://github.com/git-for-windows/git/releases/download/v2.50.1.windows.1/Git-2.50.1-64-bit.exe",
+    "version": "2.50.1",
+    "uninstall_command": "\"%ProgramFiles%\\Git\\unins000.exe\" /VERYSILENT /NORESTART",
+    "type": "installer"
+  },
+  "discord": {
+    "url": "https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x64",
+    "version": "2025.03.25",
+    "uninstall_command": "\"%LocalAppData%\\Discord\\Update.exe\" --uninstall -s",
+    "type": "installer"
+  },
+  "spotify": {
+    "url": "https://download.scdn.co/SpotifySetup.exe",
+    "version": "1.2.45.828",
+    "uninstall_command": "\"%AppData%\\Spotify\\Spotify.exe\" /uninstall",
+    "type": "installer"
+  },
+  "obs-studio": {
+    "url": "https://cdn-fastly.obsproject.com/downloads/OBS-Studio-30.1.2-Full-Installer-x64.exe",
+    "version": "30.1.2",
+    "uninstall_command": "\"%ProgramFiles%\\OBS Studio\\uninstall.exe\" /S",
+    "type": "installer"
+  },
+  "blender": {
+    "url": "https://download.blender.org/release/Blender4.2/blender-4.2.0-windows-x64.msi",
+    "version": "4.2.0",
+    "uninstall_command": "msiexec /x {56E5E671-9136-473E-8DB3-32EC84E704DF} /quiet",
+    "type": "installer"
+  },
+  "qbittorrent": {
+    "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-4.6.5/qbittorrent_4.6.5_x64_setup.exe",
+    "version": "4.6.5",
+    "uninstall_command": "\"%ProgramFiles%\\qBittorrent\\uninst.exe\" /S",
+    "type": "installer"
+  },
+  "telegram": {
+    "url": "https://telegram.org/dl/desktop/win64_portable",
+    "version": "5.5.3",
+    "uninstall_command": "\"%AppData%\\Telegram Desktop\\Uninstall.exe\"",
+    "type": "installer"
+  },
+  "gimp": {
+    "url": "https://download.gimp.org/mirror/pub/gimp/v2.10/windows/gimp-2.10.38-setup.exe",
+    "version": "2.10.38",
+    "uninstall_command": "\"%ProgramFiles%\\GIMP 2\\uninst\\unins000.exe\" /VERYSILENT",
+    "type": "installer"
+  },
+  "libreoffice": {
+    "url": "https://download.documentfoundation.org/libreoffice/stable/24.8.3/win/x86_64/LibreOffice_24.8.3_Win_x86-64.msi",
+    "version": "24.8.3",
+    "uninstall_command": "msiexec /x {81475ADA-9741-4A29-A414-7727EB900D54} /quiet",
+    "type": "installer"
+  },
+  "audacity": {
+    "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.6.1/audacity-win-3.6.1-64bit.exe",
+    "version": "3.6.1",
+    "uninstall_command": "\"%ProgramFiles%\\Audacity\\unins000.exe\" /VERYSILENT",
+    "type": "installer"
+  },
+  "minecraft-launcher": {
+    "url": "https://launcher.mojang.com/download/MinecraftInstaller.msi",
+    "version": "2024.2.0.1054",
+    "uninstall_command": "msiexec /x {1D5D7B97-5831-4BFC-8C88-518E96103861} /quiet",
+    "type": "installer"
+  },
+  "winrar": {
+    "url": "https://www.win-rar.com/fileadmin/winrar-versions/winrar-x64-700.exe",
+    "version": "7.00",
+    "uninstall_command": "\"%ProgramFiles%\\WinRAR\\uninstall.exe\" /S",
+    "type": "installer"
+  },
+  "zoom": {
+    "url": "https://cdn.zoom.us/prod/5.18.7.4638/ZoomInstallerFull.msi",
+    "version": "5.18.7.4638",
+    "uninstall_command": "msiexec /x {44A4F4B8-2EF3-4AE4-8E52-80A3427B58A6} /quiet",
+    "type": "installer"
+  },
+  "slack": {
+    "url": "https://downloads.slack-edge.com/releases_x64/SlackSetup.exe",
+    "version": "4.36.153",
+    "uninstall_command": "\"%ProgramFiles%\\Slack\\Update.exe\" --uninstall",
+    "type": "installer"
+  },
+  "cpu-z": {
+    "url": "https://download.cpuid.com/cpu-z/cpu-z_2.10-en.exe",
+    "version": "2.10",
+    "uninstall_command": "\"%ProgramFiles%\\CPUID\\CPU-Z\\unins000.exe\" /VERYSILENT",
+    "type": "installer"
+  },
+  "jdk": {
+    "url": "https://download.oracle.com/java/22/latest/jdk-22_windows-x64_bin.exe",
+    "version": "22.0.1",
+    "uninstall_command": "MsiExec.exe /X{26A24AE4-039D-4CA4-87B4-2F17222022F1} /quiet",
+    "type": "installer"
+  },
+  "epic-games-launcher": {
+    "url": "https://epicgames-download1.akamaized.net/Builds/UnrealEngineLauncher/Installers/EpicGamesLauncherInstaller.msi",
+    "version": "16.2.7",
+    "uninstall_command": "msiexec /x {F3FECF09-E5A3-4A9B-9BC3-33834B5C6E6E} /quiet",
+    "type": "installer"
+  },
+  "notion": {
+    "url": "https://www.notion.so/desktop/windows/download",
+    "version": "2.52",
+    "uninstall_command": "\"%LocalAppData%\\Notion\\Update.exe\" --uninstall -s",
+    "type": "installer"
+  },
+  "virtualbox": {
+    "url": "https://download.virtualbox.org/virtualbox/7.1.12/VirtualBox-7.1.12-169651-Win.exe",
+    "version": "7.1.12",
+    "uninstall_command": "\"%ProgramFiles%\\Oracle\\VirtualBox\\uninstall.exe\" --silent",
+    "type": "installer"
+  },
+  "opera": {
+    "url": "https://download.opera.com/download/get/?partner=www&opsys=Windows&arch=x64",
+    "version": "120.0.5543.161",
+    "uninstall_command": "\"%ProgramFiles%\\Opera\\Launcher.exe\" /uninstall /silent",
+    "type": "installer"
+  }
+}
