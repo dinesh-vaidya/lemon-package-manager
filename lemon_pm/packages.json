@@ -155,52 +155,10 @@
     "uninstall_command": "\"%ProgramFiles%\\Oracle\\VirtualBox\\uninstall.exe\" --silent",
     "type": "installer"
   },
-  "openai-cli": {
-    "url": "https://github.com/openai/openai-cli/releases/download/v0.9.3/openai-cli-0.9.3-windows-amd64.exe",
-    "version": "0.9.3",
-    "type": "portable",
-    "executable_name": "openai.exe",
-    "uninstall_command": "openai.exe"
-  },
-  "huggingface-cli": {
-    "url": "https://github.com/huggingface/huggingface-cli/releases/download/v0.4.2/huggingface-cli-windows-amd64.exe",
-    "version": "0.4.2",
-    "type": "portable",
-    "executable_name": "huggingface-cli.exe",
-    "uninstall_command": "huggingface-cli.exe"
-  },
-  "tesseract-ocr": {
-    "url": "https://github.com/UB-Mannheim/tesseract/wiki/files/5.3.1/tesseract-ocr-w64-setup-5.3.1.20230401.exe",
-    "version": "5.3.1",
-    "type": "installer",
-    "uninstall_command": "\"%ProgramFiles%\\Tesseract-OCR\\uninstall.exe\" /S"
-  },
-  "edge-tts": {
-    "url": "https://github.com/rany2/edge-tts/releases/download/v6.1.9/edge-tts-6.1.9-windows-amd64.exe",
-    "version": "6.1.9",
-    "type": "portable",
-    "executable_name": "edge-tts.exe",
-    "uninstall_command": "edge-tts.exe"
-  },
-  "grammarly-cli": {
-    "url": "https://github.com/metal3d/grammar-checker-cli/releases/download/v1.2.3/grammar-checker-windows-amd64.exe",
-    "version": "1.2.3",
-    "type": "portable",
-    "executable_name": "grammar-checker.exe",
-    "uninstall_command": "grammar-checker.exe"
-  },
-  "mnist-cli": {
-    "url": "https://github.com/alexlenail/mnist-cli/releases/download/v0.2.1/mnist-cli-0.2.1-windows-amd64.exe",
-    "version": "0.2.1",
-    "type": "portable",
-    "executable_name": "mnist.exe",
-    "uninstall_command": "mnist.exe"
-  },
-  "nlp-cli": {
-    "url": "https://github.com/textpipe/textpipe/releases/download/v1.4.0/textpipe-windows-amd64.exe",
-    "version": "1.4.0",
-    "type": "portable",
-    "executable_name": "textpipe.exe",
-    "uninstall_command": "textpipe.exe"
+  "opera": {
+    "url": "https://download.opera.com/download/get/?partner=www&opsys=Windows&arch=x64",
+    "version": "120.0.5543.161",
+    "uninstall_command": "\"%ProgramFiles%\\Opera\\Launcher.exe\" /uninstall /silent",
+    "type": "installer"
   }
 }

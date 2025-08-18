@@ -69,6 +69,7 @@ The following packages are currently available for installation, grouped by cate
 ### Browsers
 -   chrome
 -   firefox
+-   opera
 
 ### Communication
 -   discord
