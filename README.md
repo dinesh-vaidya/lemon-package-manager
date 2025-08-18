@@ -17,6 +17,12 @@ This project is currently in **Beta**. It is functional but may contain bugs and
 
 ## Setup
 
+### Prerequisites
+
+-   **Python**: You must have Python installed on your system to use this tool. The `pip` command is included with modern Python installations. You can download Python from [python.org](https://www.python.org/downloads/).
+
+### Installation
+
 1.  Clone this repository.
 2.  Navigate to the project directory.
 3.  Install the package using pip:
