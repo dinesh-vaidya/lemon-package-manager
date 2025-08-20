@@ -1,6 +1,6 @@
 {
   "7-zip": {
-    "url": "https://www.7-zip.org/a/7z2501-x64.exe",
+    "url": "https://github.com/ip7z/7zip/releases/download/25.01/7z2501-x64.exe",
     "version": "25.01",
     "uninstall_command": "\"%ProgramFiles%\\7-Zip\\Uninstall.exe\" /S",
     "type": "installer"
