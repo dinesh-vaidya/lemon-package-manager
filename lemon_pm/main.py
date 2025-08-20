@@ -46,7 +46,11 @@ def install_package(package_name):
     print(f"Installing {package_name} version {version} ({package_type})...")
 
     try:
-        response = requests.get(url, stream=True)
+        # Some servers (like GitHub) block requests without a User-Agent header.
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        response = requests.get(url, headers=headers, stream=True)
         response.raise_for_status()
 
         filename = url.split('/')[-1]
