@@ -51,7 +51,9 @@ def install_package(package_name):
 
         filename = url.split('/')[-1]
         # Download to a temp location first
-        temp_filepath = os.path.join('/tmp', filename)
+        # NOTE: Always use forward slash for /tmp, as os.path.join might use
+        # backslash on some systems, creating an invalid path like "/tmp\file.exe".
+        temp_filepath = f"/tmp/{filename}"
 
         total_size = int(response.headers.get('content-length', 0))
 
