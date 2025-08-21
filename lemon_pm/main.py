@@ -6,6 +6,19 @@ import argparse
 import requests
 import importlib.resources
 import tempfile
+import ctypes
+
+def is_admin():
+    """Checks if the script is running with administrator privileges."""
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+
+def run_as_admin():
+    """Re-launches the script with administrator privileges."""
+    # This will show a UAC prompt to the user.
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
 
 def list_packages():
     """Lists all available packages."""
@@ -32,6 +45,11 @@ def get_portable_bin_dir():
 
 def install_package(package_name):
     """Downloads and installs a package."""
+    if sys.platform == 'win32' and not is_admin():
+        print("Administrator privileges are required to install packages. Requesting elevation...")
+        run_as_admin()
+        sys.exit(0)
+
     with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
         packages = json.load(f)
 
@@ -129,6 +147,11 @@ def install_package(package_name):
 
 def uninstall_package(package_name):
     """Uninstalls a package using its uninstall command, or provides instructions."""
+    if sys.platform == 'win32' and not is_admin():
+        print("Administrator privileges are required to uninstall packages. Requesting elevation...")
+        run_as_admin()
+        sys.exit(0)
+
     with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
         packages = json.load(f)
 
