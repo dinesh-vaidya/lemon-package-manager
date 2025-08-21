@@ -8,13 +8,21 @@ with open("README.md", "r", encoding="utf-8") as f:
 with open("requirements.txt", "r", encoding="utf-8") as f:
     requirements = f.read().splitlines()
 
+import os
+
+# Read the version from the _version.py file
+version_info = {}
+with open(os.path.join("lemon_pm", "_version.py")) as f:
+    exec(f.read(), version_info)
+
+
 setup(
     name="lemon-pm",
-    version="1.0.0",
+    version=version_info["__version__"],
     description="A simple, command-line package manager for Windows devices.",
     long_description=README,
     long_description_content_type="text/markdown",
-    author="Jules the AI",
+    author="Priyanka",
     license="MIT",
     classifiers=[
         "Development Status :: 4 - Beta",

@@ -5,14 +5,68 @@ import json
 import argparse
 import requests
 import importlib.resources
+import tempfile
+import ctypes
+import shlex
+import pathlib
+import shutil
+from ._version import __version__, __status__
+
+
+def is_admin():
+    """Checks if the script is running with administrator privileges."""
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+
+def get_version():
+    """Reads the version from _version.py."""
+    return f"{__version__} (status: {__status__})"
 
 def list_packages():
-    """Lists all available packages."""
-    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
-        packages = json.load(f)
-    print("Available packages:")
+    """Lists all available packages in a category-wise table."""
+    try:
+        with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+            packages = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error reading package list: {e}")
+        return
+
+    categorized_packages = {}
     for name, data in packages.items():
-        print(f"  - {name} ({data['version']})")
+        category = data.get('category', 'Uncategorized')
+        if category not in categorized_packages:
+            categorized_packages[category] = []
+
+        version = data.get('version', 'N/A')
+        categorized_packages[category].append({'name': name, 'version': version})
+
+    print("Available packages:")
+
+    for category in sorted(categorized_packages.keys()):
+        print(f"\n--- {category} ---")
+
+        sorted_packages = sorted(categorized_packages[category], key=lambda x: x['name'])
+        if not sorted_packages:
+            continue
+
+        # Determine column widths
+        name_width = max(len(p['name']) for p in sorted_packages)
+        version_width = max(len(p['version']) for p in sorted_packages)
+
+        # Headers
+        header = f"| {'Package'.ljust(name_width)} | {'Version'.ljust(version_width)} |"
+        separator = f"|{'-' * (name_width + 2)}|{'-' * (version_width + 2)}|"
+
+        print(header)
+        print(separator)
+
+        # Table rows
+        for pkg in sorted_packages:
+            print(f"| {pkg['name'].ljust(name_width)} | {pkg['version'].ljust(version_width)} |")
+
+    print("\nEnd of list.")
 
 def get_portable_bin_dir():
     """Gets the directory for storing portable application binaries."""
@@ -31,6 +85,11 @@ def get_portable_bin_dir():
 
 def install_package(package_name):
     """Downloads and installs a package."""
+    if sys.platform == 'win32' and not is_admin():
+        print("ERROR: Administrator privileges are required to install packages.")
+        print("Please re-run this command from a terminal with administrator privileges.")
+        sys.exit(1)
+
     with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
         packages = json.load(f)
 
@@ -55,9 +114,8 @@ def install_package(package_name):
 
         filename = url.split('/')[-1]
         # Download to a temp location first
-        # NOTE: Always use forward slash for /tmp, as os.path.join might use
-        # backslash on some systems, creating an invalid path like "/tmp\file.exe".
-        temp_filepath = f"/tmp/{filename}"
+        temp_dir = tempfile.gettempdir()
+        temp_filepath = os.path.join(temp_dir, filename)
 
         total_size = int(response.headers.get('content-length', 0))
 
@@ -74,16 +132,42 @@ def install_package(package_name):
         print(f"Downloaded '{filename}'.")
 
         if package_type == 'installer':
+            install_command = package_data.get('install_command')
+            if not install_command:
+                print(f"Error: No install_command defined for '{package_name}'.")
+                # Still need to clean up the downloaded file
+                os.remove(temp_filepath)
+                return
+
             # NOTE: This will not work in a non-Windows environment.
             print(f"Running installer for {package_name}...")
-            # On a real Windows system, this would be:
-            # subprocess.run([temp_filepath], check=True)
-            # For simulation, we'll just print a message.
-            print(f"(Simulation) Would run: subprocess.run(['{temp_filepath}'], check=True)")
+            try:
+                command = [temp_filepath] + install_command
+                # Using check=True will raise a CalledProcessError if the command returns a non-zero exit code.
+                result = subprocess.run(command, check=True, capture_output=True, text=True, shell=False)
 
-            print(f"Cleaning up...")
-            os.remove(temp_filepath)
-            print(f"Successfully installed {package_name}.")
+                print(f"Installation of {package_name} completed.")
+                if result.stdout:
+                    print("Output:", result.stdout)
+                if result.stderr:
+                    print("Errors:", result.stderr)
+                print(f"Successfully installed {package_name}.")
+
+            except subprocess.CalledProcessError as e:
+                print(f"An error occurred during installation for {package_name}.")
+                print(f"Return code: {e.returncode}")
+                if e.stdout:
+                    print("Output:", e.stdout)
+                if e.stderr:
+                    print("Errors:", e.stderr)
+            except FileNotFoundError:
+                # This can happen if the downloaded file is not a valid executable
+                print(f"Error: Installer not found at '{temp_filepath}'. The file may be corrupted or not a valid installer.")
+            finally:
+                # Always clean up the downloaded installer
+                print(f"Cleaning up...")
+                if os.path.exists(temp_filepath):
+                    os.remove(temp_filepath)
 
         elif package_type == 'portable':
             bin_dir = get_portable_bin_dir()
@@ -101,8 +185,78 @@ def install_package(package_name):
     except Exception as e:
         print(f"An error occurred during installation: {e}")
 
+def run_package(package_name):
+    """Launches a package's main executable."""
+    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+        packages = json.load(f)
+
+    if package_name not in packages:
+        print(f"Package '{package_name}' not found.")
+        return
+
+    package_data = packages[package_name]
+    executable = package_data.get('executable')
+    if not executable:
+        print(f"Error: No executable defined for '{package_name}'. Cannot run.")
+        return
+
+    uninstall_command = package_data.get('uninstall_command', '')
+
+    # Try to infer the installation directory from the uninstall command.
+    # This is a heuristic and might not work for all packages.
+    try:
+        # First, expand environment variables in the uninstall command path
+        if sys.platform == 'win32':
+            replacements = {
+                '%ProgramFiles%': os.environ.get('ProgramW6432', os.environ.get('ProgramFiles')),
+                '%ProgramFiles(x86)%': os.environ.get('ProgramFiles(x86)', os.environ.get('ProgramFiles')),
+                '%LOCALAPPDATA%': os.environ.get('LOCALAPPDATA'),
+                '%APPDATA%': os.environ.get('APPDATA')
+            }
+            for var, val in replacements.items():
+                if val:
+                    uninstall_command = uninstall_command.replace(var, val)
+
+        # Use shlex to handle quotes and split the command
+        parts = shlex.split(uninstall_command)
+        if not parts:
+            raise ValueError("Uninstall command is empty.")
+
+        # The first part is usually the path to the uninstaller
+        uninstaller_path = pathlib.Path(parts[0])
+        install_dir = uninstaller_path.parent
+
+        # For some apps, the uninstaller is in a sub-folder (e.g., .../Installer/setup.exe)
+        # We might need to go up one level. A simple check: if parent is "Installer", go up.
+        if install_dir.name.lower() == 'installer':
+            install_dir = install_dir.parent
+
+        executable_path = install_dir / executable
+
+        if not executable_path.exists():
+            # Second guess: maybe it's in a subdirectory like 'bin'
+            if (install_dir / 'bin' / executable).exists():
+                executable_path = install_dir / 'bin' / executable
+            else:
+                print(f"Error: Could not find executable '{executable}' at '{executable_path}'")
+                print("The installation directory was inferred as:", install_dir)
+                return
+
+        print(f"Launching '{executable}' from '{executable_path}'...")
+        # Use Popen to launch the process in the background without blocking the terminal.
+        subprocess.Popen([str(executable_path)], shell=False)
+
+    except Exception as e:
+        print(f"An error occurred while trying to run {package_name}: {e}")
+        print("Note: The 'run' command relies on heuristics to find the executable and may not work for all packages.")
+
 def uninstall_package(package_name):
     """Uninstalls a package using its uninstall command, or provides instructions."""
+    if sys.platform == 'win32' and not is_admin():
+        print("ERROR: Administrator privileges are required to uninstall packages.")
+        print("Please re-run this command from a terminal with administrator privileges.")
+        sys.exit(1)
+
     with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
         packages = json.load(f)
 
@@ -139,10 +293,27 @@ def uninstall_package(package_name):
             print(f"Attempting to silently uninstall {package_name}...")
             print(f"Running command: {uninstall_command}")
             try:
-                # Using shell=True is necessary to expand environment variables like %ProgramFiles%.
-                # This is safe here because the commands are defined by us in packages.json.
-                # This command will only work on Windows.
-                result = subprocess.run(uninstall_command, shell=True, check=True, capture_output=True, text=True)
+                # Manually expand known environment variables for security and correctness.
+                if sys.platform == 'win32':
+                    # On 64-bit Windows, ProgramW6432 is the path to the 64-bit Program Files
+                    # folder, which is what we usually want. %ProgramFiles% can point to the
+                    # x86 folder if the script is run with a 32-bit Python interpreter.
+                    replacements = {
+                        '%ProgramFiles%': os.environ.get('ProgramW6432', os.environ.get('ProgramFiles')),
+                        '%ProgramFiles(x86)%': os.environ.get('ProgramFiles(x86)', os.environ.get('ProgramFiles')),
+                        '%LOCALAPPDATA%': os.environ.get('LOCALAPPDATA'),
+                        '%APPDATA%': os.environ.get('APPDATA')
+                    }
+                    for var, val in replacements.items():
+                        if val: # Only replace if the environment variable exists
+                            uninstall_command = uninstall_command.replace(var, val)
+
+                # Use shlex.split to safely parse the command string into a list.
+                command_parts = shlex.split(uninstall_command)
+
+                # Using shell=False is safer as it avoids shell injection vulnerabilities.
+                result = subprocess.run(command_parts, check=True, capture_output=True, text=True, shell=False)
+
                 print(f"Uninstallation command for {package_name} completed.")
                 if result.stdout:
                     print("Output:", result.stdout)
@@ -181,14 +352,31 @@ def main():
     # 'list' command
     list_parser = subparsers.add_parser('list', help='List available packages')
 
+    # 'run' command
+    run_parser = subparsers.add_parser('run', help='Run an installed package')
+    run_parser.add_argument('package_name', help='The name of the package to run')
+
+    # 'version' command
+    version_parser = subparsers.add_parser('version', help='Show the version of lemon-pm')
+
+    # 'help' command
+    help_parser = subparsers.add_parser('help', help='Show this help message')
+
+
     args = parser.parse_args()
 
     if args.command == 'install':
         install_package(args.package_name)
     elif args.command == 'uninstall':
         uninstall_package(args.package_name)
+    elif args.command == 'run':
+        run_package(args.package_name)
     elif args.command == 'list':
         list_packages()
+    elif args.command == 'version':
+        print(f"lemon-pm version {__version__} (status: {__status__})")
+    elif args.command == 'help':
+        parser.print_help()
     else:
         parser.print_help()
 
