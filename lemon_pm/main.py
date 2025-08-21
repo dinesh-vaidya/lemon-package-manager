@@ -9,6 +9,9 @@ import tempfile
 import ctypes
 import shlex
 import pathlib
+import shutil
+from ._version import __version__, __status__
+
 
 def is_admin():
     """Checks if the script is running with administrator privileges."""
@@ -18,26 +21,17 @@ def is_admin():
         return False
 
 def get_version():
-    """Reads the version from setup.py."""
-    # This is a bit fragile, but it avoids adding dependencies for a simple task.
-    # It assumes the version is on a line like: version="1.0.0",
-    try:
-        with open('setup.py', 'r') as f:
-            for line in f:
-                if line.strip().startswith('version='):
-                    # version="1.0.0",
-                    version_str = line.split('=')[1].strip()
-                    # "1.0.0",
-                    version_str = version_str.replace('"', '').replace(',', '')
-                    return version_str
-    except FileNotFoundError:
-        return "unknown (setup.py not found)"
-    return "unknown"
+    """Reads the version from _version.py."""
+    return f"{__version__} (status: {__status__})"
 
 def list_packages():
-    """Lists all available packages, grouped by category."""
-    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
-        packages = json.load(f)
+    """Lists all available packages, with a horizontal layout and pagination."""
+    try:
+        with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+            packages = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error reading package list: {e}")
+        return
 
     categorized_packages = {}
     for name, data in packages.items():
@@ -45,17 +39,59 @@ def list_packages():
         if category not in categorized_packages:
             categorized_packages[category] = []
 
-        # Store a tuple of (name, version) for sorting
-        categorized_packages[category].append((name, data['version']))
+        version = data.get('version', 'N/A')
+        categorized_packages[category].append(f"{name} ({version})")
 
-    print("Available packages:")
-    # Sort categories alphabetically for consistent output
-    for category in sorted(categorized_packages.keys()):
+    print("Available packages (press Enter to scroll, Ctrl+C to exit):")
+
+    # Get terminal width for formatting, with a fallback
+    try:
+        terminal_width = shutil.get_terminal_size((80, 24)).columns
+    except OSError:
+        # This can happen if the script is not running in a real terminal (e.g., in tests)
+        terminal_width = 80
+
+    packages_per_page = 15
+    packages_shown_on_page = 0
+    total_packages_shown = 0
+    total_packages = len(packages)
+
+    sorted_categories = sorted(categorized_packages.keys())
+
+    for i, category in enumerate(sorted_categories):
         print(f"\n--- {category} ---")
-        # Sort packages alphabetically within each category
+
         sorted_packages = sorted(categorized_packages[category])
-        for name, version in sorted_packages:
-            print(f"  - {name} ({version})")
+        if not sorted_packages:
+            continue
+
+        # Determine the optimal number of columns based on the longest package name
+        try:
+            max_len = max(len(p) for p in sorted_packages) if sorted_packages else 0
+            col_width = max_len + 4  # Add padding
+            num_cols = max(1, terminal_width // col_width)
+        except ValueError:
+            num_cols = 1 # Fallback if a category is empty
+
+        for j in range(0, len(sorted_packages), num_cols):
+            line = "".join(p.ljust(col_width) for p in sorted_packages[j:j+num_cols])
+            print(line)
+
+            # Update counters
+            total_packages_shown += len(sorted_packages[j:j+num_cols])
+            packages_shown_on_page += len(sorted_packages[j:j+num_cols])
+
+            # Check for pagination
+            if packages_shown_on_page >= packages_per_page and total_packages_shown < total_packages:
+                try:
+                    # The prompt is part of the loop to feel more natural
+                    input("... press Enter to see more ...")
+                    packages_shown_on_page = 0 # Reset for the next page
+                except (KeyboardInterrupt, EOFError):
+                    print("\n\nExiting package list.")
+                    return # Exit the function gracefully
+
+    print("\nEnd of list.")
 
 def get_portable_bin_dir():
     """Gets the directory for storing portable application binaries."""
@@ -363,7 +399,7 @@ def main():
     elif args.command == 'list':
         list_packages()
     elif args.command == 'version':
-        print(f"lemon-pm version {get_version()}")
+        print(f"lemon-pm version {__version__} (status: {__status__})")
     elif args.command == 'help':
         parser.print_help()
     else:

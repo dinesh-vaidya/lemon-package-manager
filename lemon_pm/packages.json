@@ -268,5 +268,30 @@
     "type": "installer",
     "category": "Utilities",
     "executable": "Everything.exe"
+  },
+  "winzip": {
+    "url": "https://download.winzip.com/gl/nkln/winzip28-64.msi",
+    "version": "28.0",
+    "install_command": ["/quiet"],
+    "uninstall_command": "msiexec /x {C1C2798F-78AE-4813-A3E8-356CAD85B45D} /quiet",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "winzip64.exe"
+  },
+  "putty": {
+    "url": "https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.81-installer.msi",
+    "version": "0.81",
+    "install_command": ["/quiet"],
+    "uninstall_command": "msiexec /x {B2B64010-F457-4322-8785-5551A579A595} /quiet",
+    "type": "installer",
+    "category": "Development",
+    "executable": "putty.exe"
+  },
+  "treesize": {
+    "url": "https://downloads.jam-software.de/treesize_free/TreeSizeFree-Portable.zip",
+    "version": "4.6.3",
+    "type": "portable",
+    "category": "Utilities",
+    "executable_name": "TreeSizeFree.exe"
   }
 }
