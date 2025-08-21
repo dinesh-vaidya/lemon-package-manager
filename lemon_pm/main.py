@@ -25,7 +25,7 @@ def get_version():
     return f"{__version__} (status: {__status__})"
 
 def list_packages():
-    """Lists all available packages, with a horizontal layout and pagination."""
+    """Lists all available packages in a category-wise table."""
     try:
         with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
             packages = json.load(f)
@@ -40,56 +40,31 @@ def list_packages():
             categorized_packages[category] = []
 
         version = data.get('version', 'N/A')
-        categorized_packages[category].append(f"{name} ({version})")
+        categorized_packages[category].append({'name': name, 'version': version})
 
-    print("Available packages (press Enter to scroll, Ctrl+C to exit):")
+    print("Available packages:")
 
-    # Get terminal width for formatting, with a fallback
-    try:
-        terminal_width = shutil.get_terminal_size((80, 24)).columns
-    except OSError:
-        # This can happen if the script is not running in a real terminal (e.g., in tests)
-        terminal_width = 80
-
-    packages_per_page = 15
-    packages_shown_on_page = 0
-    total_packages_shown = 0
-    total_packages = len(packages)
-
-    sorted_categories = sorted(categorized_packages.keys())
-
-    for i, category in enumerate(sorted_categories):
+    for category in sorted(categorized_packages.keys()):
         print(f"\n--- {category} ---")
 
-        sorted_packages = sorted(categorized_packages[category])
+        sorted_packages = sorted(categorized_packages[category], key=lambda x: x['name'])
         if not sorted_packages:
             continue
 
-        # Determine the optimal number of columns based on the longest package name
-        try:
-            max_len = max(len(p) for p in sorted_packages) if sorted_packages else 0
-            col_width = max_len + 4  # Add padding
-            num_cols = max(1, terminal_width // col_width)
-        except ValueError:
-            num_cols = 1 # Fallback if a category is empty
+        # Determine column widths
+        name_width = max(len(p['name']) for p in sorted_packages)
+        version_width = max(len(p['version']) for p in sorted_packages)
 
-        for j in range(0, len(sorted_packages), num_cols):
-            line = "".join(p.ljust(col_width) for p in sorted_packages[j:j+num_cols])
-            print(line)
+        # Headers
+        header = f"| {'Package'.ljust(name_width)} | {'Version'.ljust(version_width)} |"
+        separator = f"|{'-' * (name_width + 2)}|{'-' * (version_width + 2)}|"
 
-            # Update counters
-            total_packages_shown += len(sorted_packages[j:j+num_cols])
-            packages_shown_on_page += len(sorted_packages[j:j+num_cols])
+        print(header)
+        print(separator)
 
-            # Check for pagination
-            if packages_shown_on_page >= packages_per_page and total_packages_shown < total_packages:
-                try:
-                    # The prompt is part of the loop to feel more natural
-                    input("... press Enter to see more ...")
-                    packages_shown_on_page = 0 # Reset for the next page
-                except (KeyboardInterrupt, EOFError):
-                    print("\n\nExiting package list.")
-                    return # Exit the function gracefully
+        # Table rows
+        for pkg in sorted_packages:
+            print(f"| {pkg['name'].ljust(name_width)} | {pkg['version'].ljust(version_width)} |")
 
     print("\nEnd of list.")
 

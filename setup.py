@@ -22,7 +22,7 @@ setup(
     description="A simple, command-line package manager for Windows devices.",
     long_description=README,
     long_description_content_type="text/markdown",
-    author="Jules the AI",
+    author="Priyanka",
     license="MIT",
     classifiers=[
         "Development Status :: 4 - Beta",
