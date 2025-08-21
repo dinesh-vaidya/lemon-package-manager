@@ -7,6 +7,7 @@ import requests
 import importlib.resources
 import tempfile
 import ctypes
+import shlex
 
 def is_admin():
     """Checks if the script is running with administrator privileges."""
@@ -183,10 +184,27 @@ def uninstall_package(package_name):
             print(f"Attempting to silently uninstall {package_name}...")
             print(f"Running command: {uninstall_command}")
             try:
-                # Using shell=True is necessary to expand environment variables like %ProgramFiles%.
-                # This is safe here because the commands are defined by us in packages.json.
-                # This command will only work on Windows.
-                result = subprocess.run(uninstall_command, shell=True, check=True, capture_output=True, text=True)
+                # Manually expand known environment variables for security and correctness.
+                if sys.platform == 'win32':
+                    # On 64-bit Windows, ProgramW6432 is the path to the 64-bit Program Files
+                    # folder, which is what we usually want. %ProgramFiles% can point to the
+                    # x86 folder if the script is run with a 32-bit Python interpreter.
+                    replacements = {
+                        '%ProgramFiles%': os.environ.get('ProgramW6432', os.environ.get('ProgramFiles')),
+                        '%ProgramFiles(x86)%': os.environ.get('ProgramFiles(x86)', os.environ.get('ProgramFiles')),
+                        '%LOCALAPPDATA%': os.environ.get('LOCALAPPDATA'),
+                        '%APPDATA%': os.environ.get('APPDATA')
+                    }
+                    for var, val in replacements.items():
+                        if val: # Only replace if the environment variable exists
+                            uninstall_command = uninstall_command.replace(var, val)
+
+                # Use shlex.split to safely parse the command string into a list.
+                command_parts = shlex.split(uninstall_command)
+
+                # Using shell=False is safer as it avoids shell injection vulnerabilities.
+                result = subprocess.run(command_parts, check=True, capture_output=True, text=True, shell=False)
+
                 print(f"Uninstallation command for {package_name} completed.")
                 if result.stdout:
                     print("Output:", result.stdout)
