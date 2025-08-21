@@ -2,26 +2,25 @@
 
 ![version](https://img.shields.io/badge/version-1.0.0-blue) ![status](https://img.shields.io/badge/status-beta-orange)
 
-A simple, command-line package manager for Windows devices.
-
-## Status
-
-This project is currently in **Beta**. It is functional but may contain bugs and is undergoing active development.
+A simple, command-line package manager for Windows devices, designed to quickly install popular applications from the terminal.
 
 ## Features
 
--   List available software packages.
--   Install packages from a predefined list of direct download URLs.
--   Provides instructions for uninstalling packages.
--   Simple and lightweight.
+-   **Install Packages:** Silently installs packages from a predefined list of trusted URLs.
+-   **Uninstall Packages:** Silently uninstalls packages.
+-   **Run Applications:** Launch installed applications directly from the terminal.
+-   **Categorized Package List:** View all available software, neatly grouped by category.
+-   **Administrator Check:** Automatically detects if administrator privileges are needed and provides clear instructions.
+-   **Simple and Lightweight:** No complex dependencies or configuration required.
 
-## Setup
+## Installation
 
 ### Prerequisites
 
--   **Python**: You must have Python installed on your system to use this tool. The `pip` command is included with modern Python installations. You can download Python from [python.org](https://www.python.org/downloads/).
+-   **Python**: You must have Python installed on your system. You can download it from [python.org](https://www.python.org/downloads/).
+-   **Administrator Privileges**: To install and uninstall software, you must run the `lemon` command from a terminal with administrator privileges (e.g., Command Prompt or PowerShell run as Administrator).
 
-### Installation
+### Steps
 
 1.  Clone this repository.
 2.  Navigate to the project directory.
@@ -33,80 +32,67 @@ This project is currently in **Beta**. It is functional but may contain bugs and
 
 ## Usage
 
-Once installed, you can use the `lemon` command from anywhere in your terminal.
+Once installed, you can use the `lemon` command from anywhere in your terminal. For `install` and `uninstall` commands, ensure you are running your terminal as an Administrator.
 
-### List available packages
+---
 
-To see a list of all packages that can be installed, use the `list` command:
+### `lemon list`
+
+To see a list of all packages that can be installed, grouped by category.
 
 ```bash
 lemon list
 ```
 
-### Install a package
+### `lemon install <package_name>`
 
-To install a package, use the `install` command followed by the package name:
+To install a package, use the `install` command followed by the package name. The installer will be downloaded and run silently in the background.
 
 ```bash
+# Example
 lemon install notepad++
 ```
 
-The script will download the installer and simulate running it.
+### `lemon uninstall <package_name>`
 
-### Uninstall a package
-
-To get instructions on how to uninstall a package, use the `uninstall` command:
+To uninstall a package, use the `uninstall` command.
 
 ```bash
+# Example
 lemon uninstall notepad++
 ```
-This will provide you with the steps to remove the application using the standard Windows "Add or Remove Programs" feature.
+
+### `lemon run <package_name>`
+
+To launch an installed application, use the `run` command. This will start the application's main executable.
+
+*Note: This command relies on finding the executable in the standard installation path and may not work for all packages.*
+
+```bash
+# Example
+lemon run notepad++
+```
+
+### `lemon version`
+
+To see the current version of the `lemon-pm` tool.
+
+```bash
+lemon version
+```
+
+### `lemon help`
+
+To see the list of all available commands and their descriptions.
+
+```bash
+lemon help
+```
 
 ## Available Packages
 
-The following packages are currently available for installation, grouped by category:
-
-### Browsers
--   chrome
--   firefox
--   opera
-
-### Communication
--   discord
--   slack
--   telegram
--   zoom
-
-### Development
--   vscode
--   git
--   jdk
--   notepad++
-
-### Gaming
--   epic-games-launcher
--   minecraft-launcher
-
-### Media & Creativity
--   vlc
--   gimp
--   obs-studio
--   audacity
--   blender
--   spotify
-
-### Productivity
--   libreoffice
--   notion
-
-### Utilities
--   7-zip
--   winrar
--   greenshot
--   cpu-z
--   qbittorrent
-
-### Virtualization
--   virtualbox
-
-You can add more packages by editing the `packages.json` file.
+To see a full, categorized list of all available packages, use the `list` command:
+```bash
+lemon list
+```
+You can add more packages by editing the `lemon_pm/packages.json` file in the source code.

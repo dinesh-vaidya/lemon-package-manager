@@ -250,5 +250,23 @@
     "type": "installer",
     "category": "Browsers",
     "executable": "launcher.exe"
+  },
+  "warp": {
+    "url": "https://app.warp.dev/download?package=win64_exe",
+    "version": "latest",
+    "install_command": ["--silent"],
+    "uninstall_command": "\"%LOCALAPPDATA%\\Warp\\Update.exe\" --uninstall -s",
+    "type": "installer",
+    "category": "Development",
+    "executable": "Warp.exe"
+  },
+  "everything": {
+    "url": "https://www.voidtools.com/Everything-1.4.1.1028.x64-Setup.exe",
+    "version": "1.4.1.1028",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles%\\Everything\\uninstall.exe\" /S",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "Everything.exe"
   }
 }
