@@ -74,16 +74,42 @@ def install_package(package_name):
         print(f"Downloaded '{filename}'.")
 
         if package_type == 'installer':
+            install_command = package_data.get('install_command')
+            if not install_command:
+                print(f"Error: No install_command defined for '{package_name}'.")
+                # Still need to clean up the downloaded file
+                os.remove(temp_filepath)
+                return
+
             # NOTE: This will not work in a non-Windows environment.
             print(f"Running installer for {package_name}...")
-            # On a real Windows system, this would be:
-            # subprocess.run([temp_filepath], check=True)
-            # For simulation, we'll just print a message.
-            print(f"(Simulation) Would run: subprocess.run(['{temp_filepath}'], check=True)")
+            try:
+                command = [temp_filepath] + install_command
+                # Using check=True will raise a CalledProcessError if the command returns a non-zero exit code.
+                result = subprocess.run(command, check=True, capture_output=True, text=True, shell=False)
 
-            print(f"Cleaning up...")
-            os.remove(temp_filepath)
-            print(f"Successfully installed {package_name}.")
+                print(f"Installation of {package_name} completed.")
+                if result.stdout:
+                    print("Output:", result.stdout)
+                if result.stderr:
+                    print("Errors:", result.stderr)
+                print(f"Successfully installed {package_name}.")
+
+            except subprocess.CalledProcessError as e:
+                print(f"An error occurred during installation for {package_name}.")
+                print(f"Return code: {e.returncode}")
+                if e.stdout:
+                    print("Output:", e.stdout)
+                if e.stderr:
+                    print("Errors:", e.stderr)
+            except FileNotFoundError:
+                # This can happen if the downloaded file is not a valid executable
+                print(f"Error: Installer not found at '{temp_filepath}'. The file may be corrupted or not a valid installer.")
+            finally:
+                # Always clean up the downloaded installer
+                print(f"Cleaning up...")
+                if os.path.exists(temp_filepath):
+                    os.remove(temp_filepath)
 
         elif package_type == 'portable':
             bin_dir = get_portable_bin_dir()
