@@ -8,6 +8,7 @@ import importlib.resources
 import tempfile
 import ctypes
 import shlex
+import pathlib
 
 def is_admin():
     """Checks if the script is running with administrator privileges."""
@@ -16,13 +17,45 @@ def is_admin():
     except:
         return False
 
+def get_version():
+    """Reads the version from setup.py."""
+    # This is a bit fragile, but it avoids adding dependencies for a simple task.
+    # It assumes the version is on a line like: version="1.0.0",
+    try:
+        with open('setup.py', 'r') as f:
+            for line in f:
+                if line.strip().startswith('version='):
+                    # version="1.0.0",
+                    version_str = line.split('=')[1].strip()
+                    # "1.0.0",
+                    version_str = version_str.replace('"', '').replace(',', '')
+                    return version_str
+    except FileNotFoundError:
+        return "unknown (setup.py not found)"
+    return "unknown"
+
 def list_packages():
-    """Lists all available packages."""
+    """Lists all available packages, grouped by category."""
     with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
         packages = json.load(f)
-    print("Available packages:")
+
+    categorized_packages = {}
     for name, data in packages.items():
-        print(f"  - {name} ({data['version']})")
+        category = data.get('category', 'Uncategorized')
+        if category not in categorized_packages:
+            categorized_packages[category] = []
+
+        # Store a tuple of (name, version) for sorting
+        categorized_packages[category].append((name, data['version']))
+
+    print("Available packages:")
+    # Sort categories alphabetically for consistent output
+    for category in sorted(categorized_packages.keys()):
+        print(f"\n--- {category} ---")
+        # Sort packages alphabetically within each category
+        sorted_packages = sorted(categorized_packages[category])
+        for name, version in sorted_packages:
+            print(f"  - {name} ({version})")
 
 def get_portable_bin_dir():
     """Gets the directory for storing portable application binaries."""
@@ -141,6 +174,71 @@ def install_package(package_name):
     except Exception as e:
         print(f"An error occurred during installation: {e}")
 
+def run_package(package_name):
+    """Launches a package's main executable."""
+    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+        packages = json.load(f)
+
+    if package_name not in packages:
+        print(f"Package '{package_name}' not found.")
+        return
+
+    package_data = packages[package_name]
+    executable = package_data.get('executable')
+    if not executable:
+        print(f"Error: No executable defined for '{package_name}'. Cannot run.")
+        return
+
+    uninstall_command = package_data.get('uninstall_command', '')
+
+    # Try to infer the installation directory from the uninstall command.
+    # This is a heuristic and might not work for all packages.
+    try:
+        # First, expand environment variables in the uninstall command path
+        if sys.platform == 'win32':
+            replacements = {
+                '%ProgramFiles%': os.environ.get('ProgramW6432', os.environ.get('ProgramFiles')),
+                '%ProgramFiles(x86)%': os.environ.get('ProgramFiles(x86)', os.environ.get('ProgramFiles')),
+                '%LOCALAPPDATA%': os.environ.get('LOCALAPPDATA'),
+                '%APPDATA%': os.environ.get('APPDATA')
+            }
+            for var, val in replacements.items():
+                if val:
+                    uninstall_command = uninstall_command.replace(var, val)
+
+        # Use shlex to handle quotes and split the command
+        parts = shlex.split(uninstall_command)
+        if not parts:
+            raise ValueError("Uninstall command is empty.")
+
+        # The first part is usually the path to the uninstaller
+        uninstaller_path = pathlib.Path(parts[0])
+        install_dir = uninstaller_path.parent
+
+        # For some apps, the uninstaller is in a sub-folder (e.g., .../Installer/setup.exe)
+        # We might need to go up one level. A simple check: if parent is "Installer", go up.
+        if install_dir.name.lower() == 'installer':
+            install_dir = install_dir.parent
+
+        executable_path = install_dir / executable
+
+        if not executable_path.exists():
+            # Second guess: maybe it's in a subdirectory like 'bin'
+            if (install_dir / 'bin' / executable).exists():
+                executable_path = install_dir / 'bin' / executable
+            else:
+                print(f"Error: Could not find executable '{executable}' at '{executable_path}'")
+                print("The installation directory was inferred as:", install_dir)
+                return
+
+        print(f"Launching '{executable}' from '{executable_path}'...")
+        # Use Popen to launch the process in the background without blocking the terminal.
+        subprocess.Popen([str(executable_path)], shell=False)
+
+    except Exception as e:
+        print(f"An error occurred while trying to run {package_name}: {e}")
+        print("Note: The 'run' command relies on heuristics to find the executable and may not work for all packages.")
+
 def uninstall_package(package_name):
     """Uninstalls a package using its uninstall command, or provides instructions."""
     if sys.platform == 'win32' and not is_admin():
@@ -243,14 +341,31 @@ def main():
     # 'list' command
     list_parser = subparsers.add_parser('list', help='List available packages')
 
+    # 'run' command
+    run_parser = subparsers.add_parser('run', help='Run an installed package')
+    run_parser.add_argument('package_name', help='The name of the package to run')
+
+    # 'version' command
+    version_parser = subparsers.add_parser('version', help='Show the version of lemon-pm')
+
+    # 'help' command
+    help_parser = subparsers.add_parser('help', help='Show this help message')
+
+
     args = parser.parse_args()
 
     if args.command == 'install':
         install_package(args.package_name)
     elif args.command == 'uninstall':
         uninstall_package(args.package_name)
+    elif args.command == 'run':
+        run_package(args.package_name)
     elif args.command == 'list':
         list_packages()
+    elif args.command == 'version':
+        print(f"lemon-pm version {get_version()}")
+    elif args.command == 'help':
+        parser.print_help()
     else:
         parser.print_help()
 
