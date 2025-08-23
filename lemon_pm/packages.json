@@ -383,5 +383,32 @@
     "type": "installer",
     "category": "Utilities",
     "executable": "KeePassXC.exe"
+  },
+  "inkscape": {
+    "url": "https://inkscape.org/gallery/item/44619/inkscape-1.3.2_2023-11-25_091e20e-x64.msi",
+    "version": "1.3.2",
+    "install_command": ["/qn", "/norestart"],
+    "uninstall_command": "msiexec /x {4E9A1766-6BA4-4015-BA8D-05A268638587} /qn",
+    "type": "installer",
+    "category": "Media",
+    "executable": "inkscape.exe"
+  },
+  "kdenlive": {
+    "url": "https://download.kde.org/stable/kdenlive/25.04/windows/kdenlive-25.04.2.exe",
+    "version": "25.04.2",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles%\\kdenlive\\uninstall.exe\" /S",
+    "type": "installer",
+    "category": "Media",
+    "executable": "kdenlive.exe"
+  },
+  "pidgin": {
+    "url": "https://webwerks.dl.sourceforge.net/project/pidgin/Pidgin/2.14.10/pidgin-2.14.10-offline.exe",
+    "version": "2.14.10",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\Pidgin\\uninst.exe\" /S",
+    "type": "installer",
+    "category": "Social",
+    "executable": "pidgin.exe"
   }
 }
