@@ -293,5 +293,95 @@
     "type": "portable",
     "category": "Utilities",
     "executable_name": "TreeSizeFree.exe"
+  },
+  "file-converter": {
+    "url": "https://github.com/Tichau/FileConverter/releases/download/v1.2.3/FileConverter-1.2.3-x64-setup.msi",
+    "version": "1.2.3",
+    "install_command": ["/quiet"],
+    "uninstall_command": null,
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "FileConverter.exe"
+  },
+  "flow-launcher": {
+    "url": "https://github.com/Flow-Launcher/Flow.Launcher/releases/download/v1.20.2/Flow-Launcher-Setup.exe",
+    "version": "1.20.2",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles%\\FlowLauncher\\unins000.exe\" /VERYSILENT",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "Flow.Launcher.exe"
+  },
+  "duplicati": {
+    "url": "https://github.com/duplicati/duplicati/releases/download/v2.1.2.0_beta_2025-08-20/duplicati-2.1.2.0_beta_2025-08-20-1_all.msi",
+    "version": "2.1.2.0-beta",
+    "install_command": ["/quiet"],
+    "uninstall_command": null,
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "Duplicati.GUI.TrayIcon.exe"
+  },
+  "nextcloud": {
+    "url": "https://github.com/nextcloud-releases/desktop/releases/download/v3.17.1/Nextcloud-3.17.1-x64.msi",
+    "version": "3.17.1",
+    "install_command": ["/quiet"],
+    "uninstall_command": null,
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "nextcloud.exe"
+  },
+  "franz": {
+    "url": "https://github.com/meetfranz/franz/releases/download/v5.11.0/Franz-Setup-5.11.0.exe",
+    "version": "5.11.0",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%LOCALAPPDATA%\\Programs\\Franz\\Uninstall Franz.exe\" /S",
+    "type": "installer",
+    "category": "Social",
+    "executable": "Franz.exe"
+  },
+  "bitwarden": {
+    "url": "https://vault.bitwarden.com/download/?app=desktop&platform=windows",
+    "version": "latest",
+    "install_command": ["/S", "/allusers"],
+    "uninstall_command": "\"C:\\Program Files\\Bitwarden\\Uninstall Bitwarden.exe\" /allusers /S",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "Bitwarden.exe"
+  },
+  "autohotkey": {
+    "url": "https://www.autohotkey.com/download/ahk-v2.exe",
+    "version": "2.0.19",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles%\\AutoHotkey\\AutoHotkey.exe\" /uninstall",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "AutoHotkey.exe"
+  },
+  "powertoys": {
+    "url": "https://github.com/microsoft/PowerToys/releases/latest",
+    "version": "latest",
+    "install_command": ["/silent"],
+    "uninstall_command": "\"%ProgramFiles%\\PowerToys\\unins000.exe\" /silent",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "PowerToys.exe"
+  },
+  "sharex": {
+    "url": "https://github.com/ShareX/ShareX/releases/download/v16.0.1/ShareX-16.0.1-setup.exe",
+    "version": "16.0.1",
+    "install_command": ["/VERYSILENT"],
+    "uninstall_command": "\"%ProgramFiles%\\ShareX\\unins000.exe\" /VERYSILENT",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "ShareX.exe"
+  },
+  "keepassxc": {
+    "url": "https://github.com/keepassxreboot/keepassxc/releases/download/2.7.10/KeePassXC-2.7.10-Win64-LegacyWindows.msi",
+    "version": "2.7.10",
+    "install_command": ["/quiet"],
+    "uninstall_command": null,
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "KeePassXC.exe"
   }
 }
