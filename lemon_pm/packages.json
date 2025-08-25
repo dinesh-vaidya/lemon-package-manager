@@ -279,10 +279,10 @@
     "executable": "winzip64.exe"
   },
   "putty": {
-    "url": "https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.81-installer.msi",
-    "version": "0.81",
+    "url": "https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.83-installer.msi",
+    "version": "0.83",
     "install_command": ["/quiet"],
-    "uninstall_command": "msiexec /x {B2B64010-F457-4322-8785-5551A579A595} /quiet",
+    "uninstall_command": null,
     "type": "installer",
     "category": "Development",
     "executable": "putty.exe"

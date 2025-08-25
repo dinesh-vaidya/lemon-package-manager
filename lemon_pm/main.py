@@ -132,17 +132,19 @@ def install_package(package_name):
         print(f"Downloaded '{filename}'.")
 
         if package_type == 'installer':
-            install_command = package_data.get('install_command')
-            if not install_command:
-                print(f"Error: No install_command defined for '{package_name}'.")
-                # Still need to clean up the downloaded file
-                os.remove(temp_filepath)
-                return
+            install_command = package_data.get('install_command', [])
 
-            # NOTE: This will not work in a non-Windows environment.
             print(f"Running installer for {package_name}...")
             try:
-                command = [temp_filepath] + install_command
+                # Base command
+                command = [temp_filepath]
+
+                # If it's an MSI file, it must be installed with msiexec
+                if temp_filepath.endswith('.msi'):
+                    command = ['msiexec', '/i', temp_filepath] + install_command
+                else:
+                    command = [temp_filepath] + install_command
+
                 # Using check=True will raise a CalledProcessError if the command returns a non-zero exit code.
                 result = subprocess.run(command, check=True, capture_output=True, text=True, shell=False)
 
@@ -195,54 +197,73 @@ def run_package(package_name):
         return
 
     package_data = packages[package_name]
-    executable = package_data.get('executable')
-    if not executable:
-        print(f"Error: No executable defined for '{package_name}'. Cannot run.")
-        return
+    package_type = package_data.get('type', 'installer')
 
-    uninstall_command = package_data.get('uninstall_command', '')
-
-    # Try to infer the installation directory from the uninstall command.
-    # This is a heuristic and might not work for all packages.
     try:
-        # First, expand environment variables in the uninstall command path
-        if sys.platform == 'win32':
-            replacements = {
-                '%ProgramFiles%': os.environ.get('ProgramW6432', os.environ.get('ProgramFiles')),
-                '%ProgramFiles(x86)%': os.environ.get('ProgramFiles(x86)', os.environ.get('ProgramFiles')),
-                '%LOCALAPPDATA%': os.environ.get('LOCALAPPDATA'),
-                '%APPDATA%': os.environ.get('APPDATA')
-            }
-            for var, val in replacements.items():
-                if val:
-                    uninstall_command = uninstall_command.replace(var, val)
+        executable_path = None
+        if package_type == 'portable':
+            executable_name = package_data.get('executable_name')
+            if not executable_name:
+                print(f"Error: No executable_name defined for portable package '{package_name}'.")
+                return
+            bin_dir = get_portable_bin_dir()
+            executable_path = pathlib.Path(bin_dir) / executable_name
 
-        # Use shlex to handle quotes and split the command
-        parts = shlex.split(uninstall_command)
-        if not parts:
-            raise ValueError("Uninstall command is empty.")
-
-        # The first part is usually the path to the uninstaller
-        uninstaller_path = pathlib.Path(parts[0])
-        install_dir = uninstaller_path.parent
-
-        # For some apps, the uninstaller is in a sub-folder (e.g., .../Installer/setup.exe)
-        # We might need to go up one level. A simple check: if parent is "Installer", go up.
-        if install_dir.name.lower() == 'installer':
-            install_dir = install_dir.parent
-
-        executable_path = install_dir / executable
-
-        if not executable_path.exists():
-            # Second guess: maybe it's in a subdirectory like 'bin'
-            if (install_dir / 'bin' / executable).exists():
-                executable_path = install_dir / 'bin' / executable
-            else:
-                print(f"Error: Could not find executable '{executable}' at '{executable_path}'")
-                print("The installation directory was inferred as:", install_dir)
+        else: # 'installer' type
+            executable = package_data.get('executable')
+            if not executable:
+                print(f"Error: No executable defined for '{package_name}'. Cannot run.")
                 return
 
-        print(f"Launching '{executable}' from '{executable_path}'...")
+            uninstall_command = package_data.get('uninstall_command')
+            if not uninstall_command:
+                # If there's no uninstall command, we can't infer the path.
+                # This is a limitation for now.
+                print(f"Error: Cannot determine installation directory for '{package_name}' without an uninstall_command.")
+                return
+
+            # First, expand environment variables in the uninstall command path
+            if sys.platform == 'win32':
+                replacements = {
+                    '%ProgramFiles%': os.environ.get('ProgramW6432', os.environ.get('ProgramFiles')),
+                    '%ProgramFiles(x86)%': os.environ.get('ProgramFiles(x86)', os.environ.get('ProgramFiles')),
+                    '%LOCALAPPDATA%': os.environ.get('LOCALAPPDATA'),
+                    '%APPDATA%': os.environ.get('APPDATA')
+                }
+                for var, val in replacements.items():
+                    if val and uninstall_command:
+                        uninstall_command = uninstall_command.replace(var, val)
+
+            # Use shlex to handle quotes and split the command
+            parts = shlex.split(uninstall_command)
+            if not parts:
+                raise ValueError("Uninstall command is empty.")
+
+            # The first part is usually the path to the uninstaller
+            uninstaller_path = pathlib.Path(parts[0])
+            install_dir = uninstaller_path.parent
+
+            # For some apps, the uninstaller is in a sub-folder (e.g., .../Installer/setup.exe)
+            # We might need to go up one level. A simple check: if parent is "Installer", go up.
+            if install_dir.name.lower() == 'installer':
+                install_dir = install_dir.parent
+
+            executable_path = install_dir / executable
+
+            if not executable_path.exists():
+                # Second guess: maybe it's in a subdirectory like 'bin'
+                if (install_dir / 'bin' / executable).exists():
+                    executable_path = install_dir / 'bin' / executable
+                else:
+                    print(f"Error: Could not find executable '{executable}' at '{executable_path}'")
+                    print("The installation directory was inferred as:", install_dir)
+                    return
+
+        if not executable_path or not executable_path.exists():
+            print(f"Error: Executable path not found or does not exist: {executable_path}")
+            return
+
+        print(f"Launching '{executable_path.name}' from '{executable_path}'...")
         # Use Popen to launch the process in the background without blocking the terminal.
         subprocess.Popen([str(executable_path)], shell=False)
 
@@ -269,10 +290,9 @@ def uninstall_package(package_name):
 
     if package_type == 'portable':
         bin_dir = get_portable_bin_dir()
-        # For portable apps, the 'uninstall_command' is just the filename to be deleted.
-        executable_name = package_data.get('uninstall_command') # Re-using this field
+        executable_name = package_data.get('executable_name')
         if not executable_name:
-             print(f"Error: No executable name defined for portable package '{package_name}'. Cannot uninstall.")
+             print(f"Error: No executable_name defined for portable package '{package_name}'. Cannot uninstall.")
              return
 
         final_filepath = os.path.join(bin_dir, executable_name)
