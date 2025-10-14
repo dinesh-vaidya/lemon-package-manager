@@ -49,8 +49,8 @@ def list_packages():
     for category in sorted(categorized_packages.keys()):
 
         table = Table(title=f"[bold yellow]{category}[/bold yellow]", show_header=True, header_style="bold magenta")
-        table.add_column("Package", style="light_green", no_wrap=True)
-        table.add_column("Version", style="light_blue")
+        table.add_column("Package", style="green", no_wrap=True)
+        table.add_column("Version", style="cyan")
 
         sorted_packages = sorted(categorized_packages[category], key=lambda x: x['name'])
         if not sorted_packages:
