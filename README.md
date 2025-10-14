@@ -18,7 +18,7 @@ A simple, command-line package manager for Windows devices, designed to quickly 
 ### Prerequisites
 
 -   **Python**: You must have Python installed on your system. You can download it from [python.org](https://www.python.org/downloads/).
--   **Administrator Privileges**: To install and uninstall software, you must run the `lemon` command from a terminal with administrator privileges (e.g., Command Prompt or PowerShell run as Administrator).
+-   **Administrator Privileges**: To install and uninstall software, you must run the `lemon` (or `lpm`) command from a terminal with administrator privileges (e.g., Command Prompt or PowerShell run as Administrator).
 
 ### Steps
 
@@ -28,32 +28,33 @@ A simple, command-line package manager for Windows devices, designed to quickly 
     ```bash
     pip install .
     ```
-    This will install the necessary dependencies and add the `lemon` command to your system's PATH.
+    This will install the necessary dependencies and add the `lemon` and `lpm` commands to your system's PATH.
 
 ## Usage
 
-Once installed, you can use the `lemon` command from anywhere in your terminal. For `install` and `uninstall` commands, ensure you are running your terminal as an Administrator.
+Once installed, you can use the `lemon` (or `lpm`) command from anywhere in your terminal. Both commands are interchangeable. For `install` and `uninstall` commands, ensure you are running your terminal as an Administrator.
 
 ---
 
-### `lemon list`
+### `lemon list` or `lpm list`
 
 To see a list of all packages that can be installed, grouped by category.
 
 ```bash
+# Example
 lemon list
 ```
 
-### `lemon install <package_name>`
+### `lemon install <package_name>` or `lpm install <package_name>`
 
 To install a package, use the `install` command followed by the package name. The installer will be downloaded and run silently in the background.
 
 ```bash
 # Example
-lemon install notepad++
+lpm install notepad++
 ```
 
-### `lemon uninstall <package_name>`
+### `lemon uninstall <package_name>` or `lpm uninstall <package_name>`
 
 To uninstall a package, use the `uninstall` command.
 
@@ -62,7 +63,7 @@ To uninstall a package, use the `uninstall` command.
 lemon uninstall notepad++
 ```
 
-### `lemon run <package_name>`
+### `lemon run <package_name>` or `lpm run <package_name>`
 
 To launch an installed application, use the `run` command. This will start the application's main executable.
 
@@ -70,23 +71,25 @@ To launch an installed application, use the `run` command. This will start the a
 
 ```bash
 # Example
-lemon run notepad++
+lpm run notepad++
 ```
 
-### `lemon version`
+### `lemon version` or `lpm version`
 
 To see the current version of the `lemon-pm` tool.
 
 ```bash
+# Example
 lemon version
 ```
 
-### `lemon help`
+### `lemon help` or `lpm help`
 
 To see the list of all available commands and their descriptions.
 
 ```bash
-lemon help
+# Example
+lpm help
 ```
 
 ## Available Packages
