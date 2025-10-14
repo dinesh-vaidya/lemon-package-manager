@@ -33,5 +33,5 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=requirements,
-    entry_points={"console_scripts": ["lemon=lemon_pm.main:main"]},
+    entry_points={"console_scripts": ["lemon=lemon_pm.main:main", "lpm=lemon_pm.main:main"]},
 )
