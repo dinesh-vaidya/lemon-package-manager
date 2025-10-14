@@ -10,6 +10,8 @@ import ctypes
 import shlex
 import pathlib
 import shutil
+from rich.console import Console
+from rich.table import Table
 from ._version import __version__, __status__
 
 
@@ -38,35 +40,28 @@ def list_packages():
         category = data.get('category', 'Uncategorized')
         if category not in categorized_packages:
             categorized_packages[category] = []
-
         version = data.get('version', 'N/A')
         categorized_packages[category].append({'name': name, 'version': version})
 
-    print("Available packages:")
+    console = Console()
+    console.print("Available packages:", style="bold white")
 
     for category in sorted(categorized_packages.keys()):
-        print(f"\n--- {category} ---")
+
+        table = Table(title=f"[bold yellow]{category}[/bold yellow]", show_header=True, header_style="bold magenta")
+        table.add_column("Package", style="light_green", no_wrap=True)
+        table.add_column("Version", style="light_blue")
 
         sorted_packages = sorted(categorized_packages[category], key=lambda x: x['name'])
         if not sorted_packages:
             continue
 
-        # Determine column widths
-        name_width = max(len(p['name']) for p in sorted_packages)
-        version_width = max(len(p['version']) for p in sorted_packages)
-
-        # Headers
-        header = f"| {'Package'.ljust(name_width)} | {'Version'.ljust(version_width)} |"
-        separator = f"|{'-' * (name_width + 2)}|{'-' * (version_width + 2)}|"
-
-        print(header)
-        print(separator)
-
-        # Table rows
         for pkg in sorted_packages:
-            print(f"| {pkg['name'].ljust(name_width)} | {pkg['version'].ljust(version_width)} |")
+            table.add_row(pkg['name'], pkg['version'])
 
-    print("\nEnd of list.")
+        console.print(table)
+
+    console.print("End of list.", style="bold white")
 
 def get_portable_bin_dir():
     """Gets the directory for storing portable application binaries."""

@@ -282,7 +282,7 @@
     "url": "https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.83-installer.msi",
     "version": "0.83",
     "install_command": ["/quiet"],
-    "uninstall_command": null,
+    "uninstall_command": "msiexec /x {45b3032f-22cc-40cd-9e97-4da7095fa5a2} /quiet",
     "type": "installer",
     "category": "Development",
     "executable": "putty.exe"
@@ -325,7 +325,7 @@
     "url": "https://github.com/nextcloud-releases/desktop/releases/download/v3.17.1/Nextcloud-3.17.1-x64.msi",
     "version": "3.17.1",
     "install_command": ["/quiet"],
-    "uninstall_command": null,
+    "uninstall_command": "msiexec /x {8E5566E6-2268-4814-A3B7-372BD0B4A188} /quiet",
     "type": "installer",
     "category": "Utilities",
     "executable": "nextcloud.exe"
@@ -379,7 +379,7 @@
     "url": "https://github.com/keepassxreboot/keepassxc/releases/download/2.7.10/KeePassXC-2.7.10-Win64-LegacyWindows.msi",
     "version": "2.7.10",
     "install_command": ["/quiet"],
-    "uninstall_command": null,
+    "uninstall_command": "msiexec /x {C564B54B-E675-4562-861A-286C336A0A9F} /quiet",
     "type": "installer",
     "category": "Utilities",
     "executable": "KeePassXC.exe"
@@ -419,5 +419,14 @@
     "type": "installer",
     "category": "Utilities",
     "executable": "ksnip.exe"
+  },
+  "neovim": {
+    "url": "https://github.com/neovim/neovim/releases/download/v0.10.0/nvim-win64.msi",
+    "version": "0.10.0",
+    "install_command": ["/quiet"],
+    "uninstall_command": "msiexec /x {2A4565D8-4A42-4217-A63A-228373A66352} /quiet",
+    "type": "installer",
+    "category": "Development",
+    "executable": "nvim.exe"
   }
 }
