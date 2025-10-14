@@ -83,7 +83,7 @@ def list_packages():
                     padding = max_len - visible_len
 
                     # Construct the colored string and add the padding
-                    colored_item = f"{Fore.CYAN}{name}{Style.RESET_ALL} {Fore.GREEN}{version}{Style.RESET_ALL}"
+                    colored_item = f"{Style.BRIGHT}{Fore.GREEN}{name}{Style.RESET_ALL} {Style.BRIGHT}{Fore.BLUE}{version}{Style.RESET_ALL}"
                     line += colored_item + ' ' * padding
             print(line)
 
