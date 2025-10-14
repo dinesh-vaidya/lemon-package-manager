@@ -10,7 +10,11 @@ import ctypes
 import shlex
 import pathlib
 import shutil
+from colorama import Fore, Style, init
 from ._version import __version__, __status__
+
+# Initialize colorama
+init(autoreset=True)
 
 
 def is_admin():
@@ -34,46 +38,56 @@ def list_packages():
         return
 
     categorized_packages = {}
+    all_display_items = []
     for name, data in packages.items():
         category = data.get('category', 'Uncategorized')
         if category not in categorized_packages:
             categorized_packages[category] = []
         version = data.get('version', 'N/A')
-        categorized_packages[category].append({'name': name, 'version': version})
+        display_item = f"{name} ({version})"
+        categorized_packages[category].append(display_item)
+        all_display_items.append(display_item)
 
-    # Get terminal width
+    # Get terminal width and calculate uniform column width
     try:
         terminal_width = os.get_terminal_size().columns
     except OSError:
         terminal_width = 80  # Default width
 
-    print("Available packages:")
+    max_len = max(len(item) for item in all_display_items) + 4  # Add more padding
+    num_columns = max(1, terminal_width // max_len)
+
+    print(f"{Style.BRIGHT}Available packages:{Style.RESET_ALL}")
 
     for category in sorted(categorized_packages.keys()):
-        print(f"\n--- {category} ---")
-        sorted_packages = sorted(categorized_packages[category], key=lambda x: x['name'])
+        print(f"\n{Fore.YELLOW}{Style.BRIGHT}--- {category} ---{Style.RESET_ALL}")
+        sorted_packages = sorted(categorized_packages[category])
         if not sorted_packages:
             continue
 
-        # Create display strings with name and version
-        display_items = [f"{p['name']} ({p['version']})" for p in sorted_packages]
-
-        # Determine the number of columns
-        max_len = max(len(item) for item in display_items) + 2  # Add padding
-        num_columns = max(1, terminal_width // max_len)
-
-        # Calculate the number of rows needed
-        num_rows = (len(display_items) + num_columns - 1) // num_columns
+        # Calculate the number of rows needed for this category
+        num_rows = (len(sorted_packages) + num_columns - 1) // num_columns
 
         for r in range(num_rows):
             line = ""
             for c in range(num_columns):
                 index = r + c * num_rows
-                if index < len(display_items):
-                    line += display_items[index].ljust(max_len)
+                if index < len(sorted_packages):
+                    # Color the package name and version
+                    parts = sorted_packages[index].rsplit(' ', 1)
+                    name = parts[0]
+                    version = parts[1] if len(parts) > 1 else ''
+
+                    # Calculate the visible length and the padding required
+                    visible_len = len(name) + len(version) + 1
+                    padding = max_len - visible_len
+
+                    # Construct the colored string and add the padding
+                    colored_item = f"{Fore.CYAN}{name}{Style.RESET_ALL} {Fore.GREEN}{version}{Style.RESET_ALL}"
+                    line += colored_item + ' ' * padding
             print(line)
 
-    print("\nEnd of list.")
+    print(f"\n{Style.BRIGHT}End of list.{Style.RESET_ALL}")
 
 def get_portable_bin_dir():
     """Gets the directory for storing portable application binaries."""
