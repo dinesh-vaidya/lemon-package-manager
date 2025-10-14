@@ -25,7 +25,7 @@ def get_version():
     return f"{__version__} (status: {__status__})"
 
 def list_packages():
-    """Lists all available packages in a category-wise table."""
+    """Lists all available packages in a category-wise, multi-column format."""
     try:
         with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
             packages = json.load(f)
@@ -38,33 +38,40 @@ def list_packages():
         category = data.get('category', 'Uncategorized')
         if category not in categorized_packages:
             categorized_packages[category] = []
-
         version = data.get('version', 'N/A')
         categorized_packages[category].append({'name': name, 'version': version})
+
+    # Get terminal width
+    try:
+        terminal_width = os.get_terminal_size().columns
+    except OSError:
+        terminal_width = 80  # Default width
 
     print("Available packages:")
 
     for category in sorted(categorized_packages.keys()):
         print(f"\n--- {category} ---")
-
         sorted_packages = sorted(categorized_packages[category], key=lambda x: x['name'])
         if not sorted_packages:
             continue
 
-        # Determine column widths
-        name_width = max(len(p['name']) for p in sorted_packages)
-        version_width = max(len(p['version']) for p in sorted_packages)
+        # Create display strings with name and version
+        display_items = [f"{p['name']} ({p['version']})" for p in sorted_packages]
 
-        # Headers
-        header = f"| {'Package'.ljust(name_width)} | {'Version'.ljust(version_width)} |"
-        separator = f"|{'-' * (name_width + 2)}|{'-' * (version_width + 2)}|"
+        # Determine the number of columns
+        max_len = max(len(item) for item in display_items) + 2  # Add padding
+        num_columns = max(1, terminal_width // max_len)
 
-        print(header)
-        print(separator)
+        # Calculate the number of rows needed
+        num_rows = (len(display_items) + num_columns - 1) // num_columns
 
-        # Table rows
-        for pkg in sorted_packages:
-            print(f"| {pkg['name'].ljust(name_width)} | {pkg['version'].ljust(version_width)} |")
+        for r in range(num_rows):
+            line = ""
+            for c in range(num_columns):
+                index = r + c * num_rows
+                if index < len(display_items):
+                    line += display_items[index].ljust(max_len)
+            print(line)
 
     print("\nEnd of list.")
 
