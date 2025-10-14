@@ -419,5 +419,14 @@
     "type": "installer",
     "category": "Utilities",
     "executable": "ksnip.exe"
+  },
+  "neovim": {
+    "url": "https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-win64.msi",
+    "version": "0.11.4",
+    "install_command": ["/qn"],
+    "uninstall_command": "msiexec /x {4E7E884A-3998-427A-B525-45C076B4136B} /qn",
+    "type": "installer",
+    "category": "Development",
+    "executable": "nvim.exe"
   }
 }
