@@ -24,9 +24,9 @@ A simple, command-line package manager for Windows devices, designed to quickly 
 
 1.  Clone this repository.
 2.  Navigate to the project directory.
-3.  Install the package using pip:
+3.  Run the `install.bat` script by double-clicking it or running it from your terminal.
     ```bash
-    pip install .
+    install.bat
     ```
     This will install the necessary dependencies and add the `lemon` and `lpm` commands to your system's PATH.
 
@@ -102,6 +102,15 @@ To see the list of all available commands and their descriptions.
 ```bash
 # Example
 lpm help
+```
+
+### `lemon uninstall-lpm` or `lpm uninstall-lpm`
+
+To uninstall the lemon package manager itself. This will remove the `lemon` and `lpm` commands from your system.
+
+```bash
+# Example
+lpm uninstall-lpm
 ```
 
 ## Available Packages
