@@ -104,6 +104,15 @@ To see the list of all available commands and their descriptions.
 lpm help
 ```
 
+### `lemon uninstall-lemon` or `lpm uninstall-lemon`
+
+To uninstall the lemon package manager itself. This will remove the `lemon` and `lpm` commands from your system.
+
+```bash
+# Example
+lpm uninstall-lemon
+```
+
 ## Available Packages
 
 To see a full, categorized list of all available packages, use the `list` command:

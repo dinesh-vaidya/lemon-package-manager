@@ -353,6 +353,17 @@ def uninstall_package(package_name):
             print(f"2. Find '{package_name}' in the list and select 'Uninstall'.")
 
 
+def uninstall_lemon():
+    """Uninstalls the lemon package manager itself."""
+    print("Uninstalling lemon-pm...")
+    try:
+        subprocess.run([sys.executable, "-m", "pip", "uninstall", "lemon-pm", "-y"], check=True)
+        print("lemon-pm has been successfully uninstalled.")
+    except subprocess.CalledProcessError as e:
+        print(f"An error occurred during uninstallation: {e}")
+    except FileNotFoundError:
+        print("Error: 'pip' command not found. Please ensure you have pip installed and in your PATH.")
+
 def list_categories():
     """Lists all available package categories."""
     try:
@@ -398,6 +409,9 @@ def main():
     # 'help' command
     help_parser = subparsers.add_parser('help', help='Show this help message')
 
+    # 'uninstall-lemon' command
+    uninstall_lemon_parser = subparsers.add_parser('uninstall-lemon', help='Uninstall the lemon package manager itself')
+
 
     args = parser.parse_args()
 
@@ -413,6 +427,8 @@ def main():
         list_categories()
     elif args.command == 'version':
         print(f"lemon-pm version {__version__} (status: {__status__})")
+    elif args.command == 'uninstall-lemon':
+        uninstall_lemon()
     elif args.command == 'help':
         parser.print_help()
     else:
