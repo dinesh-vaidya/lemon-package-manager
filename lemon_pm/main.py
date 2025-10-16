@@ -26,7 +26,7 @@ def get_version():
     """Reads the version from _version.py."""
     return f"{__version__} (status: {__status__})"
 
-def list_packages():
+def list_packages(category_filter=None):
     """Lists all available packages in a category-wise table."""
     try:
         with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
@@ -38,6 +38,8 @@ def list_packages():
     categorized_packages = {}
     for name, data in packages.items():
         category = data.get('category', 'Uncategorized')
+        if category_filter and category.lower() != category_filter.lower():
+            continue
         if category not in categorized_packages:
             categorized_packages[category] = []
         version = data.get('version', 'N/A')
@@ -46,22 +48,27 @@ def list_packages():
     console = Console()
     console.print("Available packages:", style="bold white")
 
-    for category in sorted(categorized_packages.keys()):
+    terminal_width = console.width
 
-        table = Table(title=f"[bold yellow]{category}[/bold yellow]", show_header=True, header_style="bold magenta")
-        table.add_column("Package", style="green", no_wrap=True)
-        table.add_column("Version", style="cyan")
+    for category in sorted(categorized_packages.keys()):
+        console.print(f"\n[bold yellow]{category}[/bold yellow]")
 
         sorted_packages = sorted(categorized_packages[category], key=lambda x: x['name'])
         if not sorted_packages:
             continue
 
-        for pkg in sorted_packages:
-            table.add_row(pkg['name'], pkg['version'])
+        max_name_len = max(len(p['name']) for p in sorted_packages)
+        column_width = max_name_len + 2
+        num_columns = max(1, terminal_width // column_width)
 
-        console.print(table)
+        for i in range(0, len(sorted_packages), num_columns):
+            row = sorted_packages[i:i+num_columns]
+            row_str = ""
+            for pkg in row:
+                row_str += f"[green]{pkg['name']:<{column_width}}[/green]"
+            console.print(row_str)
 
-    console.print("End of list.", style="bold white")
+    console.print("\nEnd of list.", style="bold white")
 
 def get_portable_bin_dir():
     """Gets the directory for storing portable application binaries."""
@@ -351,6 +358,21 @@ def uninstall_package(package_name):
             print(f"2. Find '{package_name}' in the list and select 'Uninstall'.")
 
 
+def list_categories():
+    """Lists all available package categories."""
+    try:
+        with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+            packages = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error reading package list: {e}")
+        return
+
+    categories = set(data.get('category', 'Uncategorized') for data in packages.values())
+    console = Console()
+    console.print("Available categories:", style="bold white")
+    for category in sorted(categories):
+        console.print(f"- [yellow]{category}[/yellow]")
+
 def main():
     """Main function for the lemon package manager."""
     parser = argparse.ArgumentParser(description="A simple package manager for Windows.")
@@ -365,7 +387,11 @@ def main():
     uninstall_parser.add_argument('package_name', help='The name of the package to uninstall')
 
     # 'list' command
-    list_parser = subparsers.add_parser('list', help='List available packages')
+    list_parser = subparsers.add_parser('list', help='List available packages, optionally filtered by category')
+    list_parser.add_argument('category', nargs='?', default=None, help='The category to filter by')
+
+    # 'categories' command
+    categories_parser = subparsers.add_parser('categories', help='List all available package categories')
 
     # 'run' command
     run_parser = subparsers.add_parser('run', help='Run an installed package')
@@ -387,7 +413,9 @@ def main():
     elif args.command == 'run':
         run_package(args.package_name)
     elif args.command == 'list':
-        list_packages()
+        list_packages(args.category)
+    elif args.command == 'categories':
+        list_categories()
     elif args.command == 'version':
         print(f"lemon-pm version {__version__} (status: {__status__})")
     elif args.command == 'help':
