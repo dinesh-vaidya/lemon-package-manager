@@ -36,13 +36,25 @@ Once installed, you can use the `lemon` (or `lpm`) command from anywhere in your
 
 ---
 
-### `lemon list` or `lpm list`
+### `lemon list [category]` or `lpm list [category]`
 
-To see a list of all packages that can be installed, grouped by category.
+To see a list of all packages. You can optionally filter the list by providing a category name.
+
+```bash
+# Show all packages
+lemon list
+
+# Show only packages in the 'Development' category
+lpm list Development
+```
+
+### `lemon categories` or `lpm categories`
+
+To see a list of all available package categories.
 
 ```bash
 # Example
-lemon list
+lemon categories
 ```
 
 ### `lemon install <package_name>` or `lpm install <package_name>`
