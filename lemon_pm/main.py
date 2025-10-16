@@ -356,15 +356,15 @@ def uninstall_package(package_name):
 def uninstall_lemon():
     """Uninstalls the lemon package manager itself."""
     console = Console()
-    console.print("This will uninstall the lemon package manager from your system. This action is irreversible.", style="bold red")
+    console.print("This will uninstall the Lemon Package Manager from your system. This action is irreversible.", style="bold red")
 
     confirm = input("Are you sure you want to continue? (y/n): ")
 
     if confirm.lower() == 'y':
-        print("Uninstalling lemon-pm...")
+        print("Uninstalling Lemon Package Manager...")
         try:
             subprocess.run([sys.executable, "-m", "pip", "uninstall", "lemon-pm", "-y"], check=True)
-            print("lemon-pm has been successfully uninstalled.")
+            print("Lemon Package Manager has been successfully uninstalled.")
             console.print("Thank you for using Lemon Package Manager!", style="bold green")
         except subprocess.CalledProcessError as e:
             print(f"An error occurred during uninstallation: {e}")
