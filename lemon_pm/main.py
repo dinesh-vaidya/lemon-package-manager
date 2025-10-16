@@ -48,27 +48,22 @@ def list_packages(category_filter=None):
     console = Console()
     console.print("Available packages:", style="bold white")
 
-    terminal_width = console.width
-
     for category in sorted(categorized_packages.keys()):
-        console.print(f"\n[bold yellow]{category}[/bold yellow]")
+
+        table = Table(title=f"[bold yellow]{category}[/bold yellow]", show_header=True, header_style="bold magenta")
+        table.add_column("Package", style="green", no_wrap=True)
+        table.add_column("Version", style="cyan")
 
         sorted_packages = sorted(categorized_packages[category], key=lambda x: x['name'])
         if not sorted_packages:
             continue
 
-        max_name_len = max(len(p['name']) for p in sorted_packages)
-        column_width = max_name_len + 2
-        num_columns = max(1, terminal_width // column_width)
+        for pkg in sorted_packages:
+            table.add_row(pkg['name'], pkg['version'])
 
-        for i in range(0, len(sorted_packages), num_columns):
-            row = sorted_packages[i:i+num_columns]
-            row_str = ""
-            for pkg in row:
-                row_str += f"[green]{pkg['name']:<{column_width}}[/green]"
-            console.print(row_str)
+        console.print(table)
 
-    console.print("\nEnd of list.", style="bold white")
+    console.print("End of list.", style="bold white")
 
 def get_portable_bin_dir():
     """Gets the directory for storing portable application binaries."""
