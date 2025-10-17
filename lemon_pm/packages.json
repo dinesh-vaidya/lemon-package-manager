@@ -428,5 +428,14 @@
     "type": "installer",
     "category": "Development",
     "executable": "nvim.exe"
+  },
+  "ollama": {
+    "url": "https://github.com/ollama/ollama/releases/download/v0.1.32/OllamaSetup.exe",
+    "version": "0.1.32",
+    "install_command": ["/SP-", "/VERYSILENT", "/NORESTART"],
+    "uninstall_command": "\"%LOCALAPPDATA%\\Ollama\\uninstall.exe\" /S",
+    "type": "installer",
+    "category": "Development",
+    "executable": "ollama.exe"
   }
 }
