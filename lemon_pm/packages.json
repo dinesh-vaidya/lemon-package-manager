@@ -437,5 +437,32 @@
     "type": "installer",
     "category": "Development",
     "executable": "ollama.exe"
+  },
+  "krita": {
+    "url": "https://download.kde.org/stable/krita/5.2.2/krita-x64-5.2.2-setup.exe",
+    "version": "5.2.2",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles%\\Krita (x64)\\uninst.exe\" /S",
+    "type": "installer",
+    "category": "Media",
+    "executable": "krita.exe"
+  },
+  "darktable": {
+    "url": "https://github.com/darktable-org/darktable/releases/download/release-4.4.2/darktable-4.4.2-win64.exe",
+    "version": "4.4.2",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles%\\darktable\\uninstall.exe\" /S",
+    "type": "installer",
+    "category": "Media",
+    "executable": "darktable.exe"
+  },
+  "paint.net": {
+    "url": "https://www.getpaint.net/release/paint.net_5.0.13.install.x64.zip",
+    "version": "5.0.13",
+    "install_command": ["/auto"],
+    "uninstall_command": "paintdotnet:/uninstall",
+    "type": "installer",
+    "category": "Media",
+    "executable": "PaintDotNet.exe"
   }
 }
