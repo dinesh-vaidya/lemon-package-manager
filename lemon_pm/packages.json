@@ -464,5 +464,48 @@
     "type": "installer",
     "category": "Media",
     "executable": "PaintDotNet.exe"
+  },
+  "wps-office": {
+    "url": "https://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/12.2.0.12345/500.1001/WPSOffice_12.2.0.12345.exe",
+    "version": "12.2.0.12345",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%LOCALAPPDATA%\\Kingsoft\\WPS Office\\uninst.exe\" /S",
+    "type": "installer",
+    "category": "Office",
+    "executable": "wps.exe"
+  },
+  "vscodium": {
+    "url": "https://github.com/VSCodium/vscodium/releases/download/1.85.1.23348/VSCodiumUserSetup-x64-1.85.1.23348.exe",
+    "version": "1.85.1.23348",
+    "install_command": ["/VERYSILENT"],
+    "uninstall_command": "\"%LOCALAPPDATA%\\Programs\\VSCodium\\unins000.exe\" /VERYSILENT /NORESTART",
+    "type": "installer",
+    "category": "Development",
+    "executable": "codium.exe"
+  },
+  "veracrypt": {
+    "url": "https://launchpad.net/veracrypt/trunk/1.26.7/+download/VeraCrypt_1.26.7_Windows_x64.msi",
+    "version": "1.26.7",
+    "install_command": ["/quiet"],
+    "uninstall_command": "msiexec /x {FD266E7F-B21C-4217-9137-414545558434} /quiet",
+    "type": "installer",
+    "category": "Security",
+    "executable": "VeraCrypt.exe"
+  },
+  "system-informer": {
+    "url": "https://github.com/winsiderss/systeminformer/releases/download/v3.0.7100/systeminformer-3.0.7100-setup.exe",
+    "version": "3.0.7100",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles%\\SystemInformer\\unins000.exe\" /VERYSILENT",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "SystemInformer.exe"
+  },
+  "rufus": {
+    "url": "https://github.com/pbatard/rufus/releases/download/v4.4/rufus-4.4.exe",
+    "version": "4.4",
+    "type": "portable",
+    "category": "Utilities",
+    "executable_name": "rufus-4.4.exe"
   }
 }
