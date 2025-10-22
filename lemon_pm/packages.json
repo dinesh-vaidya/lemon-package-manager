@@ -487,7 +487,7 @@
     "url": "https://launchpad.net/veracrypt/trunk/1.26.7/+download/VeraCrypt_1.26.7_Windows_x64.msi",
     "version": "1.26.7",
     "install_command": ["/quiet"],
-    "uninstall_command": "msiexec /x {FD266E7F-B21C-4217-9137-414545558434} /quiet",
+    "uninstall_command": "\"%ProgramFiles%\\VeraCrypt\\VeraCrypt.exe\" /uninstall",
     "type": "installer",
     "category": "Security",
     "executable": "VeraCrypt.exe"
@@ -507,5 +507,32 @@
     "type": "portable",
     "category": "Utilities",
     "executable_name": "rufus-4.4.exe"
+  },
+  "brackets": {
+    "url": "https://github.com/brackets-cont/brackets/releases/download/v2.2.1-17983/Brackets.2.2.1.msi",
+    "version": "2.2.1",
+    "install_command": ["/quiet"],
+    "uninstall_command": "msiexec /uninstall Brackets.msi /quiet",
+    "type": "installer",
+    "category": "Development",
+    "executable": "Brackets.exe"
+  },
+  "atom": {
+    "url": "https://github.com/atom/atom/releases/download/v1.63.1/AtomSetup-x64.exe",
+    "version": "1.63.1",
+    "install_command": ["-s"],
+    "uninstall_command": "\"%LOCALAPPDATA%\\atom\\Update.exe\" --uninstall -s",
+    "type": "installer",
+    "category": "Development",
+    "executable": "atom.exe"
+  },
+  "emacs": {
+    "url": "https://ftp.gnu.org/gnu/emacs/windows/emacs-29/emacs-29.3-x86_64-installer.exe",
+    "version": "29.3",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles%\\Emacs\\_emacs\\unins000.exe\" /S",
+    "type": "installer",
+    "category": "Development",
+    "executable": "runemacs.exe"
   }
 }
