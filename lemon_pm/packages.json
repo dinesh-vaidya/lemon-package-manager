@@ -534,5 +534,14 @@
     "type": "installer",
     "category": "Development",
     "executable": "runemacs.exe"
+  },
+  "joplin": {
+    "url": "https://github.com/laurent22/joplin/releases/download/v2.14.20/Joplin-Setup-2.14.20.exe",
+    "version": "2.14.20",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%LOCALAPPDATA%\\Programs\\Joplin\\uninstall.exe\" /S",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "Joplin.exe"
   }
 }
