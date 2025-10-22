@@ -10,6 +10,8 @@ import ctypes
 import shlex
 import pathlib
 import shutil
+from rich.console import Console
+from rich.table import Table
 from ._version import __version__, __status__
 
 
@@ -24,7 +26,7 @@ def get_version():
     """Reads the version from _version.py."""
     return f"{__version__} (status: {__status__})"
 
-def list_packages():
+def list_packages(category_filter=None):
     """Lists all available packages in a category-wise table."""
     try:
         with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
@@ -36,37 +38,32 @@ def list_packages():
     categorized_packages = {}
     for name, data in packages.items():
         category = data.get('category', 'Uncategorized')
+        if category_filter and category.lower() != category_filter.lower():
+            continue
         if category not in categorized_packages:
             categorized_packages[category] = []
-
         version = data.get('version', 'N/A')
         categorized_packages[category].append({'name': name, 'version': version})
 
-    print("Available packages:")
+    console = Console()
+    console.print("Available packages:", style="bold white")
 
     for category in sorted(categorized_packages.keys()):
-        print(f"\n--- {category} ---")
+
+        table = Table(title=f"[bold yellow]{category}[/bold yellow]", show_header=True, header_style="bold magenta")
+        table.add_column("Package", style="green", no_wrap=True)
+        table.add_column("Version", style="cyan")
 
         sorted_packages = sorted(categorized_packages[category], key=lambda x: x['name'])
         if not sorted_packages:
             continue
 
-        # Determine column widths
-        name_width = max(len(p['name']) for p in sorted_packages)
-        version_width = max(len(p['version']) for p in sorted_packages)
-
-        # Headers
-        header = f"| {'Package'.ljust(name_width)} | {'Version'.ljust(version_width)} |"
-        separator = f"|{'-' * (name_width + 2)}|{'-' * (version_width + 2)}|"
-
-        print(header)
-        print(separator)
-
-        # Table rows
         for pkg in sorted_packages:
-            print(f"| {pkg['name'].ljust(name_width)} | {pkg['version'].ljust(version_width)} |")
+            table.add_row(pkg['name'], pkg['version'])
 
-    print("\nEnd of list.")
+        console.print(table)
+
+    console.print("End of list.", style="bold white")
 
 def get_portable_bin_dir():
     """Gets the directory for storing portable application binaries."""
@@ -356,6 +353,41 @@ def uninstall_package(package_name):
             print(f"2. Find '{package_name}' in the list and select 'Uninstall'.")
 
 
+def uninstall_lemon():
+    """Uninstalls the lemon package manager itself."""
+    console = Console()
+    console.print("This will uninstall the Lemon Package Manager from your system. This action is irreversible.", style="bold red")
+
+    confirm = input("Are you sure you want to continue? (y/n): ")
+
+    if confirm.lower() == 'y':
+        print("Uninstalling Lemon Package Manager...")
+        try:
+            subprocess.run([sys.executable, "-m", "pip", "uninstall", "lemon-pm", "-y"], check=True)
+            print("Lemon Package Manager has been successfully uninstalled.")
+            console.print("Thank you for using Lemon Package Manager!", style="bold green")
+        except subprocess.CalledProcessError as e:
+            print(f"An error occurred during uninstallation: {e}")
+        except FileNotFoundError:
+            print("Error: 'pip' command not found. Please ensure you have pip installed and in your PATH.")
+    else:
+        print("Uninstallation cancelled.")
+
+def list_categories():
+    """Lists all available package categories."""
+    try:
+        with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+            packages = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error reading package list: {e}")
+        return
+
+    categories = set(data.get('category', 'Uncategorized') for data in packages.values())
+    console = Console()
+    console.print("Available categories:", style="bold white")
+    for category in sorted(categories):
+        console.print(f"- [yellow]{category}[/yellow]")
+
 def main():
     """Main function for the lemon package manager."""
     parser = argparse.ArgumentParser(description="A simple package manager for Windows.")
@@ -370,7 +402,11 @@ def main():
     uninstall_parser.add_argument('package_name', help='The name of the package to uninstall')
 
     # 'list' command
-    list_parser = subparsers.add_parser('list', help='List available packages')
+    list_parser = subparsers.add_parser('list', help='List available packages, optionally filtered by category')
+    list_parser.add_argument('category', nargs='?', default=None, help='The category to filter by')
+
+    # 'categories' command
+    categories_parser = subparsers.add_parser('categories', help='List all available package categories')
 
     # 'run' command
     run_parser = subparsers.add_parser('run', help='Run an installed package')
@@ -382,6 +418,9 @@ def main():
     # 'help' command
     help_parser = subparsers.add_parser('help', help='Show this help message')
 
+    # 'uninstall-lpm' command
+    uninstall_lemon_parser = subparsers.add_parser('uninstall-lpm', help='Uninstall the lemon package manager itself')
+
 
     args = parser.parse_args()
 
@@ -392,9 +431,13 @@ def main():
     elif args.command == 'run':
         run_package(args.package_name)
     elif args.command == 'list':
-        list_packages()
+        list_packages(args.category)
+    elif args.command == 'categories':
+        list_categories()
     elif args.command == 'version':
-        print(f"lemon-pm version {__version__} (status: {__status__})")
+        print(f"Lemon Package Manager version {__version__} (status: {__status__})")
+    elif args.command == 'uninstall-lpm':
+        uninstall_lemon()
     elif args.command == 'help':
         parser.print_help()
     else:
