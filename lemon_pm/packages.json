@@ -543,5 +543,14 @@
     "type": "installer",
     "category": "Utilities",
     "executable": "Joplin.exe"
+  },
+  "figma": {
+    "url": "https://desktop.figma.com/win/Figma.msi",
+    "version": "latest",
+    "install_command": ["/quiet"],
+    "uninstall_command": "msiexec /x Figma.msi /quiet",
+    "type": "installer",
+    "category": "Media",
+    "executable": "figma.exe"
   }
 }
