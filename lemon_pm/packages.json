@@ -552,5 +552,12 @@
     "type": "installer",
     "category": "Media",
     "executable": "figma.exe"
+  },
+  "photodemon": {
+    "url": "https://github.com/tannerhelland/PhotoDemon/releases/download/v2025.4/PhotoDemon-2025.4.zip",
+    "version": "2025.4",
+    "type": "portable",
+    "category": "Media",
+    "executable_name": "PhotoDemon.exe"
   }
 }
