@@ -43,7 +43,8 @@ def list_packages(category_filter=None):
         if category not in categorized_packages:
             categorized_packages[category] = []
         version = data.get('version', 'N/A')
-        categorized_packages[category].append({'name': name, 'version': version})
+        description = data.get('description', 'No description available.')
+        categorized_packages[category].append({'name': name, 'version': version, 'description': description})
 
     console = Console()
     console.print("Available packages:", style="bold white")
@@ -53,13 +54,14 @@ def list_packages(category_filter=None):
         table = Table(title=f"[bold yellow]{category}[/bold yellow]", show_header=True, header_style="bold magenta")
         table.add_column("Package", style="green", no_wrap=True)
         table.add_column("Version", style="cyan")
+        table.add_column("Description", style="white")
 
         sorted_packages = sorted(categorized_packages[category], key=lambda x: x['name'])
         if not sorted_packages:
             continue
 
         for pkg in sorted_packages:
-            table.add_row(pkg['name'], pkg['version'])
+            table.add_row(pkg['name'], pkg['version'], pkg['description'])
 
         console.print(table)
 
