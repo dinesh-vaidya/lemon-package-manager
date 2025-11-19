@@ -51,7 +51,7 @@ def list_packages(category_filter=None):
 
     for category in sorted(categorized_packages.keys()):
 
-        table = Table(title=f"[bold yellow]{category}[/bold yellow]", show_header=True, header_style="bold magenta")
+        table = Table(title=f"[bold yellow]{category}[/bold yellow]", show_header=True, header_style="bold magenta", expand=True)
         table.add_column("Package", style="green", no_wrap=True)
         table.add_column("Version", style="cyan")
         table.add_column("Description", style="white")
