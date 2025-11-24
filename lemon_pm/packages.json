@@ -622,5 +622,25 @@
     "type": "portable",
     "category": "Media",
     "executable_name": "PhotoDemon.exe"
+  },
+  "ccleaner": {
+    "url": "https://download.ccleaner.com/ccsetup616.exe",
+    "version": "6.16",
+    "description": "A utility used to clean potentially unwanted files and invalid Windows Registry entries from a computer.",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles%\\CCleaner\\uninst.exe\" /S",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "CCleaner64.exe"
+  },
+  "bleachbit": {
+    "url": "https://download.bleachbit.org/BleachBit-4.4.2-setup.exe",
+    "version": "4.4.2",
+    "description": "A free and open-source disk space cleaner, privacy manager, and computer system optimizer.",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles%\\BleachBit\\uninstall.exe\" /S",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "bleachbit.exe"
   }
 }
