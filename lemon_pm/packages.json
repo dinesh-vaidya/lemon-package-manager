@@ -699,6 +699,6 @@
     "description": "A web browser that anonymizes your web traffic using the Tor network, making it hard to track you online.",
     "type": "portable",
     "category": "Browsers",
-    "executable": "start-tor-browser.exe"
+    "executable_name": "start-tor-browser.exe"
   }
 }
