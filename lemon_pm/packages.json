@@ -674,8 +674,8 @@
     "executable": "jellyfin.exe"
   },
   "protonvpn": {
-    "url": "https://github.com/ProtonVPN/win-app/releases/download/4.3.5/ProtonVPN_v4.3.5.exe",
-    "version": "4.3.5",
+    "url": "https://protonvpn.com/download/ProtonVPN_win_v4.3.7.exe",
+    "version": "4.3.7",
     "description": "A high-speed Swiss VPN that safeguards your privacy.",
     "install_command": ["/S"],
     "uninstall_command": "\"%ProgramFiles%\\Proton Technologies\\ProtonVPN\\uninstall.exe\" /S",
