@@ -10,10 +10,55 @@ import ctypes
 import shlex
 import pathlib
 import shutil
+import time
 from rich.console import Console
 from rich.table import Table
+from rich.live import Live
 from ._version import __version__, __status__
 
+
+def typewriter_effect(text, delay=0.05):
+    """Prints text with a typewriter effect."""
+    for char in text:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(delay)
+    print()
+
+def demo():
+    """Demonstrates all available commands with examples."""
+    console = Console()
+    console.print("--- Lemon Package Manager Demo ---", style="bold yellow")
+
+    typewriter_effect("\n1. List all available packages:")
+    console.print("$ lemon list", style="cyan")
+    list_packages(animate=True)
+
+    typewriter_effect("\n2. Install a package:")
+    console.print("$ lemon install 7-zip", style="cyan")
+    typewriter_effect("   (This will download and run the installer for 7-zip)")
+
+    typewriter_effect("\n3. Uninstall a package:")
+    console.print("$ lemon uninstall 7-zip", style="cyan")
+    typewriter_effect("   (This will run the uninstaller for 7-zip)")
+
+    typewriter_effect("\n4. Run a package:")
+    console.print("$ lemon run 7-zip", style="cyan")
+    typewriter_effect("   (This will attempt to launch the main executable for 7-zip)")
+
+    typewriter_effect("\n5. List all available categories:")
+    console.print("$ lemon categories", style="cyan")
+    list_categories()
+
+    typewriter_effect("\n6. Show the version of lemon-pm:")
+    console.print("$ lemon version", style="cyan")
+    console.print(f"Lemon Package Manager version {__version__} (status: {__status__})")
+
+    typewriter_effect("\n7. Uninstall the lemon package manager itself:")
+    console.print("$ lemon uninstall-lpm", style="cyan")
+    typewriter_effect("   (This will prompt for confirmation before uninstalling)")
+
+    console.print("\n--- End of Demo ---", style="bold yellow")
 
 def is_admin():
     """Checks if the script is running with administrator privileges."""
@@ -26,7 +71,7 @@ def get_version():
     """Reads the version from _version.py."""
     return f"{__version__} (status: {__status__})"
 
-def list_packages(category_filter=None):
+def list_packages(category_filter=None, animate=False):
     """Lists all available packages in a category-wise table."""
     try:
         with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
@@ -49,21 +94,52 @@ def list_packages(category_filter=None):
     console = Console()
     console.print("Available packages:", style="bold white")
 
-    for category in sorted(categorized_packages.keys()):
+    sorted_categories = sorted(categorized_packages.keys())
 
-        table = Table(title=f"[bold yellow]{category}[/bold yellow]", show_header=True, header_style="bold magenta", expand=True)
+    # Pre-sort all packages to avoid doing it in the loop
+    for category in sorted_categories:
+        categorized_packages[category] = sorted(categorized_packages[category], key=lambda x: x['name'])
+
+    if not animate:
+        for category in sorted_categories:
+            if not categorized_packages[category]:
+                continue
+            table = Table(title=f"[bold yellow]{category}[/bold yellow]", show_header=True, header_style="bold magenta", expand=True)
+            table.add_column("Package", style="green", no_wrap=True)
+            table.add_column("Version", style="cyan")
+            table.add_column("Description", style="white")
+
+            for pkg in categorized_packages[category]:
+                table.add_row(pkg['name'], pkg['version'], pkg['description'])
+            console.print(table)
+    else:
+        # Animation mode
+        table = Table(show_header=True, header_style="bold magenta", expand=True)
         table.add_column("Package", style="green", no_wrap=True)
         table.add_column("Version", style="cyan")
         table.add_column("Description", style="white")
 
-        sorted_packages = sorted(categorized_packages[category], key=lambda x: x['name'])
-        if not sorted_packages:
-            continue
+        current_category = None
 
-        for pkg in sorted_packages:
-            table.add_row(pkg['name'], pkg['version'], pkg['description'])
+        with Live(table, console=console, screen=False, vertical_overflow="visible") as live:
+            for category in sorted_categories:
+                if not categorized_packages[category]:
+                    continue
 
-        console.print(table)
+                # Add a temporary row for the category header
+                if current_category != category:
+                    if current_category is not None:
+                        # Add a separator before the new category
+                        table.add_row("---", "---", "---")
+                    table.title = f"[bold yellow]{category}[/bold yellow]"
+                    current_category = category
+                    live.update(table) # Refresh to show the new title
+                    time.sleep(0.5)
+
+                for pkg in categorized_packages[category]:
+                    table.add_row(pkg['name'], pkg['version'], pkg['description'])
+                    live.update(table)
+                    time.sleep(0.1)
 
     console.print("End of list.", style="bold white")
 
@@ -423,6 +499,9 @@ def main():
     # 'uninstall-lpm' command
     uninstall_lemon_parser = subparsers.add_parser('uninstall-lpm', help='Uninstall the lemon package manager itself')
 
+    # 'demo' command
+    demo_parser = subparsers.add_parser('demo', help='Demonstrate all available commands')
+
 
     args = parser.parse_args()
 
@@ -440,6 +519,8 @@ def main():
         print(f"Lemon Package Manager version {__version__} (status: {__status__})")
     elif args.command == 'uninstall-lpm':
         uninstall_lemon()
+    elif args.command == 'demo':
+        demo()
     elif args.command == 'help':
         parser.print_help()
     else:
