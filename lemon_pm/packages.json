@@ -160,11 +160,11 @@
     "executable": "gimp-2.10.exe"
   },
   "libreoffice": {
-    "url": "https://download.documentfoundation.org/libreoffice/stable/24.8.3/win/x86_64/LibreOffice_24.8.3_Win_x86-64.msi",
-    "version": "24.8.3",
+    "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.3/win/x86_64/LibreOffice_25.8.3_Win_x86-64.msi",
+    "version": "25.8.3",
     "description": "A free and open-source office productivity software suite.",
     "install_command": ["/quiet"],
-    "uninstall_command": "msiexec /x {81475ADA-9741-4A29-A414-7727EB900D54} /quiet",
+    "uninstall_command": "wmic product where \"name like 'LibreOffice%'\" call uninstall /nointeractive",
     "type": "installer",
     "category": "Utilities",
     "executable": "soffice.exe"
@@ -260,8 +260,8 @@
     "executable": null
   },
   "virtualbox": {
-    "url": "https://download.virtualbox.org/virtualbox/7.1.12/VirtualBox-7.1.12-169651-Win.exe",
-    "version": "7.1.12",
+    "url": "https://download.virtualbox.org/virtualbox/7.2.4/VirtualBox-7.2.4-170995-Win.exe",
+    "version": "7.2.4",
     "description": "A free and open-source hosted hypervisor for x86 virtualization, developed by Oracle Corporation.",
     "install_command": ["--silent"],
     "uninstall_command": "\"%ProgramFiles%\\Oracle\\VirtualBox\\uninstall.exe\" --silent",
@@ -642,5 +642,63 @@
     "type": "installer",
     "category": "Utilities",
     "executable": "bleachbit.exe"
+  },
+  "thunderbird": {
+    "url": "https://archive.mozilla.org/pub/thunderbird/releases/128.5.2esr/win64/en-US/Thunderbird%20Setup%20128.5.2esr.msi",
+    "version": "128.5.2esr",
+    "description": "A free and open-source email, newsfeed, chat, and calendaring client.",
+    "install_command": ["/quiet"],
+    "uninstall_command": "wmic product where \"name like 'Mozilla Thunderbird%'\" call uninstall /nointeractive",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "thunderbird.exe"
+  },
+  "vmware-player": {
+    "url": "https://download3.vmware.com/software/WKST-PLAYER-1752/VMware-player-full-17.5.2-23775571.exe",
+    "version": "17.5.2",
+    "description": "A desktop hypervisor application that lets you run virtual machines on your Windows or Linux PC.",
+    "install_command": ["/S", "/v", "/qn"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\VMware\\VMware Player\\uninstall.exe\" /s",
+    "type": "installer",
+    "category": "Development",
+    "executable": "vmplayer.exe"
+  },
+  "jellyfin": {
+    "url": "https://repo.jellyfin.org/files/server/windows/latest-stable/amd64/jellyfin_10.11.4_windows-x64.exe",
+    "version": "10.11.4",
+    "description": "A Free Software Media System that puts you in control of managing and streaming your media.",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles%\\Jellyfin\\Server\\uninstall.exe\" /S",
+    "type": "installer",
+    "category": "Media",
+    "executable": "jellyfin.exe"
+  },
+  "protonvpn": {
+    "url": "https://protonvpn.com/download/ProtonVPN_win_v4.3.7.exe",
+    "version": "4.3.7",
+    "description": "A high-speed Swiss VPN that safeguards your privacy.",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles%\\Proton Technologies\\ProtonVPN\\uninstall.exe\" /S",
+    "type": "installer",
+    "category": "Security",
+    "executable": "ProtonVPN.exe"
+  },
+  "zen-browser": {
+    "url": "https://github.com/zen-browser/desktop/releases/download/1.17.12b/zen.installer.exe",
+    "version": "1.17.12b",
+    "description": "A free and open-source fork of Mozilla Firefox with a focus on privacy, customizability, and design.",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles%\\Zen\\unins000.exe\" /S",
+    "type": "installer",
+    "category": "Browsers",
+    "executable": "zen.exe"
+  },
+  "tor-browser": {
+    "url": "https://www.torproject.org/dist/torbrowser/15.0.2/tor-browser-windows-x86_64-portable-15.0.2.exe",
+    "version": "15.0.2",
+    "description": "A web browser that anonymizes your web traffic using the Tor network, making it hard to track you online.",
+    "type": "portable",
+    "category": "Browsers",
+    "executable": "start-tor-browser.exe"
   }
 }
