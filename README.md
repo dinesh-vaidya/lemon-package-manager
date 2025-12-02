@@ -104,6 +104,15 @@ To see the list of all available commands and their descriptions.
 lpm help
 ```
 
+### `lemon demo` or `lpm demo`
+
+To see a live demonstration of all the available commands. This command provides a guided tour of the package manager's features with animated text and tables.
+
+```bash
+# Example
+lpm demo
+```
+
 ### `lemon uninstall-lpm` or `lpm uninstall-lpm`
 
 To uninstall the lemon package manager itself. This will remove the `lemon` and `lpm` commands from your system.
