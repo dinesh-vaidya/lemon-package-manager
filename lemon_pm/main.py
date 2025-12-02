@@ -10,10 +10,58 @@ import ctypes
 import shlex
 import pathlib
 import shutil
+import time
 from rich.console import Console
 from rich.table import Table
 from ._version import __version__, __status__
 
+
+def typewriter_effect(text, delay=0.05):
+    """Prints text with a typewriter effect."""
+    for char in text:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(delay)
+    print()
+
+def demo():
+    """Demonstrates all available commands with examples."""
+    console = Console()
+    console.print("--- Lemon Package Manager Demo ---", style="bold yellow")
+
+    typewriter_effect("\n1. List all available packages:")
+    console.print("$ lemon list", style="cyan")
+    list_packages()
+
+    typewriter_effect("\n2. List packages in a specific category:")
+    console.print("$ lemon list Utilities", style="cyan")
+    list_packages(category_filter="Utilities")
+
+    typewriter_effect("\n3. Install a package:")
+    console.print("$ lemon install 7-zip", style="cyan")
+    typewriter_effect("   (This will download and run the installer for 7-zip)")
+
+    typewriter_effect("\n4. Uninstall a package:")
+    console.print("$ lemon uninstall 7-zip", style="cyan")
+    typewriter_effect("   (This will run the uninstaller for 7-zip)")
+
+    typewriter_effect("\n5. Run a package:")
+    console.print("$ lemon run 7-zip", style="cyan")
+    typewriter_effect("   (This will attempt to launch the main executable for 7-zip)")
+
+    typewriter_effect("\n6. List all available categories:")
+    console.print("$ lemon categories", style="cyan")
+    list_categories()
+
+    typewriter_effect("\n7. Show the version of lemon-pm:")
+    console.print("$ lemon version", style="cyan")
+    console.print(f"Lemon Package Manager version {__version__} (status: {__status__})")
+
+    typewriter_effect("\n8. Uninstall the lemon package manager itself:")
+    console.print("$ lemon uninstall-lpm", style="cyan")
+    typewriter_effect("   (This will prompt for confirmation before uninstalling)")
+
+    console.print("\n--- End of Demo ---", style="bold yellow")
 
 def is_admin():
     """Checks if the script is running with administrator privileges."""
@@ -423,6 +471,9 @@ def main():
     # 'uninstall-lpm' command
     uninstall_lemon_parser = subparsers.add_parser('uninstall-lpm', help='Uninstall the lemon package manager itself')
 
+    # 'demo' command
+    demo_parser = subparsers.add_parser('demo', help='Demonstrate all available commands')
+
 
     args = parser.parse_args()
 
@@ -440,6 +491,8 @@ def main():
         print(f"Lemon Package Manager version {__version__} (status: {__status__})")
     elif args.command == 'uninstall-lpm':
         uninstall_lemon()
+    elif args.command == 'demo':
+        demo()
     elif args.command == 'help':
         parser.print_help()
     else:
