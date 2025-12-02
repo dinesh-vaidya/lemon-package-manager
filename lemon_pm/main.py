@@ -34,27 +34,31 @@ def demo():
     console.print("$ lemon list", style="cyan")
     list_packages(animate=True)
 
-    typewriter_effect("\n2. Install a package:")
+    typewriter_effect("\n2. List packages in a specific category:")
+    console.print("$ lemon list Utilities", style="cyan")
+    list_packages(category_filter="Utilities", animate=True)
+
+    typewriter_effect("\n3. Install a package:")
     console.print("$ lemon install 7-zip", style="cyan")
     typewriter_effect("   (This will download and run the installer for 7-zip)")
 
-    typewriter_effect("\n3. Uninstall a package:")
+    typewriter_effect("\n4. Uninstall a package:")
     console.print("$ lemon uninstall 7-zip", style="cyan")
     typewriter_effect("   (This will run the uninstaller for 7-zip)")
 
-    typewriter_effect("\n4. Run a package:")
+    typewriter_effect("\n5. Run a package:")
     console.print("$ lemon run 7-zip", style="cyan")
     typewriter_effect("   (This will attempt to launch the main executable for 7-zip)")
 
-    typewriter_effect("\n5. List all available categories:")
+    typewriter_effect("\n6. List all available categories:")
     console.print("$ lemon categories", style="cyan")
     list_categories()
 
-    typewriter_effect("\n6. Show the version of lemon-pm:")
+    typewriter_effect("\n7. Show the version of lemon-pm:")
     console.print("$ lemon version", style="cyan")
     console.print(f"Lemon Package Manager version {__version__} (status: {__status__})")
 
-    typewriter_effect("\n7. Uninstall the lemon package manager itself:")
+    typewriter_effect("\n8. Uninstall the lemon package manager itself:")
     console.print("$ lemon uninstall-lpm", style="cyan")
     typewriter_effect("   (This will prompt for confirmation before uninstalling)")
 
