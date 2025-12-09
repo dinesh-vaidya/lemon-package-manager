@@ -470,6 +470,72 @@ def list_categories():
     for category in sorted(categories):
         console.print(f"- [yellow]{category}[/yellow]")
 
+def chat():
+    """Starts an interactive chat session to manage packages."""
+    console = Console()
+    console.print("--- Welcome to Lemon Package Manager Chat ---", style="bold yellow")
+    typewriter_effect("Assistant: What would you like me to do? (e.g., 'install 7-zip', 'list packages', 'exit')")
+
+    try:
+        with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+            packages = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error reading package list: {e}")
+        return
+
+    package_names = list(packages.keys())
+
+    while True:
+        try:
+            user_input = input("User: ").lower().strip()
+
+            if not user_input:
+                continue
+
+            # Exit conditions
+            if user_input in ["exit", "quit", "bye", "q"]:
+                typewriter_effect("Assistant: Goodbye!")
+                break
+
+            # --- Intent: List Packages ---
+            if "list" in user_input or "show me" in user_input:
+                typewriter_effect("Assistant: Of course! Here are all the available packages:")
+                list_packages()
+                typewriter_effect("\nAssistant: Is there anything else I can help you with?")
+                continue
+
+            # --- Intent: Install Package ---
+            if "install" in user_input:
+                found_package = None
+                # Iterate through all known package names to see if one is mentioned.
+                for name in package_names:
+                    if name in user_input:
+                        found_package = name
+                        break
+
+                if found_package:
+                    typewriter_effect(f"Assistant: I found '{found_package}' in our list. It is available.")
+                    confirmation = input(f"Assistant: Would you like to install it? (y/n): ").lower().strip()
+                    if confirmation == 'y':
+                        typewriter_effect(f"Assistant: Great! Starting the installation for {found_package}.")
+                        install_package(found_package)
+                    else:
+                        typewriter_effect("Assistant: Understood. I will not install it.")
+                else:
+                    typewriter_effect("Assistant: I'm sorry, I couldn't find the requested software in our package list.")
+
+                typewriter_effect("\nAssistant: Is there anything else I can help you with?")
+                continue
+
+            # --- Default/Fallback ---
+            typewriter_effect("Assistant: I'm not sure how to help with that. You can ask me to 'list packages' or 'install <package_name>'.")
+
+        except (KeyboardInterrupt, EOFError):
+            # Handle Ctrl+C or Ctrl+D gracefully
+            print("\n") # Move to the next line
+            typewriter_effect("Assistant: Goodbye!")
+            break
+
 def main():
     """Main function for the lemon package manager."""
     parser = argparse.ArgumentParser(description="A simple package manager for Windows.")
@@ -506,6 +572,9 @@ def main():
     # 'demo' command
     demo_parser = subparsers.add_parser('demo', help='Demonstrate all available commands')
 
+    # 'chat' command
+    chat_parser = subparsers.add_parser('chat', help='Start an interactive chat session')
+
 
     args = parser.parse_args()
 
@@ -525,6 +594,8 @@ def main():
         uninstall_lemon()
     elif args.command == 'demo':
         demo()
+    elif args.command == 'chat':
+        chat()
     elif args.command == 'help':
         parser.print_help()
     else:
