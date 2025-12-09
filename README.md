@@ -115,7 +115,7 @@ lpm demo
 
 ### `lemon chat` or `lpm chat`
 
-Starts an interactive chat session with an AI assistant to help you manage packages. You can ask it to "list packages" or "install <package_name>".
+Starts an interactive chat session with an AI assistant to help you manage packages. You can ask it to "list packages", "install <package_name>", or "search <package_name>". The chat interface is colorful and easy to use.
 
 ```bash
 # Example
