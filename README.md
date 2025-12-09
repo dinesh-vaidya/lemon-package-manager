@@ -113,6 +113,15 @@ To see a live demonstration of all the available commands. This command provides
 lpm demo
 ```
 
+### `lemon chat` or `lpm chat`
+
+Starts an interactive chat session with an AI assistant to help you manage packages. You can ask it to "list packages" or "install <package_name>".
+
+```bash
+# Example
+lpm chat
+```
+
 ### `lemon uninstall-lpm` or `lpm uninstall-lpm`
 
 To uninstall the lemon package manager itself. This will remove the `lemon` and `lpm` commands from your system.
