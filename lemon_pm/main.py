@@ -11,56 +11,254 @@ import shlex
 import pathlib
 import shutil
 import time
+import random
+import difflib
 from rich.console import Console
 from rich.table import Table
 from rich.live import Live
 from ._version import __version__, __status__
 
 
-def typewriter_effect(text, delay=0.05):
+def typewriter_effect(text, console, delay=0.05, style=None):
     """Prints text with a typewriter effect."""
     for char in text:
-        sys.stdout.write(char)
-        sys.stdout.flush()
+        console.print(char, style=style, end="")
         time.sleep(delay)
     print()
+
+def chat():
+    """Starts an interactive chat session to manage packages."""
+    console = Console()
+    console.print("--- Welcome to Lemon Package Manager Chat ---", style="bold yellow")
+    console.print("Assistant:", style="bold cyan", end=" ")
+    typewriter_effect("I can help you manage packages. Here are the commands you can use:", console, style="grey50")
+    console.print("  list, search <pkg>, install <pkg>, info <pkg>, uninstall <pkg>, exit", style="grey50")
+
+    try:
+        with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+            packages = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error reading package list: {e}")
+        return
+
+    package_names = list(packages.keys())
+    goodbye_messages = [
+        "Goodbye!",
+        "See you later!",
+        "Happy to help. Bye!",
+        "Take care!"
+    ]
+
+    while True:
+        try:
+            console.print("User:", style="bold green", end=" ")
+            user_input = input().lower().strip()
+
+            if not user_input:
+                continue
+
+            if user_input in ["exit", "quit", "bye", "q"]:
+                console.print("Assistant:", style="bold cyan", end=" ")
+                typewriter_effect(random.choice(goodbye_messages), console)
+                break
+
+            if handle_smart_suggestions(user_input, packages, console):
+                pass  # Handled in the function
+            elif user_input.startswith("list") or user_input.startswith("show me"):
+                handle_list_packages(packages, console)
+            elif user_input.startswith("search"):
+                handle_search(user_input, package_names, console)
+            elif user_input.startswith("info"):
+                handle_info(user_input, packages, console)
+            elif user_input.startswith("uninstall"):
+                handle_uninstall(user_input, package_names, console)
+            elif user_input.startswith("install"):
+                handle_install(user_input, package_names, console)
+            else:
+                console.print("Assistant:", style="bold cyan", end=" ")
+                typewriter_effect("I'm not sure how to help with that. You can ask me to 'list', 'search', 'install', 'info', or 'uninstall'.", console)
+
+        except (KeyboardInterrupt, EOFError):
+            print("\n")
+            console.print("Assistant:", style="bold cyan", end=" ")
+            typewriter_effect(random.choice(goodbye_messages), console)
+            break
+
+def handle_list_packages(packages, console):
+    console.print("Assistant:", style="bold cyan", end=" ")
+    typewriter_effect("Of course! Here are all the available packages:", style="grey50")
+    list_packages_chat(packages, console)
+    console.print("\nAssistant:", style="bold cyan", end=" ")
+    typewriter_effect("Is there anything else I can help you with?", style="grey50")
+
+def handle_search(user_input, package_names, console):
+    parts = user_input.split(maxsplit=1)
+    if len(parts) > 1:
+        package_name = parts[1]
+        if package_name in package_names:
+            console.print("Assistant:", style="bold cyan", end=" ")
+            typewriter_effect(f"Yes, '{package_name}' is available.", style="grey50")
+            console.print("Assistant:", style="bold cyan", end=" ")
+            typewriter_effect("Would you like to install it? (y/n):", style="grey50")
+            confirmation = input().lower().strip()
+            if confirmation == 'y':
+                install_package(package_name)
+            else:
+                console.print("Assistant:", style="bold cyan", end=" ")
+                typewriter_effect("Okay, I will not install it.", style="grey50")
+        else:
+            console.print("Assistant:", style="bold cyan", end=" ")
+            typewriter_effect(f"Sorry, '{package_name}' is not available.", style="grey50")
+    else:
+        console.print("Assistant:", style="bold cyan", end=" ")
+        typewriter_effect("Please specify a package to search for.", style="grey50")
+
+def handle_info(user_input, packages, console):
+    parts = user_input.split(maxsplit=1)
+    if len(parts) > 1:
+        package_name = parts[1]
+        if package_name in packages:
+            pkg_data = packages[package_name]
+            console.print("Assistant:", style="bold cyan", end=" ")
+            typewriter_effect(f"Here is some information about '{package_name}':", style="grey50")
+            console.print(f"  Version: {pkg_data.get('version', 'N/A')}", style="cyan")
+            console.print(f"  Description: {pkg_data.get('description', 'No description available.')}", style="cyan")
+        else:
+            console.print("Assistant:", style="bold cyan", end=" ")
+            typewriter_effect(f"Sorry, I couldn't find '{package_name}'.", style="grey50")
+    else:
+        console.print("Assistant:", style="bold cyan", end=" ")
+        typewriter_effect("Please specify a package to get info about.", style="grey50")
+
+def handle_uninstall(user_input, package_names, console):
+    parts = user_input.split(maxsplit=1)
+    if len(parts) > 1:
+        package_name = parts[1]
+        if package_name in package_names:
+            console.print("Assistant:", style="bold cyan", end=" ")
+            typewriter_effect(f"Are you sure you want to uninstall '{package_name}'? (y/n):", style="grey50")
+            confirmation = input().lower().strip()
+            if confirmation == 'y':
+                uninstall_package(package_name)
+            else:
+                console.print("Assistant:", style="bold cyan", end=" ")
+                typewriter_effect("Okay, I will not uninstall it.", style="grey50")
+        else:
+            console.print("Assistant:", style="bold cyan", end=" ")
+            typewriter_effect(f"Sorry, '{package_name}' is not in the package list.", style="grey50")
+    else:
+        console.print("Assistant:", style="bold cyan", end=" ")
+        typewriter_effect("Please specify a package to uninstall.", style="grey50")
+
+def handle_install(user_input, package_names, console):
+    parts = user_input.split(maxsplit=1)
+    if len(parts) > 1:
+        package_name = parts[1]
+        if package_name in package_names:
+            console.print("Assistant:", style="bold cyan", end=" ")
+            typewriter_effect(f"I found '{package_name}' in our list. It is available.", style="grey50")
+            console.print("Assistant:", style="bold cyan", end=" ")
+            typewriter_effect("Would you like to install it? (y/n):", style="grey50")
+            confirmation = input().lower().strip()
+            if confirmation == 'y':
+                console.print("Assistant:", style="bold cyan", end=" ")
+                typewriter_effect(f"Great! Starting the installation for {package_name}.", style="grey50")
+                install_package(package_name)
+            else:
+                console.print("Assistant:", style="bold cyan", end=" ")
+                typewriter_effect("Understood. I will not install it.", style="grey50")
+        else:
+            close_matches = difflib.get_close_matches(package_name, package_names)
+            if close_matches:
+                suggestion = close_matches[0]
+                console.print("Assistant:", style="bold cyan", end=" ")
+                typewriter_effect(f"I couldn't find '{package_name}'. Did you mean '{suggestion}'? (y/n):", style="grey50")
+                confirmation = input().lower().strip()
+                if confirmation == 'y':
+                    console.print("Assistant:", style="bold cyan", end=" ")
+                    typewriter_effect(f"Great! Starting the installation for {suggestion}.", style="grey50")
+                    install_package(suggestion)
+                else:
+                    console.print("Assistant:", style="bold cyan", end=" ")
+                    typewriter_effect("My mistake. I won't install that.", style="grey50")
+            else:
+                console.print("Assistant:", style="bold cyan", end=" ")
+                typewriter_effect("I'm sorry, I couldn't find the requested software in our package list.", style="grey50")
+    else:
+        console.print("Assistant:", style="bold cyan", end=" ")
+        typewriter_effect("Please specify a package to install.", style="grey50")
+
+def handle_smart_suggestions(user_input, packages, console):
+    categories = set(data.get('category', 'Uncategorized').lower() for data in packages.values())
+    found_category = None
+    for cat in categories:
+        if cat in user_input:
+            found_category = cat
+            break
+
+    if found_category:
+        console.print("Assistant:", style="bold cyan", end=" ")
+        typewriter_effect(f"I found some packages in the '{found_category}' category:", style="grey50")
+
+        table = Table(show_header=True, header_style="bold magenta", expand=True)
+        table.add_column("Package", style="green", no_wrap=True)
+        table.add_column("Version", style="cyan")
+
+        category_packages = []
+        for name, data in packages.items():
+            if data.get('category', '').lower() == found_category:
+                table.add_row(name, data.get('version', 'N/A'))
+                category_packages.append(name)
+        console.print(table)
+        console.print("\nAssistant:", style="bold cyan", end=" ")
+        typewriter_effect("Would you like to install any of these? If so, just type the name.", style="grey50")
+
+        console.print("User:", style="bold green", end=" ")
+        next_input = input().lower().strip()
+        if next_input in category_packages:
+            install_package(next_input)
+        else:
+            console.print("Assistant:", style="bold cyan", end=" ")
+            typewriter_effect("Okay, I will not install any of these.", style="grey50")
+        return True
+    return False
 
 def demo():
     """Demonstrates all available commands with examples."""
     console = Console()
     console.print("--- Lemon Package Manager Demo ---", style="bold yellow")
 
-    typewriter_effect("\n1. List all available packages:")
+    typewriter_effect("\n1. List all available packages:", console)
     console.print("$ lemon list", style="cyan")
     list_packages(animate=True)
 
-    typewriter_effect("\n2. List packages in a specific category:")
+    typewriter_effect("\n2. List packages in a specific category:", console)
     console.print("$ lemon list Utilities", style="cyan")
     list_packages(category_filter="Utilities", animate=True)
 
-    typewriter_effect("\n3. Install a package:")
+    typewriter_effect("\n3. Install a package:", console)
     console.print("$ lemon install 7-zip", style="cyan")
-    typewriter_effect("   (This will download and run the installer for 7-zip)")
+    typewriter_effect("   (This will download and run the installer for 7-zip)", console)
 
-    typewriter_effect("\n4. Uninstall a package:")
+    typewriter_effect("\n4. Uninstall a package:", console)
     console.print("$ lemon uninstall 7-zip", style="cyan")
-    typewriter_effect("   (This will run the uninstaller for 7-zip)")
+    typewriter_effect("   (This will run the uninstaller for 7-zip)", console)
 
-    typewriter_effect("\n5. Run a package:")
+    typewriter_effect("\n5. Run a package:", console)
     console.print("$ lemon run 7-zip", style="cyan")
-    typewriter_effect("   (This will attempt to launch the main executable for 7-zip)")
+    typewriter_effect("   (This will attempt to launch the main executable for 7-zip)", console)
 
-    typewriter_effect("\n6. List all available categories:")
+    typewriter_effect("\n6. List all available categories:", console)
     console.print("$ lemon categories", style="cyan")
     list_categories()
 
-    typewriter_effect("\n7. Show the version of lemon-pm:")
+    typewriter_effect("\n7. Show the version of lemon-pm:", console)
     console.print("$ lemon version", style="cyan")
     console.print(f"Lemon Package Manager version {__version__} (status: {__status__})")
 
-    typewriter_effect("\n8. Uninstall the lemon package manager itself:")
+    typewriter_effect("\n8. Uninstall the lemon package manager itself:", console)
     console.print("$ lemon uninstall-lpm", style="cyan")
-    typewriter_effect("   (This will prompt for confirmation before uninstalling)")
+    typewriter_effect("   (This will prompt for confirmation before uninstalling)", console)
 
     console.print("\n--- End of Demo ---", style="bold yellow")
 
@@ -74,6 +272,20 @@ def is_admin():
 def get_version():
     """Reads the version from _version.py."""
     return f"{__version__} (status: {__status__})"
+
+def list_packages_chat(packages, console):
+    """Lists all available packages with only name and version for the chat command."""
+    table = Table(show_header=True, header_style="bold magenta", expand=True)
+    table.add_column("Package", style="green", no_wrap=True)
+    table.add_column("Version", style="cyan")
+
+    sorted_packages = sorted(packages.items(), key=lambda x: x[0])
+
+    for name, data in sorted_packages:
+        version = data.get('version', 'N/A')
+        table.add_row(name, version)
+
+    console.print(table)
 
 def list_packages(category_filter=None, animate=False):
     """Lists all available packages in a category-wise table."""
@@ -469,111 +681,6 @@ def list_categories():
     console.print("Available categories:", style="bold white")
     for category in sorted(categories):
         console.print(f"- [yellow]{category}[/yellow]")
-
-def chat():
-    """Starts an interactive chat session to manage packages."""
-    console = Console()
-    console.print("--- Welcome to Lemon Package Manager Chat ---", style="bold yellow")
-    console.print("Assistant:", style="bold cyan", end=" ")
-    console.print("What would you like me to do? (e.g., 'install 7-zip', 'list packages', 'exit')", style="cyan")
-
-    try:
-        with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
-            packages = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"Error reading package list: {e}")
-        return
-
-    package_names = list(packages.keys())
-
-    while True:
-        try:
-            console.print("User:", style="bold green", end=" ")
-            user_input = input().lower().strip()
-
-
-            if not user_input:
-                continue
-
-            # Exit conditions
-            if user_input in ["exit", "quit", "bye", "q"]:
-                console.print("Assistant:", style="bold cyan", end=" ")
-                console.print("Goodbye!", style="cyan")
-                break
-
-            # --- Intent: List Packages ---
-            if "list" in user_input or "show me" in user_input:
-                console.print("Assistant:", style="bold cyan", end=" ")
-                console.print("Of course! Here are all the available packages:", style="cyan")
-                list_packages()
-                console.print("\nAssistant:", style="bold cyan", end=" ")
-                console.print("Is there anything else I can help you with?", style="cyan")
-                continue
-
-            # --- Intent: Search Package ---
-            if user_input.startswith("search"):
-                parts = user_input.split()
-                if len(parts) > 1:
-                    package_name = parts[1]
-                    if package_name in package_names:
-                        console.print("Assistant:", style="bold cyan", end=" ")
-                        console.print(f"Yes, '{package_name}' is available.", style="cyan")
-                        console.print("Assistant:", style="bold cyan", end=" ")
-                        console.print("Would you like to install it? (y/n):", style="cyan", end=" ")
-                        confirmation = input().lower().strip()
-                        if confirmation == 'y':
-                            install_package(package_name)
-                        else:
-                            console.print("Assistant:", style="bold cyan", end=" ")
-                            console.print("Okay, I will not install it.", style="cyan")
-                    else:
-                        console.print("Assistant:", style="bold cyan", end=" ")
-                        console.print(f"Sorry, '{package_name}' is not available.", style="cyan")
-                else:
-                    console.print("Assistant:", style="bold cyan", end=" ")
-                    console.print("Please specify a package to search for.", style="cyan")
-                continue
-
-            # --- Intent: Install Package ---
-            if "install" in user_input:
-                found_package = None
-                # Iterate through all known package names to see if one is mentioned.
-                for name in package_names:
-                    if name in user_input:
-                        found_package = name
-                        break
-
-                if found_package:
-                    console.print("Assistant:", style="bold cyan", end=" ")
-                    console.print(f"I found '{found_package}' in our list. It is available.", style="cyan")
-                    console.print("Assistant:", style="bold cyan", end=" ")
-                    console.print("Would you like to install it? (y/n):", style="cyan", end=" ")
-                    confirmation = input().lower().strip()
-                    if confirmation == 'y':
-                        console.print("Assistant:", style="bold cyan", end=" ")
-                        console.print(f"Great! Starting the installation for {found_package}.", style="cyan")
-                        install_package(found_package)
-                    else:
-                        console.print("Assistant:", style="bold cyan", end=" ")
-                        console.print("Understood. I will not install it.", style="cyan")
-                else:
-                    console.print("Assistant:", style="bold cyan", end=" ")
-                    console.print("I'm sorry, I couldn't find the requested software in our package list.", style="cyan")
-
-                console.print("\nAssistant:", style="bold cyan", end=" ")
-                console.print("Is there anything else I can help you with?", style="cyan")
-                continue
-
-            # --- Default/Fallback ---
-            console.print("Assistant:", style="bold cyan", end=" ")
-            console.print("I'm not sure how to help with that. You can ask me to 'list packages' or 'install <package_name>'.", style="cyan")
-
-        except (KeyboardInterrupt, EOFError):
-            # Handle Ctrl+C or Ctrl+D gracefully
-            print("\n") # Move to the next line
-            console.print("Assistant:", style="bold cyan", end=" ")
-            console.print("Goodbye!", style="cyan")
-            break
 
 def main():
     """Main function for the lemon package manager."""
