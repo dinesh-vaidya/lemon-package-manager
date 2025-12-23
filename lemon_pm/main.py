@@ -30,6 +30,10 @@ def chat():
     """Starts an interactive chat session to manage packages."""
     console = Console()
     console.print("--- Welcome to Lemon Package Manager Chat ---", style="bold yellow")
+
+    if sys.platform == 'win32' and not is_admin():
+        console.print("WARNING: Running without administrator privileges. You will not be able to install or uninstall packages.", style="bold yellow")
+
     console.print("Assistant:", style="bold cyan", end=" ")
     typewriter_effect("I can help you manage packages. Here are the commands you can use:", console, style="grey50")
     console.print("  list, search <pkg>, install <pkg>, info <pkg>, uninstall <pkg>, exit", style="grey50")
@@ -86,10 +90,8 @@ def chat():
 
 def handle_list_packages(packages, console):
     console.print("Assistant:", style="bold cyan", end=" ")
-    typewriter_effect("Of course! Here are all the available packages:", style="grey50")
+    typewriter_effect("Of course! Here are all the available packages:", console, style="grey50")
     list_packages_chat(packages, console)
-    console.print("\nAssistant:", style="bold cyan", end=" ")
-    typewriter_effect("Is there anything else I can help you with?", style="grey50")
 
 def handle_search(user_input, package_names, console):
     parts = user_input.split(maxsplit=1)
@@ -97,21 +99,21 @@ def handle_search(user_input, package_names, console):
         package_name = parts[1]
         if package_name in package_names:
             console.print("Assistant:", style="bold cyan", end=" ")
-            typewriter_effect(f"Yes, '{package_name}' is available.", style="grey50")
+            typewriter_effect(f"Yes, '{package_name}' is available.", console, style="grey50")
             console.print("Assistant:", style="bold cyan", end=" ")
-            typewriter_effect("Would you like to install it? (y/n):", style="grey50")
+            typewriter_effect("Would you like to install it? (y/n):", console, style="grey50")
             confirmation = input().lower().strip()
             if confirmation == 'y':
-                install_package(package_name)
+                install_package(package_name, from_chat=True)
             else:
                 console.print("Assistant:", style="bold cyan", end=" ")
-                typewriter_effect("Okay, I will not install it.", style="grey50")
+                typewriter_effect("Okay, I will not install it.", console, style="grey50")
         else:
             console.print("Assistant:", style="bold cyan", end=" ")
-            typewriter_effect(f"Sorry, '{package_name}' is not available.", style="grey50")
+            typewriter_effect(f"Sorry, '{package_name}' is not available.", console, style="grey50")
     else:
         console.print("Assistant:", style="bold cyan", end=" ")
-        typewriter_effect("Please specify a package to search for.", style="grey50")
+        typewriter_effect("Please specify a package to search for.", console, style="grey50")
 
 def handle_info(user_input, packages, console):
     parts = user_input.split(maxsplit=1)
@@ -120,15 +122,15 @@ def handle_info(user_input, packages, console):
         if package_name in packages:
             pkg_data = packages[package_name]
             console.print("Assistant:", style="bold cyan", end=" ")
-            typewriter_effect(f"Here is some information about '{package_name}':", style="grey50")
+            typewriter_effect(f"Here is some information about '{package_name}':", console, style="grey50")
             console.print(f"  Version: {pkg_data.get('version', 'N/A')}", style="cyan")
             console.print(f"  Description: {pkg_data.get('description', 'No description available.')}", style="cyan")
         else:
             console.print("Assistant:", style="bold cyan", end=" ")
-            typewriter_effect(f"Sorry, I couldn't find '{package_name}'.", style="grey50")
+            typewriter_effect(f"Sorry, I couldn't find '{package_name}'.", console, style="grey50")
     else:
         console.print("Assistant:", style="bold cyan", end=" ")
-        typewriter_effect("Please specify a package to get info about.", style="grey50")
+        typewriter_effect("Please specify a package to get info about.", console, style="grey50")
 
 def handle_uninstall(user_input, package_names, console):
     parts = user_input.split(maxsplit=1)
@@ -136,19 +138,19 @@ def handle_uninstall(user_input, package_names, console):
         package_name = parts[1]
         if package_name in package_names:
             console.print("Assistant:", style="bold cyan", end=" ")
-            typewriter_effect(f"Are you sure you want to uninstall '{package_name}'? (y/n):", style="grey50")
+            typewriter_effect(f"Are you sure you want to uninstall '{package_name}'? (y/n):", console, style="grey50")
             confirmation = input().lower().strip()
             if confirmation == 'y':
-                uninstall_package(package_name)
+                uninstall_package(package_name, from_chat=True)
             else:
                 console.print("Assistant:", style="bold cyan", end=" ")
-                typewriter_effect("Okay, I will not uninstall it.", style="grey50")
+                typewriter_effect("Okay, I will not uninstall it.", console, style="grey50")
         else:
             console.print("Assistant:", style="bold cyan", end=" ")
-            typewriter_effect(f"Sorry, '{package_name}' is not in the package list.", style="grey50")
+            typewriter_effect(f"Sorry, '{package_name}' is not in the package list.", console, style="grey50")
     else:
         console.print("Assistant:", style="bold cyan", end=" ")
-        typewriter_effect("Please specify a package to uninstall.", style="grey50")
+        typewriter_effect("Please specify a package to uninstall.", console, style="grey50")
 
 def handle_install(user_input, package_names, console):
     parts = user_input.split(maxsplit=1)
@@ -156,37 +158,37 @@ def handle_install(user_input, package_names, console):
         package_name = parts[1]
         if package_name in package_names:
             console.print("Assistant:", style="bold cyan", end=" ")
-            typewriter_effect(f"I found '{package_name}' in our list. It is available.", style="grey50")
+            typewriter_effect(f"I found '{package_name}' in our list. It is available.", console, style="grey50")
             console.print("Assistant:", style="bold cyan", end=" ")
-            typewriter_effect("Would you like to install it? (y/n):", style="grey50")
+            typewriter_effect("Would you like to install it? (y/n):", console, style="grey50")
             confirmation = input().lower().strip()
             if confirmation == 'y':
                 console.print("Assistant:", style="bold cyan", end=" ")
-                typewriter_effect(f"Great! Starting the installation for {package_name}.", style="grey50")
-                install_package(package_name)
+                typewriter_effect(f"Great! Starting the installation for {package_name}.", console, style="grey50")
+                install_package(package_name, from_chat=True)
             else:
                 console.print("Assistant:", style="bold cyan", end=" ")
-                typewriter_effect("Understood. I will not install it.", style="grey50")
+                typewriter_effect("Understood. I will not install it.", console, style="grey50")
         else:
             close_matches = difflib.get_close_matches(package_name, package_names)
             if close_matches:
                 suggestion = close_matches[0]
                 console.print("Assistant:", style="bold cyan", end=" ")
-                typewriter_effect(f"I couldn't find '{package_name}'. Did you mean '{suggestion}'? (y/n):", style="grey50")
+                typewriter_effect(f"I couldn't find '{package_name}'. Did you mean '{suggestion}'? (y/n):", console, style="grey50")
                 confirmation = input().lower().strip()
                 if confirmation == 'y':
                     console.print("Assistant:", style="bold cyan", end=" ")
-                    typewriter_effect(f"Great! Starting the installation for {suggestion}.", style="grey50")
-                    install_package(suggestion)
+                    typewriter_effect(f"Great! Starting the installation for {suggestion}.", console, style="grey50")
+                    install_package(suggestion, from_chat=True)
                 else:
                     console.print("Assistant:", style="bold cyan", end=" ")
-                    typewriter_effect("My mistake. I won't install that.", style="grey50")
+                    typewriter_effect("My mistake. I won't install that.", console, style="grey50")
             else:
                 console.print("Assistant:", style="bold cyan", end=" ")
-                typewriter_effect("I'm sorry, I couldn't find the requested software in our package list.", style="grey50")
+                typewriter_effect("I'm sorry, I couldn't find the requested software in our package list.", console, style="grey50")
     else:
         console.print("Assistant:", style="bold cyan", end=" ")
-        typewriter_effect("Please specify a package to install.", style="grey50")
+        typewriter_effect("Please specify a package to install.", console, style="grey50")
 
 def handle_smart_suggestions(user_input, packages, console):
     categories = set(data.get('category', 'Uncategorized').lower() for data in packages.values())
@@ -198,7 +200,7 @@ def handle_smart_suggestions(user_input, packages, console):
 
     if found_category:
         console.print("Assistant:", style="bold cyan", end=" ")
-        typewriter_effect(f"I found some packages in the '{found_category}' category:", style="grey50")
+        typewriter_effect(f"I found some packages in the '{found_category}' category:", console, style="grey50")
 
         table = Table(show_header=True, header_style="bold magenta", expand=True)
         table.add_column("Package", style="green", no_wrap=True)
@@ -211,15 +213,15 @@ def handle_smart_suggestions(user_input, packages, console):
                 category_packages.append(name)
         console.print(table)
         console.print("\nAssistant:", style="bold cyan", end=" ")
-        typewriter_effect("Would you like to install any of these? If so, just type the name.", style="grey50")
+        typewriter_effect("Would you like to install any of these? If so, just type the name.", console, style="grey50")
 
         console.print("User:", style="bold green", end=" ")
         next_input = input().lower().strip()
         if next_input in category_packages:
-            install_package(next_input)
+            install_package(next_input, from_chat=True)
         else:
             console.print("Assistant:", style="bold cyan", end=" ")
-            typewriter_effect("Okay, I will not install any of these.", style="grey50")
+            typewriter_effect("Okay, I will not install any of these.", console, style="grey50")
         return True
     return False
 
@@ -374,9 +376,14 @@ def get_portable_bin_dir():
     os.makedirs(bin_dir, exist_ok=True)
     return bin_dir
 
-def install_package(package_name):
+def install_package(package_name, from_chat=False):
     """Downloads and installs a package."""
     if sys.platform == 'win32' and not is_admin():
+        if from_chat:
+            console = Console()
+            console.print("Administrator privileges are required to install packages.", style="bold red")
+            console.print("Please restart chat with administrator privileges to install packages.", style="bold red")
+            return
         print("ERROR: Administrator privileges are required to install packages.")
         print("Please re-run this command from a terminal with administrator privileges.")
         sys.exit(1)
@@ -456,6 +463,8 @@ def install_package(package_name):
             except FileNotFoundError:
                 # This can happen if the downloaded file is not a valid executable
                 print(f"Error: Installer not found at '{temp_filepath}'. The file may be corrupted or not a valid installer.")
+            except PermissionError:
+                print(f"Error: Permission denied to execute the installer at '{temp_filepath}'.")
             finally:
                 # Always clean up the downloaded installer
                 print(f"Cleaning up...")
@@ -562,9 +571,14 @@ def run_package(package_name):
         print(f"An error occurred while trying to run {package_name}: {e}")
         print("Note: The 'run' command relies on heuristics to find the executable and may not work for all packages.")
 
-def uninstall_package(package_name):
+def uninstall_package(package_name, from_chat=False):
     """Uninstalls a package using its uninstall command, or provides instructions."""
     if sys.platform == 'win32' and not is_admin():
+        if from_chat:
+            console = Console()
+            console.print("Administrator privileges are required to uninstall packages.", style="bold red")
+            console.print("Please restart chat with administrator privileges to uninstall packages.", style="bold red")
+            return
         print("ERROR: Administrator privileges are required to uninstall packages.")
         print("Please re-run this command from a terminal with administrator privileges.")
         sys.exit(1)
