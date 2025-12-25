@@ -1,203 +1,363 @@
 {
   "7-zip": {
-    "url": "https://github.com/ip7z/7zip/releases/download/25.01/7z2501-x64.exe",
     "version": "25.01",
     "description": "A free and open-source file archiver with a high compression ratio.",
-    "install_command": ["/S"],
-    "uninstall_command": "\"%ProgramFiles%\\7-Zip\\Uninstall.exe\" /S",
     "type": "installer",
     "category": "Utilities",
-    "executable": "7zFM.exe"
+    "executable": "7zFM.exe",
+    "architectures": {
+      "64": {
+        "url": "https://github.com/ip7z/7zip/releases/download/25.01/7z2501-x64.exe",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%ProgramFiles%\\7-Zip\\Uninstall.exe\" /S"
+      },
+      "32": {
+        "url": "https://github.com/ip7z/7zip/releases/download/25.01/7z2501.exe",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\7-Zip\\Uninstall.exe\" /S"
+      }
+    }
   },
   "notepad++": {
-    "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.5/npp.8.8.5.Installer.x64.exe",
     "version": "8.8.5",
     "description": "A free source code editor and Notepad replacement that supports several languages.",
-    "install_command": ["/S"],
-    "uninstall_command": "\"%ProgramFiles%\\Notepad++\\uninstall.exe\" /S",
     "type": "installer",
     "category": "Development",
-    "executable": "notepad++.exe"
+    "executable": "notepad++.exe",
+    "architectures": {
+      "64": {
+        "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.5/npp.8.8.5.Installer.x64.exe",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%ProgramFiles%\\Notepad++\\uninstall.exe\" /S"
+      },
+      "32": {
+        "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.5/npp.8.8.5.Installer.exe",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\Notepad++\\uninstall.exe\" /S"
+      }
+    }
   },
   "vlc": {
-    "url": "https://get.videolan.org/vlc/3.0.21/win64/vlc-3.0.21-win64.exe",
     "version": "3.0.21",
     "description": "A free and open-source, portable, cross-platform media player software and streaming media server.",
-    "install_command": ["/S"],
-    "uninstall_command": "\"%ProgramFiles%\\VideoLAN\\VLC\\uninstall.exe\" /S",
     "type": "installer",
     "category": "Media",
-    "executable": "vlc.exe"
+    "executable": "vlc.exe",
+    "architectures": {
+      "64": {
+        "url": "https://get.videolan.org/vlc/3.0.21/win64/vlc-3.0.21-win64.exe",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%ProgramFiles%\\VideoLAN\\VLC\\uninstall.exe\" /S"
+      },
+      "32": {
+        "url": "https://get.videolan.org/vlc/3.0.21/win32/vlc-3.0.21-win32.exe",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\VideoLAN\\VLC\\uninstall.exe\" /S"
+      }
+    }
   },
   "greenshot": {
-    "url": "https://github.com/greenshot/greenshot/releases/download/v1.3.296/Greenshot-INSTALLER-1.3.296-RELEASE.exe",
     "version": "1.3.296",
     "description": "A light-weight screenshot software tool for Windows with the possibility to edit and annotate screenshots.",
-    "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES"],
-    "uninstall_command": "\"%ProgramFiles%\\Greenshot\\unins000.exe\" /VERYSILENT /SUPPRESSMSGBOXES",
     "type": "installer",
     "category": "Utilities",
-    "executable": "greenshot.exe"
+    "executable": "greenshot.exe",
+    "architectures": {
+      "64": {
+        "url": "https://github.com/greenshot/greenshot/releases/download/v1.3.296/Greenshot-INSTALLER-1.3.296-RELEASE.exe",
+        "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES"],
+        "uninstall_command": "\"%ProgramFiles%\\Greenshot\\unins000.exe\" /VERYSILENT /SUPPRESSMSGBOXES"
+      }
+    }
   },
   "vscode": {
-    "url": "https://update.code.visualstudio.com/1.103.1/win32-x64-user/stable",
     "version": "1.103.1",
     "description": "A free source-code editor made by Microsoft for Windows, Linux and macOS.",
-    "install_command": ["/VERYSILENT", "/MERGETASKS=!runcode"],
-    "uninstall_command": "\"%LocalAppData%\\Programs\\Microsoft VS Code\\unins000.exe\" /VERYSILENT /NORESTART",
     "type": "installer",
     "category": "Development",
-    "executable": "Code.exe"
+    "executable": "Code.exe",
+    "architectures": {
+      "64": {
+        "url": "https://update.code.visualstudio.com/1.103.1/win32-x64-user/stable",
+        "install_command": ["/VERYSILENT", "/MERGETASKS=!runcode"],
+        "uninstall_command": "\"%LocalAppData%\\Programs\\Microsoft VS Code\\unins000.exe\" /VERYSILENT /NORESTART"
+      },
+      "32": {
+        "url": "https://update.code.visualstudio.com/1.103.1/win32-user/stable",
+        "install_command": ["/VERYSILENT", "/MERGETASKS=!runcode"],
+        "uninstall_command": "\"%LocalAppData%\\Programs\\Microsoft VS Code\\unins000.exe\" /VERYSILENT /NORESTART"
+      }
+    }
   },
   "chrome": {
-    "url": "https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi",
     "version": "131.0.6778.205",
     "description": "A cross-platform web browser developed by Google.",
-    "install_command": ["/quiet"],
-    "uninstall_command": "\"%ProgramFiles%\\Google\\Chrome\\Application\\chrome.exe\" --uninstall --system-level --force-uninstall",
     "type": "installer",
     "category": "Browsers",
-    "executable": "chrome.exe"
+    "executable": "chrome.exe",
+    "architectures": {
+      "64": {
+        "url": "https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi",
+        "install_command": ["/quiet"],
+        "uninstall_command": "\"%ProgramFiles%\\Google\\Chrome\\Application\\chrome.exe\" --uninstall --system-level --force-uninstall"
+      },
+      "32": {
+        "url": "https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise.msi",
+        "install_command": ["/quiet"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\Google\\Chrome\\Application\\chrome.exe\" --uninstall --system-level --force-uninstall"
+      }
+    }
   },
   "firefox": {
-    "url": "https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=en-US",
     "version": "141.0.3",
     "description": "A free and open-source web browser developed by the Mozilla Foundation.",
-    "install_command": ["/S"],
-    "uninstall_command": "\"%ProgramFiles%\\Mozilla Firefox\\uninstall\\helper.exe\" /S",
     "type": "installer",
     "category": "Browsers",
-    "executable": "firefox.exe"
+    "executable": "firefox.exe",
+    "architectures": {
+      "64": {
+        "url": "https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=en-US",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%ProgramFiles%\\Mozilla Firefox\\uninstall\\helper.exe\" /S"
+      },
+      "32": {
+        "url": "https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win&lang=en-US",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\Mozilla Firefox\\uninstall\\helper.exe\" /S"
+      }
+    }
   },
   "brave": {
-    "url": "https://laptop-updates.brave.com/latest/winx64",
     "version": "latest",
     "description": "A free and open-source web browser developed by Brave Software, Inc. on the Chromium web browser.",
-    "install_command": ["--silent"],
-    "uninstall_command": "\"%ProgramFiles%\\BraveSoftware\\Brave-Browser\\Application\\1.68.132\\Installer\\setup.exe\" --uninstall --system-level",
     "type": "installer",
     "category": "Browsers",
-    "executable": "brave.exe"
+    "executable": "brave.exe",
+    "architectures": {
+      "64": {
+        "url": "https://laptop-updates.brave.com/latest/winx64",
+        "install_command": ["--silent"],
+        "uninstall_command": "\"%ProgramFiles%\\BraveSoftware\\Brave-Browser\\Application\\1.68.132\\Installer\\setup.exe\" --uninstall --system-level"
+      },
+      "32": {
+        "url": "https://laptop-updates.brave.com/latest/winx86",
+        "install_command": ["--silent"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\BraveSoftware\\Brave-Browser\\Application\\1.68.132\\Installer\\setup.exe\" --uninstall --system-level"
+      }
+    }
   },
   "git": {
-    "url": "https://github.com/git-for-windows/git/releases/download/v2.50.1.windows.1/Git-2.50.1-64-bit.exe",
     "version": "2.50.1",
     "description": "A distributed version-control system for tracking changes in source code during software development.",
-    "install_command": ["/VERYSILENT"],
-    "uninstall_command": "\"%ProgramFiles%\\Git\\unins000.exe\" /VERYSILENT /NORESTART",
     "type": "installer",
     "category": "Development",
-    "executable": "git-bash.exe"
+    "executable": "git-bash.exe",
+    "architectures": {
+      "64": {
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.50.1.windows.1/Git-2.50.1-64-bit.exe",
+        "install_command": ["/VERYSILENT"],
+        "uninstall_command": "\"%ProgramFiles%\\Git\\unins000.exe\" /VERYSILENT /NORESTART"
+      },
+      "32": {
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.50.1.windows.1/Git-2.50.1-32-bit.exe",
+        "install_command": ["/VERYSILENT"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\Git\\unins000.exe\" /VERYSILENT /NORESTART"
+      }
+    }
   },
   "discord": {
-    "url": "https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x64",
     "version": "2025.03.25",
     "description": "A VoIP, instant messaging and digital distribution platform designed for creating communities.",
-    "install_command": ["-s"],
-    "uninstall_command": "\"%LocalAppData%\\Discord\\Update.exe\" --uninstall -s",
     "type": "installer",
     "category": "Social",
-    "executable": null
+    "executable": null,
+    "architectures": {
+      "64": {
+        "url": "https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x64",
+        "install_command": ["-s"],
+        "uninstall_command": "\"%LocalAppData%\\Discord\\Update.exe\" --uninstall -s"
+      }
+    }
   },
   "spotify": {
-    "url": "https://download.scdn.co/SpotifySetup.exe",
     "version": "1.2.45.828",
     "description": "A digital music, podcast, and video service that gives you access to millions of songs and other content from creators all over the world.",
-    "install_command": ["/S"],
-    "uninstall_command": "\"%AppData%\\Spotify\\Spotify.exe\" /uninstall",
     "type": "installer",
     "category": "Media",
-    "executable": "Spotify.exe"
+    "executable": "Spotify.exe",
+    "architectures": {
+      "64": {
+        "url": "https://download.scdn.co/SpotifySetup.exe",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%AppData%\\Spotify\\Spotify.exe\" /uninstall"
+      }
+    }
   },
   "obs-studio": {
-    "url": "https://cdn-fastly.obsproject.com/downloads/OBS-Studio-30.1.2-Full-Installer-x64.exe",
     "version": "30.1.2",
     "description": "A free and open-source software for video recording and live streaming.",
-    "install_command": ["/S"],
-    "uninstall_command": "\"%ProgramFiles%\\OBS Studio\\uninstall.exe\" /S",
     "type": "installer",
     "category": "Media",
-    "executable": "obs64.exe"
+    "executable": "obs64.exe",
+    "architectures": {
+      "64": {
+        "url": "https://cdn-fastly.obsproject.com/downloads/OBS-Studio-30.1.2-Full-Installer-x64.exe",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%ProgramFiles%\\OBS Studio\\uninstall.exe\" /S"
+      },
+      "32": {
+        "url": "https://cdn-fastly.obsproject.com/downloads/OBS-Studio-30.1.2-Full-Installer-x86.exe",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\OBS Studio\\uninstall.exe\" /S"
+      }
+    }
   },
   "blender": {
-    "url": "https://download.blender.org/release/Blender4.2/blender-4.2.0-windows-x64.msi",
     "version": "4.2.0",
     "description": "A free and open-source 3D computer graphics software toolset used for creating animated films, visual effects, art, 3D printed models, motion graphics, interactive 3D applications, and virtual reality.",
-    "install_command": ["/quiet"],
-    "uninstall_command": "msiexec /x {56E5E671-9136-473E-8DB3-32EC84E704DF} /quiet",
     "type": "installer",
     "category": "Media",
-    "executable": "blender.exe"
+    "executable": "blender.exe",
+    "architectures": {
+      "64": {
+        "url": "https://download.blender.org/release/Blender4.2/blender-4.2.0-windows-x64.msi",
+        "install_command": ["/quiet"],
+        "uninstall_command": "msiexec /x {56E5E671-9136-473E-8DB3-32EC84E704DF} /quiet"
+      },
+      "32": {
+        "url": "https://download.blender.org/release/Blender4.2/blender-4.2.0-windows-i686.msi",
+        "install_command": ["/quiet"],
+        "uninstall_command": "msiexec /x {56E5E671-9136-473E-8DB3-32EC84E704DF} /quiet"
+      }
+    }
   },
   "qbittorrent": {
-    "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-4.6.5/qbittorrent_4.6.5_x64_setup.exe",
     "version": "4.6.5",
     "description": "A cross-platform free and open-source BitTorrent client.",
-    "install_command": ["/S"],
-    "uninstall_command": "\"%ProgramFiles%\\qBittorrent\\uninst.exe\" /S",
     "type": "installer",
     "category": "Utilities",
-    "executable": "qbittorrent.exe"
+    "executable": "qbittorrent.exe",
+    "architectures": {
+      "64": {
+        "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-4.6.5/qbittorrent_4.6.5_x64_setup.exe",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%ProgramFiles%\\qBittorrent\\uninst.exe\" /S"
+      },
+      "32": {
+        "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-4.6.5/qbittorrent_4.6.5_setup.exe",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\qBittorrent\\uninst.exe\" /S"
+      }
+    }
   },
   "telegram": {
-    "url": "https://telegram.org/dl/desktop/win64_portable",
     "version": "5.5.3",
     "description": "A freeware, cross-platform, cloud-based instant messaging service.",
-    "install_command": ["/S"],
-    "uninstall_command": "\"%AppData%\\Telegram Desktop\\Uninstall.exe\"",
     "type": "installer",
     "category": "Social",
-    "executable": "Telegram.exe"
+    "executable": "Telegram.exe",
+    "architectures": {
+      "64": {
+        "url": "https://telegram.org/dl/desktop/win64",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%AppData%\\Telegram Desktop\\Uninstall.exe\""
+      },
+      "32": {
+        "url": "https://telegram.org/dl/desktop/win",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%AppData%\\Telegram Desktop\\Uninstall.exe\""
+      }
+    }
   },
   "gimp": {
-    "url": "https://download.gimp.org/mirror/pub/gimp/v2.10/windows/gimp-2.10.38-setup.exe",
     "version": "2.10.38",
     "description": "A free and open-source raster graphics editor used for image manipulation and image editing, free-form drawing, transcoding between different image file formats, and more specialized tasks.",
-    "install_command": ["/VERYSILENT"],
-    "uninstall_command": "\"%ProgramFiles%\\GIMP 2\\uninst\\unins000.exe\" /VERYSILENT",
     "type": "installer",
     "category": "Media",
-    "executable": "gimp-2.10.exe"
+    "executable": "gimp-2.10.exe",
+    "architectures": {
+      "64": {
+        "url": "https://download.gimp.org/mirror/pub/gimp/v2.10/windows/gimp-2.10.38-setup.exe",
+        "install_command": ["/VERYSILENT"],
+        "uninstall_command": "\"%ProgramFiles%\\GIMP 2\\uninst\\unins000.exe\" /VERYSILENT"
+      }
+    }
   },
   "libreoffice": {
-    "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.3/win/x86_64/LibreOffice_25.8.3_Win_x86-64.msi",
     "version": "25.8.3",
     "description": "A free and open-source office productivity software suite.",
-    "install_command": ["/quiet"],
-    "uninstall_command": "wmic product where \"name like 'LibreOffice%'\" call uninstall /nointeractive",
     "type": "installer",
     "category": "Utilities",
-    "executable": "soffice.exe"
+    "executable": "soffice.exe",
+    "architectures": {
+      "64": {
+        "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.3/win/x86_64/LibreOffice_25.8.3_Win_x86-64.msi",
+        "install_command": ["/quiet"],
+        "uninstall_command": "wmic product where \"name like 'LibreOffice%'\" call uninstall /nointeractive"
+      },
+      "32": {
+        "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.3/win/x86/LibreOffice_25.8.3_Win_x86.msi",
+        "install_command": ["/quiet"],
+        "uninstall_command": "wmic product where \"name like 'LibreOffice%'\" call uninstall /nointeractive"
+      }
+    }
   },
   "audacity": {
-    "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.6.1/audacity-win-3.6.1-64bit.exe",
     "version": "3.6.1",
     "description": "A free and open-source digital audio editor and recording application software.",
-    "install_command": ["/VERYSILENT"],
-    "uninstall_command": "\"%ProgramFiles%\\Audacity\\unins000.exe\" /VERYSILENT",
     "type": "installer",
     "category": "Media",
-    "executable": "audacity.exe"
+    "executable": "audacity.exe",
+    "architectures": {
+      "64": {
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.6.1/audacity-win-3.6.1-64bit.exe",
+        "install_command": ["/VERYSILENT"],
+        "uninstall_command": "\"%ProgramFiles%\\Audacity\\unins000.exe\" /VERYSILENT"
+      },
+      "32": {
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.6.1/audacity-win-3.6.1-32bit.exe",
+        "install_command": ["/VERYSILENT"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\Audacity\\unins000.exe\" /VERYSILENT"
+      }
+    }
   },
   "minecraft-launcher": {
-    "url": "https://launcher.mojang.com/download/MinecraftInstaller.msi",
     "version": "2024.2.0.1054",
     "description": "The official launcher for the video game Minecraft.",
-    "install_command": ["/quiet"],
-    "uninstall_command": "msiexec /x {1D5D7B97-5831-4BFC-8C88-518E96103861} /quiet",
     "type": "installer",
     "category": "Games",
-    "executable": "MinecraftLauncher.exe"
+    "executable": "MinecraftLauncher.exe",
+    "architectures": {
+      "64": {
+        "url": "https://launcher.mojang.com/download/MinecraftInstaller.msi",
+        "install_command": ["/quiet"],
+        "uninstall_command": "msiexec /x {1D5D7B97-5831-4BFC-8C88-518E96103861} /quiet"
+      },
+      "32": {
+        "url": "https://launcher.mojang.com/download/MinecraftInstaller.msi",
+        "install_command": ["/quiet"],
+        "uninstall_command": "msiexec /x {1D5D7B97-5831-4BFC-8C88-518E96103861} /quiet"
+      }
+    }
   },
   "winrar": {
-    "url": "https://www.win-rar.com/fileadmin/winrar-versions/winrar-x64-700.exe",
     "version": "7.00",
     "description": "A trialware file archiver utility for Windows.",
-    "install_command": ["/S"],
-    "uninstall_command": "\"%ProgramFiles%\\WinRAR\\uninstall.exe\" /S",
     "type": "installer",
     "category": "Utilities",
-    "executable": "WinRAR.exe"
+    "executable": "WinRAR.exe",
+    "architectures": {
+      "64": {
+        "url": "https://www.win-rar.com/fileadmin/winrar-versions/winrar-x64-700.exe",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%ProgramFiles%\\WinRAR\\uninstall.exe\" /S"
+      },
+      "32": {
+        "url": "https://www.win-rar.com/fileadmin/winrar-versions/winrar-x32-700.exe",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\WinRAR\\uninstall.exe\" /S"
+      }
+    }
   },
   "zoom": {
     "url": "https://cdn.zoom.us/prod/5.18.7.4638/ZoomInstallerFull.msi",
@@ -397,6 +557,18 @@
     "category": "Utilities",
     "executable": "AutoHotkey.exe"
   },
+  "bulk-rename-utility": {
+    "url": "https://www.bulkrenameutility.co.uk/swmirror/BRU_setup.exe",
+    "version": "4.1.0.0",
+    "description": "Bulk Rename Utility allows you to easily batch rename files and folders based upon many flexible criteria.",
+    "install_command": [
+      "/S"
+    ],
+    "uninstall_command": "\"%ProgramFiles%\\Bulk Rename Utility\\unins000.exe\" /S",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "Bulk Rename Utility.exe"
+  },
   "powertoys": {
     "url": "https://github.com/microsoft/PowerToys/releases/latest",
     "version": "latest",
@@ -446,6 +618,18 @@
     "type": "installer",
     "category": "Media",
     "executable": "kdenlive.exe"
+  },
+  "handbrake": {
+    "url": "https://handbrake.fr/rotation.php?file=HandBrake-1.10.2-x86_64-Win_GUI.exe",
+    "version": "1.10.2",
+    "description": "A tool for converting video from nearly any format to a selection of modern, widely supported codecs.",
+    "install_command": [
+      "/S"
+    ],
+    "uninstall_command": "\"%ProgramFiles%\\HandBrake\\uninst.exe\" /S",
+    "type": "installer",
+    "category": "Media",
+    "executable": "HandBrake.exe"
   },
   "pidgin": {
     "url": "https://webwerks.dl.sourceforge.net/project/pidgin/Pidgin/2.14.10/pidgin-2.14.10-offline.exe",
@@ -700,5 +884,19 @@
     "type": "portable",
     "category": "Browsers",
     "executable": "start-tor-browser.exe"
+  },
+  "super-productivity": {
+    "version": "8.1.0",
+    "description": "A deep work task manager for developers and other professionals.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "superProductivity.exe",
+    "architectures": {
+      "64": {
+        "url": "https://github.com/johannesjo/super-productivity/releases/latest/download/Super-Productivity-Setup.exe",
+        "install_command": ["/S"],
+        "uninstall_command": "\"%LOCALAPPDATA%\\Programs\\super-productivity\\Uninstall Super Productivity.exe\" /S"
+      }
+    }
   }
 }

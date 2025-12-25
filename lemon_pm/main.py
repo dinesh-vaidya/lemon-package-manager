@@ -68,9 +68,6 @@ def chat():
 
             if handle_smart_suggestions(user_input, packages, console):
                 pass  # Handled in the function
-            elif "how many" in user_input or "number of" in user_input:
-                console.print("Assistant:", style="bold cyan", end=" ")
-                typewriter_effect(f"There are {len(packages)} packages available.", console, style="grey50")
             elif user_input.startswith("list") or user_input.startswith("show me"):
                 handle_list_packages(packages, console)
             elif user_input.startswith("search"):
@@ -380,75 +377,143 @@ def get_portable_bin_dir():
     return bin_dir
 
 
-def is_installed(package_name):
-    """Checks if a package is likely installed."""
-    try:
-        with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
-            packages = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return False  # Cannot determine if installed if package list is missing
+def is_installed(package_name, arch=None):
+    """Checks if a package is installed by checking for the executable."""
+    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+        packages = json.load(f)
 
     if package_name not in packages:
         return False
 
     package_data = packages[package_name]
-    package_type = package_data.get('type', 'installer')
 
-    if package_type == 'portable':
-        executable_name = package_data.get('executable_name')
-        if not executable_name:
-            return False
-        bin_dir = get_portable_bin_dir()
-        executable_path = pathlib.Path(bin_dir) / executable_name
-        return executable_path.exists()
+    arches_to_check = []
+    if "architectures" in package_data:
+        if arch and arch in package_data["architectures"]:
+            arches_to_check.append(arch)
+        else:  # Check all available architectures if a specific one isn't provided
+            arches_to_check.extend(package_data["architectures"].keys())
+    else:
+        arches_to_check.append(None)  # For non-arch-specific packages
 
-    elif package_type == 'installer':
-        uninstall_command = package_data.get('uninstall_command')
+    for arch_key in arches_to_check:
+        package_info = package_data
+        if arch_key:
+            package_info = package_data["architectures"][arch_key]
+
+        executable = package_info.get('executable', package_data.get('executable'))
+        if not executable:
+            continue
+
+        uninstall_command = package_info.get('uninstall_command', package_data.get('uninstall_command'))
         if not uninstall_command:
-            return False
+            continue
 
         if sys.platform == 'win32':
             replacements = {
                 '%ProgramFiles%': os.environ.get('ProgramW6432', os.environ.get('ProgramFiles')),
                 '%ProgramFiles(x86)%': os.environ.get('ProgramFiles(x86)', os.environ.get('ProgramFiles')),
-                '%LOCALAPPDATA%': os.environ.get('LOCALAPPDATA'),
-                '%APPDATA%': os.environ.get('APPDATA')
             }
             for var, val in replacements.items():
                 if val:
                     uninstall_command = uninstall_command.replace(var, val)
 
         try:
-            command_parts = shlex.split(uninstall_command)
-            if not command_parts:
-                return False
+            parts = shlex.split(uninstall_command)
+            if not parts:
+                continue
 
-            uninstaller_path = pathlib.Path(command_parts[0])
+            uninstaller_path = pathlib.Path(parts[0])
+            install_dir = uninstaller_path.parent
 
-            if uninstaller_path.name.lower() in ['msiexec.exe', 'wmic.exe']:
-                return False
-
-            return uninstaller_path.exists()
+            # Check common locations relative to uninstaller
+            if (install_dir / executable).exists():
+                return True
+            if (install_dir / 'bin' / executable).exists():
+                return True
         except Exception:
-            return False
+            continue  # Ignore errors in path parsing
 
     return False
 
 
-def install_package(package_name, from_chat=False):
-    """Downloads and installs a package."""
-    if is_installed(package_name):
-        print(f"'{package_name}' is already installed.")
-        return
+def _install_package_with_arch(package_name, package_data, arch):
+    """Helper function to install a package for a specific architecture."""
+    version = package_data['version']
+    package_type = package_data.get('type', 'installer')
 
+    if "architectures" in package_data:
+        if arch not in package_data["architectures"]:
+            print(f"'{arch}-bit' architecture not available for '{package_name}'.")
+            return False
+        arch_data = package_data["architectures"][arch]
+        url = arch_data['url']
+        install_command = arch_data.get('install_command', [])
+    else:
+        url = package_data['url']
+        install_command = package_data.get('install_command', [])
+
+    print(f"Attempting to install {package_name} version {version} ({arch}-bit)...")
+
+    try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        response = requests.get(url, headers=headers, stream=True)
+        response.raise_for_status()
+
+        filename = url.split('/')[-1]
+        temp_dir = tempfile.gettempdir()
+        temp_filepath = os.path.join(temp_dir, filename)
+
+        total_size = int(response.headers.get('content-length', 0))
+        with open(temp_filepath, 'wb') as f:
+            downloaded = 0
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+                downloaded += len(chunk)
+                done = int(50 * downloaded / total_size) if total_size else 0
+                sys.stdout.write(f"\r[{'=' * done}{' ' * (50-done)}] {downloaded}/{total_size} bytes")
+                sys.stdout.flush()
+        sys.stdout.write('\n')
+        print(f"Downloaded '{filename}'.")
+        os.chmod(temp_filepath, 0o755)
+
+        if package_type == 'installer':
+            command = [temp_filepath]
+            if temp_filepath.endswith('.msi'):
+                command = ['msiexec', '/i', temp_filepath] + install_command
+            else:
+                command += install_command
+
+            subprocess.run(command, check=True, capture_output=True, text=True, shell=False)
+            print(f"Successfully installed {package_name}.")
+            return True
+        elif package_type == 'portable':
+            bin_dir = get_portable_bin_dir()
+            executable_name = package_data.get('executable_name', filename)
+            final_filepath = os.path.join(bin_dir, executable_name)
+            os.rename(temp_filepath, final_filepath)
+            os.chmod(final_filepath, 0o755)
+            print(f"Successfully installed {package_name} to {final_filepath}")
+            return True
+    except subprocess.CalledProcessError as e:
+        print(f"Installation failed for {arch}-bit architecture.")
+        # Re-raise the specific error to be caught by the calling function
+        raise e
+    except (requests.exceptions.RequestException, FileNotFoundError, PermissionError, OSError) as e:
+        print(f"An error occurred during installation: {e}")
+        return False
+    finally:
+        if 'temp_filepath' in locals() and os.path.exists(temp_filepath):
+            print("Cleaning up...")
+            os.remove(temp_filepath)
+    return False
+
+def install_package(package_name, from_chat=False):
+    """Downloads and installs a package, with fallback for architecture."""
     if sys.platform == 'win32' and not is_admin():
-        if from_chat:
-            console = Console()
-            console.print("Administrator privileges are required to install packages.", style="bold red")
-            console.print("Please restart chat with administrator privileges to install packages.", style="bold red")
-            return
         print("ERROR: Administrator privileges are required to install packages.")
-        print("Please re-run this command from a terminal with administrator privileges.")
         sys.exit(1)
 
     with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
@@ -459,99 +524,43 @@ def install_package(package_name, from_chat=False):
         return
 
     package_data = packages[package_name]
-    url = package_data['url']
-    version = package_data['version']
-    package_type = package_data.get('type', 'installer') # Default to 'installer'
 
-    print(f"Installing {package_name} version {version} ({package_type})...")
+    if is_installed(package_name):
+        print(f"'{package_name}' is already installed.")
+        return
 
-    try:
-        # Some servers (like GitHub) block requests without a User-Agent header.
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }
-        response = requests.get(url, headers=headers, stream=True)
-        response.raise_for_status()
+    if "architectures" in package_data:
+        is_64bit_os = sys.maxsize > 2**32
 
-        filename = url.split('/')[-1]
-        # Download to a temp location first
-        temp_dir = tempfile.gettempdir()
-        temp_filepath = os.path.join(temp_dir, filename)
-
-        total_size = int(response.headers.get('content-length', 0))
-
-        with open(temp_filepath, 'wb') as f:
-            downloaded = 0
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
-                downloaded += len(chunk)
-                if total_size > 0:
-                    done = int(50 * downloaded / total_size)
-                    sys.stdout.write(f"\r[{'=' * done}{' ' * (50-done)}] {downloaded}/{total_size} bytes")
-                else:
-                    sys.stdout.write(f"\rDownloaded {downloaded} bytes")
-                sys.stdout.flush()
-        sys.stdout.write('\n')
-
-        print(f"Downloaded '{filename}'.")
-
-        if package_type == 'installer':
-            install_command = package_data.get('install_command', [])
-
-            print(f"Running installer for {package_name}...")
+        if is_64bit_os and "64" in package_data["architectures"]:
             try:
-                # Base command
-                command = [temp_filepath]
-
-                # If it's an MSI file, it must be installed with msiexec
-                if temp_filepath.endswith('.msi'):
-                    command = ['msiexec', '/i', temp_filepath] + install_command
-                else:
-                    command = [temp_filepath] + install_command
-
-                # Using check=True will raise a CalledProcessError if the command returns a non-zero exit code.
-                result = subprocess.run(command, check=True, capture_output=True, text=True, shell=False)
-
-                print(f"Installation of {package_name} completed.")
-                if result.stdout:
-                    print("Output:", result.stdout)
-                if result.stderr:
-                    print("Errors:", result.stderr)
-                print(f"Successfully installed {package_name}.")
-
+                if _install_package_with_arch(package_name, package_data, "64"):
+                    return
             except subprocess.CalledProcessError as e:
-                print(f"An error occurred during installation for {package_name}.")
-                print(f"Return code: {e.returncode}")
-                if e.stdout:
-                    print("Output:", e.stdout)
-                if e.stderr:
-                    print("Errors:", e.stderr)
-            except FileNotFoundError:
-                # This can happen if the downloaded file is not a valid executable
-                print(f"Error: Installer not found at '{temp_filepath}'. The file may be corrupted or not a valid installer.")
-            except PermissionError:
-                print(f"Error: Permission denied to execute the installer at '{temp_filepath}'.")
-            finally:
-                # Always clean up the downloaded installer
-                print(f"Cleaning up...")
-                if os.path.exists(temp_filepath):
-                    os.remove(temp_filepath)
+                # This specific error code can indicate a 64-bit app on a 32-bit OS
+                if e.winerror == 216 and "32" in package_data["architectures"]:
+                    print("64-bit installation failed, attempting 32-bit fallback.")
+                    if _install_package_with_arch(package_name, package_data, "32"):
+                        return
+                else:
+                    print("64-bit installation failed.")
 
-        elif package_type == 'portable':
-            bin_dir = get_portable_bin_dir()
-            executable_name = package_data.get('executable_name', filename)
-            final_filepath = os.path.join(bin_dir, executable_name)
-            print(f"Moving '{filename}' to '{bin_dir}'...")
-            os.rename(temp_filepath, final_filepath)
-            # Make the file executable
-            os.chmod(final_filepath, 0o755)
-            print(f"Successfully installed {package_name} to {final_filepath}")
-            print("NOTE: You may need to add this directory to your system's PATH to run the command from anywhere.")
+        # If 64-bit failed or wasn't attempted, try 32-bit
+        if "32" in package_data["architectures"]:
+            try:
+                if _install_package_with_arch(package_name, package_data, "32"):
+                    return
+            except subprocess.CalledProcessError:
+                 print("32-bit installation also failed.")
+    else:
+        # For packages without specified architectures
+        try:
+            if _install_package_with_arch(package_name, package_data, "N/A"):
+                return
+        except subprocess.CalledProcessError:
+            print(f"Installation failed for {package_name}.")
 
-    except requests.exceptions.RequestException as e:
-        print(f"Error downloading {package_name}: {e}")
-    except Exception as e:
-        print(f"An error occurred during installation: {e}")
+    print(f"Could not install {package_name}.")
 
 def run_package(package_name):
     """Launches a package's main executable."""
@@ -639,10 +648,6 @@ def run_package(package_name):
 
 def uninstall_package(package_name, from_chat=False):
     """Uninstalls a package using its uninstall command, or provides instructions."""
-    if not is_installed(package_name):
-        print(f"'{package_name}' is not installed.")
-        return
-
     if sys.platform == 'win32' and not is_admin():
         if from_chat:
             console = Console()
