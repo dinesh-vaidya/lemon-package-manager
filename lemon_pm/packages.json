@@ -447,6 +447,18 @@
     "category": "Media",
     "executable": "kdenlive.exe"
   },
+  "handbrake": {
+    "url": "https://handbrake.fr/rotation.php?file=HandBrake-1.10.2-x86_64-Win_GUI.exe",
+    "version": "1.10.2",
+    "description": "A tool for converting video from nearly any format to a selection of modern, widely supported codecs.",
+    "install_command": [
+      "/S"
+    ],
+    "uninstall_command": "\"%ProgramFiles%\\HandBrake\\uninst.exe\" /S",
+    "type": "installer",
+    "category": "Media",
+    "executable": "HandBrake.exe"
+  },
   "pidgin": {
     "url": "https://webwerks.dl.sourceforge.net/project/pidgin/Pidgin/2.14.10/pidgin-2.14.10-offline.exe",
     "version": "2.14.10",
