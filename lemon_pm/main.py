@@ -68,9 +68,6 @@ def chat():
 
             if handle_smart_suggestions(user_input, packages, console):
                 pass  # Handled in the function
-            elif "how many" in user_input or "number of" in user_input:
-                console.print("Assistant:", style="bold cyan", end=" ")
-                typewriter_effect(f"There are {len(packages)} packages available.", console, style="grey50")
             elif user_input.startswith("list") or user_input.startswith("show me"):
                 handle_list_packages(packages, console)
             elif user_input.startswith("search"):
@@ -379,8 +376,68 @@ def get_portable_bin_dir():
     os.makedirs(bin_dir, exist_ok=True)
     return bin_dir
 
+
+def is_installed(package_name):
+    """Checks if a package is likely installed."""
+    try:
+        with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+            packages = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return False  # Cannot determine if installed if package list is missing
+
+    if package_name not in packages:
+        return False
+
+    package_data = packages[package_name]
+    package_type = package_data.get('type', 'installer')
+
+    if package_type == 'portable':
+        executable_name = package_data.get('executable_name')
+        if not executable_name:
+            return False
+        bin_dir = get_portable_bin_dir()
+        executable_path = pathlib.Path(bin_dir) / executable_name
+        return executable_path.exists()
+
+    elif package_type == 'installer':
+        uninstall_command = package_data.get('uninstall_command')
+        if not uninstall_command:
+            return False
+
+        if sys.platform == 'win32':
+            replacements = {
+                '%ProgramFiles%': os.environ.get('ProgramW6432', os.environ.get('ProgramFiles')),
+                '%ProgramFiles(x86)%': os.environ.get('ProgramFiles(x86)', os.environ.get('ProgramFiles')),
+                '%LOCALAPPDATA%': os.environ.get('LOCALAPPDATA'),
+                '%APPDATA%': os.environ.get('APPDATA')
+            }
+            for var, val in replacements.items():
+                if val:
+                    uninstall_command = uninstall_command.replace(var, val)
+
+        try:
+            command_parts = shlex.split(uninstall_command)
+            if not command_parts:
+                return False
+
+            uninstaller_path = pathlib.Path(command_parts[0])
+
+            if uninstaller_path.name.lower() in ['msiexec.exe', 'wmic.exe']:
+                return False
+
+            return uninstaller_path.exists()
+        except Exception:
+            return False
+
+    return False
+
+
 def install_package(package_name, from_chat=False):
     """Downloads and installs a package."""
+    if is_installed(package_name):
+        print(f"'{package_name}' is already installed.")
+        return
+
     if sys.platform == 'win32' and not is_admin():
         if from_chat:
             console = Console()
@@ -576,6 +633,10 @@ def run_package(package_name):
 
 def uninstall_package(package_name, from_chat=False):
     """Uninstalls a package using its uninstall command, or provides instructions."""
+    if not is_installed(package_name):
+        print(f"'{package_name}' is not installed.")
+        return
+
     if sys.platform == 'win32' and not is_admin():
         if from_chat:
             console = Console()
