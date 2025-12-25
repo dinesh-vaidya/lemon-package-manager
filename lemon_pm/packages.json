@@ -397,6 +397,18 @@
     "category": "Utilities",
     "executable": "AutoHotkey.exe"
   },
+  "bulk-rename-utility": {
+    "url": "https://www.bulkrenameutility.co.uk/swmirror/BRU_setup.exe",
+    "version": "4.1.0.0",
+    "description": "Bulk Rename Utility allows you to easily batch rename files and folders based upon many flexible criteria.",
+    "install_command": [
+      "/S"
+    ],
+    "uninstall_command": "\"%ProgramFiles%\\Bulk Rename Utility\\unins000.exe\" /S",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "Bulk Rename Utility.exe"
+  },
   "powertoys": {
     "url": "https://github.com/microsoft/PowerToys/releases/latest",
     "version": "latest",
