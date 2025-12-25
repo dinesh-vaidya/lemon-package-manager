@@ -68,6 +68,9 @@ def chat():
 
             if handle_smart_suggestions(user_input, packages, console):
                 pass  # Handled in the function
+            elif "how many" in user_input or "number of" in user_input:
+                console.print("Assistant:", style="bold cyan", end=" ")
+                typewriter_effect(f"There are {len(packages)} packages available.", console, style="grey50")
             elif user_input.startswith("list") or user_input.startswith("show me"):
                 handle_list_packages(packages, console)
             elif user_input.startswith("search"):
@@ -482,8 +485,11 @@ def install_package(package_name, from_chat=False):
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
                 downloaded += len(chunk)
-                done = int(50 * downloaded / total_size)
-                sys.stdout.write(f"\r[{'=' * done}{' ' * (50-done)}] {downloaded}/{total_size} bytes")
+                if total_size > 0:
+                    done = int(50 * downloaded / total_size)
+                    sys.stdout.write(f"\r[{'=' * done}{' ' * (50-done)}] {downloaded}/{total_size} bytes")
+                else:
+                    sys.stdout.write(f"\rDownloaded {downloaded} bytes")
                 sys.stdout.flush()
         sys.stdout.write('\n')
 
