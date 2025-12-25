@@ -66,7 +66,12 @@ def chat():
                 typewriter_effect(random.choice(goodbye_messages), console)
                 break
 
-            if handle_smart_suggestions(user_input, packages, console):
+            if user_input in ["ok", "okay", "thanks", "thank you"]:
+                console.print("Assistant:", style="bold cyan", end=" ")
+                typewriter_effect("You're welcome! Is there anything else I can help with?", console, style="grey50")
+            elif any(p in user_input for p in ["how many", "number of", "total", "count"]) and "packages" in user_input:
+                handle_package_count(packages, console)
+            elif handle_smart_suggestions(user_input, packages, console):
                 pass  # Handled in the function
             elif user_input.startswith("list") or user_input.startswith("show me"):
                 handle_list_packages(packages, console)
@@ -88,10 +93,18 @@ def chat():
             typewriter_effect(random.choice(goodbye_messages), console)
             break
 
+def handle_package_count(packages, console):
+    """Handles the user's request for the total number of packages."""
+    total_packages = len(packages)
+    console.print("Assistant:", style="bold cyan", end=" ")
+    typewriter_effect(f"There are currently {total_packages} packages available.", console, style="grey50")
+
+
 def handle_list_packages(packages, console):
     console.print("Assistant:", style="bold cyan", end=" ")
     typewriter_effect("Of course! Here are all the available packages:", console, style="grey50")
     list_packages_chat(packages, console)
+
 
 def handle_search(user_input, package_names, console):
     parts = user_input.split(maxsplit=1)
