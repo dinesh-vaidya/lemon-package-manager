@@ -898,5 +898,90 @@
         "uninstall_command": "\"%LOCALAPPDATA%\\Programs\\super-productivity\\Uninstall Super Productivity.exe\" /S"
       }
     }
+  },
+  "openshot": {
+    "version": "3.4.0",
+    "description": "A free and open-source video editor.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "openshot-qt.exe",
+    "architectures": {
+      "64": {
+        "url": "https://github.com/OpenShot/openshot-qt/releases/download/v3.4.0/OpenShot-v3.4.0-x86_64.exe",
+        "install_command": [
+          "/SP-",
+          "/VERYSILENT",
+          "/SUPPRESSMSGBOXS",
+          "/NORESTART"
+        ],
+        "uninstall_command": "\"%ProgramFiles%\\OpenShot Video Editor\\unins000.exe\" /SILENT"
+      },
+      "32": {
+        "url": "https://github.com/OpenShot/openshot-qt/releases/download/v3.4.0/OpenShot-v3.4.0-x86.exe",
+        "install_command": [
+          "/SP-",
+          "/VERYSILENT",
+          "/SUPPRESSMSGBOXS",
+          "/NORESTART"
+        ],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\OpenShot Video Editor\\unins000.exe\" /SILENT"
+      }
+    }
+  },
+  "vidcutter": {
+    "version": "6.0.5.1",
+    "description": "A modern yet simple multi-platform video cutter and joiner.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "vidcutter.exe",
+    "architectures": {
+      "64": {
+        "url": "https://github.com/ozmartian/vidcutter/releases/download/6.0.5.1/VidCutter-6.0.5.1-setup-win64.exe",
+        "install_command": [
+          "/S"
+        ],
+        "uninstall_command": "\"%ProgramFiles%\\VidCutter\\unins000.exe\" /S"
+      }
+    }
+  },
+  "shotcut": {
+    "version": "25.12.30",
+    "description": "A free, open source, cross-platform video editor.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "shotcut.exe",
+    "architectures": {
+      "64": {
+        "url": "https://sourceforge.net/projects/shotcut/files/v25.12.30/shotcut-win64-25.12.30.exe/download",
+        "install_command": [
+          "/S"
+        ],
+        "uninstall_command": "\"%ProgramFiles%\\Shotcut\\uninstall.exe\" /S"
+      }
+    }
+  },
+  "avidemux": {
+    "version": "2.8.1",
+    "description": "A free video editor designed for simple cutting, filtering and encoding tasks.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "avidemux.exe",
+    "architectures": {
+      "64": {
+        "url": "https://www.fosshub.com/Avidemux.html/avidemux_2.8.1_win64.exe",
+        "install_command": [
+          "/S"
+        ],
+        "uninstall_command": "\"%ProgramFiles%\\Avidemux\\unins000.exe\" /S"
+      }
+    }
+  },
+  "natron": {
+    "version": "2.5.0",
+    "description": "A free and open-source node-based compositing software.",
+    "type": "portable",
+    "category": "Media",
+    "executable_name": "bin/Natron.exe",
+    "url": "https://github.com/NatronGitHub/Natron/releases/latest/download/Natron-2.5.0-Windows-x86_64.zip"
   }
 }
