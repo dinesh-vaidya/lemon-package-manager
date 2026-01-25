@@ -1,6 +1,6 @@
 # lemon package manager 🍋
 
-![version](https://img.shields.io/badge/version-1.1.0-blue) ![status](https://img.shields.io/badge/status-beta-orange) ![license](https://img.shields.io/badge/license-MIT-green)
+![version](https://img.shields.io/badge/version-1.1.1-blue) ![status](https://img.shields.io/badge/status-beta-orange) ![license](https://img.shields.io/badge/license-MIT-green)
 
 A simple, command-line package manager for Windows devices, designed to quickly install popular applications from the terminal.
 
