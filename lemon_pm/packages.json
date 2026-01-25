@@ -983,5 +983,53 @@
     "category": "Media",
     "executable_name": "bin/Natron.exe",
     "url": "https://github.com/NatronGitHub/Natron/releases/latest/download/Natron-2.5.0-Windows-x86_64.zip"
+  },
+  "exiftool": {
+    "version": "13.45",
+    "description": "Read, Write and Edit Meta Information in a wide variety of files.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "exiftool.exe",
+    "architectures": {
+      "64": {
+        "url": "https://oliverbetz.de/cms/files/Artikel/ExifTool-for-Windows/ExifTool_install_13.45_64.exe",
+        "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/SP-"],
+        "uninstall_command": "\"%ProgramFiles%\\ExifTool\\unins000.exe\" /VERYSILENT /SUPPRESSMSGBOXES"
+      },
+      "32": {
+        "url": "https://oliverbetz.de/cms/files/Artikel/ExifTool-for-Windows/ExifTool_install_13.45_32.exe",
+        "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/SP-"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\ExifTool\\unins000.exe\" /VERYSILENT /SUPPRESSMSGBOXES"
+      }
+    }
+  },
+  "sandboxie-plus": {
+    "version": "1.16.9",
+    "description": "An open-source sandboxing tool for Windows.",
+    "type": "installer",
+    "category": "Security",
+    "executable": "SandMan.exe",
+    "architectures": {
+      "64": {
+        "url": "https://github.com/sandboxie-plus/Sandboxie/releases/download/v1.16.9/Sandboxie-Plus-x64-v1.16.9.exe",
+        "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/SP-"],
+        "uninstall_command": "\"%ProgramFiles%\\Sandboxie-Plus\\unins000.exe\" /VERYSILENT /SUPPRESSMSGBOXES"
+      },
+      "32": {
+        "url": "https://github.com/sandboxie-plus/Sandboxie/releases/download/v1.16.9/Sandboxie-Plus-x86-v1.16.9.exe",
+        "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/SP-"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\Sandboxie-Plus\\unins000.exe\" /VERYSILENT /SUPPRESSMSGBOXES"
+      }
+    }
+  },
+  "honeybot": {
+    "version": "0.1.8",
+    "description": "A lightweight Windows port-based honeypot.",
+    "type": "installer",
+    "category": "Security",
+    "executable": "HoneyBOT.exe",
+    "url": "https://web.archive.org/web/20220330132644if_/http://www.atomicsoftwaresolutions.com/HoneyBOT_018.exe",
+    "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/SP-"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\HoneyBOT\\unins000.exe\" /VERYSILENT /SUPPRESSMSGBOXES"
   }
 }
