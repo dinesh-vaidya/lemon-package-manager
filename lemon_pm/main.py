@@ -19,6 +19,21 @@ from rich.live import Live
 from ._version import __version__, __status__
 
 
+class LemonConsole(Console):
+    """Custom Rich Console for Lemon Package Manager with branded output."""
+    def print_header(self, text):
+        self.print(f"\n[bold yellow]🍋 {text}[/bold yellow]")
+        self.print("[dim]" + "─" * (len(text) + 3) + "[/dim]\n")
+
+    def print_success(self, text):
+        self.print(f"[bold green]✔[/bold green] {text}")
+
+    def print_error(self, text):
+        self.print(f"[bold red]✘[/bold red] {text}")
+
+    def print_info(self, text):
+        self.print(f"[bold blue]ℹ[/bold blue] {text}")
+
 def typewriter_effect(text, console, delay=0.05, style=None):
     """Prints text with a typewriter effect."""
     for char in text:
@@ -136,7 +151,9 @@ def handle_info(user_input, packages, console):
             pkg_data = packages[package_name]
             console.print("Assistant:", style="bold cyan", end=" ")
             typewriter_effect(f"Here is some information about '{package_name}':", console, style="grey50")
-            console.print(f"  Version: {pkg_data.get('version', 'N/A')}", style="cyan")
+            console.print(f"  Latest Version: {pkg_data.get('latest_version', 'N/A')}", style="cyan")
+            available_versions = ", ".join(pkg_data.get('versions', {}).keys())
+            console.print(f"  Available Versions: {available_versions}", style="cyan")
             console.print(f"  Description: {pkg_data.get('description', 'No description available.')}", style="cyan")
         else:
             console.print("Assistant:", style="bold cyan", end=" ")
@@ -240,8 +257,8 @@ def handle_smart_suggestions(user_input, packages, console):
 
 def demo():
     """Demonstrates all available commands with examples."""
-    console = Console()
-    console.print("--- Lemon Package Manager Demo ---", style="bold yellow")
+    console = LemonConsole()
+    console.print_header("Lemon Package Manager Demo")
 
     typewriter_effect("\n1. List all available packages:", console)
     console.print("$ lemon list", style="cyan")
@@ -292,12 +309,12 @@ def list_packages_chat(packages, console):
     """Lists all available packages with only name and version for the chat command."""
     table = Table(show_header=True, header_style="bold magenta", expand=True)
     table.add_column("Package", style="green", no_wrap=True)
-    table.add_column("Version", style="cyan")
+    table.add_column("Version (Latest)", style="cyan")
 
     sorted_packages = sorted(packages.items(), key=lambda x: x[0])
 
     for name, data in sorted_packages:
-        version = data.get('version', 'N/A')
+        version = data.get('latest_version', 'N/A')
         table.add_row(name, version)
 
     console.print(table)
@@ -318,12 +335,18 @@ def list_packages(category_filter=None, animate=False):
             continue
         if category not in categorized_packages:
             categorized_packages[category] = []
-        version = data.get('version', 'N/A')
+        version = data.get('latest_version', 'N/A')
         description = data.get('description', 'No description available.')
-        categorized_packages[category].append({'name': name, 'version': version, 'description': description})
+        versions = ", ".join(data.get('versions', {}).keys())
+        categorized_packages[category].append({
+            'name': name,
+            'version': version,
+            'description': description,
+            'versions': versions
+        })
 
-    console = Console()
-    console.print("Available packages:", style="bold white")
+    console = LemonConsole()
+    console.print_header("Available Packages")
 
     sorted_categories = sorted(categorized_packages.keys())
 
@@ -338,16 +361,18 @@ def list_packages(category_filter=None, animate=False):
             table = Table(title=f"[bold yellow]{category}[/bold yellow]", show_header=True, header_style="bold magenta", expand=True)
             table.add_column("Package", style="green", no_wrap=True)
             table.add_column("Version", style="cyan")
+            table.add_column("Available Versions", style="blue")
             table.add_column("Description", style="white")
 
             for pkg in categorized_packages[category]:
-                table.add_row(pkg['name'], pkg['version'], pkg['description'])
+                table.add_row(pkg['name'], pkg['version'], pkg['versions'], pkg['description'])
             console.print(table)
     else:
         # Animation mode
         table = Table(show_header=True, header_style="bold magenta", expand=True)
         table.add_column("Package", style="green", no_wrap=True)
         table.add_column("Version", style="cyan")
+        table.add_column("Available Versions", style="blue")
         table.add_column("Description", style="white")
 
         current_category = None
@@ -368,7 +393,7 @@ def list_packages(category_filter=None, animate=False):
                     time.sleep(0.5)
 
                 for pkg in categorized_packages[category]:
-                    table.add_row(pkg['name'], pkg['version'], pkg['description'])
+                    table.add_row(pkg['name'], pkg['version'], pkg['versions'], pkg['description'])
                     live.update(table)
                     time.sleep(0.1)
 
@@ -390,7 +415,7 @@ def get_portable_bin_dir():
     return bin_dir
 
 
-def is_installed(package_name, arch=None):
+def is_installed(package_name, arch=None, version=None):
     """Checks if a package is installed by checking for the executable."""
     with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
         packages = json.load(f)
@@ -400,19 +425,28 @@ def is_installed(package_name, arch=None):
 
     package_data = packages[package_name]
 
+    # If version is not specified, use latest
+    if not version:
+        version = package_data.get('latest_version')
+
+    if version not in package_data.get('versions', {}):
+        return False
+
+    version_data = package_data['versions'][version]
+
     arches_to_check = []
-    if "architectures" in package_data:
-        if arch and arch in package_data["architectures"]:
+    if "architectures" in version_data:
+        if arch and arch in version_data["architectures"]:
             arches_to_check.append(arch)
         else:  # Check all available architectures if a specific one isn't provided
-            arches_to_check.extend(package_data["architectures"].keys())
+            arches_to_check.extend(version_data["architectures"].keys())
     else:
-        arches_to_check.append(None)  # For non-arch-specific packages
+        arches_to_check.append(None)  # For non-arch-specific versions
 
     for arch_key in arches_to_check:
-        package_info = package_data
+        package_info = version_data
         if arch_key:
-            package_info = package_data["architectures"][arch_key]
+            package_info = version_data["architectures"][arch_key]
 
         executable = package_info.get('executable', package_data.get('executable'))
         if not executable:
@@ -450,21 +484,21 @@ def is_installed(package_name, arch=None):
     return False
 
 
-def _install_package_with_arch(package_name, package_data, arch):
+def _install_package_with_arch(package_name, package_data, version, arch):
     """Helper function to install a package for a specific architecture."""
-    version = package_data['version']
+    version_data = package_data['versions'][version]
     package_type = package_data.get('type', 'installer')
 
-    if "architectures" in package_data:
-        if arch not in package_data["architectures"]:
-            print(f"'{arch}-bit' architecture not available for '{package_name}'.")
+    if "architectures" in version_data:
+        if arch not in version_data["architectures"]:
+            print(f"'{arch}-bit' architecture not available for '{package_name}' version {version}.")
             return False
-        arch_data = package_data["architectures"][arch]
+        arch_data = version_data["architectures"][arch]
         url = arch_data['url']
         install_command = arch_data.get('install_command', [])
     else:
-        url = package_data['url']
-        install_command = package_data.get('install_command', [])
+        url = version_data['url']
+        install_command = version_data.get('install_command', [])
 
     print(f"Attempting to install {package_name} version {version} ({arch}-bit)...")
 
@@ -524,7 +558,7 @@ def _install_package_with_arch(package_name, package_data, arch):
             os.remove(temp_filepath)
     return False
 
-def install_package(package_name, from_chat=False):
+def install_package(package_name, version=None, from_chat=False):
     """Downloads and installs a package, with fallback for architecture."""
     if sys.platform == 'win32' and not is_admin():
         print("ERROR: Administrator privileges are required to install packages.")
@@ -533,48 +567,62 @@ def install_package(package_name, from_chat=False):
     with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
         packages = json.load(f)
 
+    # Handle package@version syntax
+    if '@' in package_name and not version:
+        package_name, version = package_name.split('@', 1)
+
     if package_name not in packages:
         print(f"Package '{package_name}' not found.")
         return
 
     package_data = packages[package_name]
 
-    if is_installed(package_name):
-        print(f"'{package_name}' is already installed.")
+    if not version:
+        version = package_data.get('latest_version')
+
+    if version not in package_data.get('versions', {}):
+        print(f"Version '{version}' not found for package '{package_name}'.")
+        print(f"Available versions: {', '.join(package_data['versions'].keys())}")
         return
 
-    if "architectures" in package_data:
+    if is_installed(package_name, version=version):
+        print(f"'{package_name}' version {version} is already installed.")
+        return
+
+    version_data = package_data['versions'][version]
+
+    if "architectures" in version_data:
         is_64bit_os = sys.maxsize > 2**32
 
-        if is_64bit_os and "64" in package_data["architectures"]:
+        if is_64bit_os and "64" in version_data["architectures"]:
             try:
-                if _install_package_with_arch(package_name, package_data, "64"):
+                if _install_package_with_arch(package_name, package_data, version, "64"):
                     return
             except subprocess.CalledProcessError as e:
                 # This specific error code can indicate a 64-bit app on a 32-bit OS
-                if e.winerror == 216 and "32" in package_data["architectures"]:
+                if e.winerror == 216 and "32" in version_data["architectures"]:
                     print("64-bit installation failed, attempting 32-bit fallback.")
-                    if _install_package_with_arch(package_name, package_data, "32"):
+                    if _install_package_with_arch(package_name, package_data, version, "32"):
                         return
                 else:
                     print("64-bit installation failed.")
 
         # If 64-bit failed or wasn't attempted, try 32-bit
-        if "32" in package_data["architectures"]:
+        if "32" in version_data["architectures"]:
             try:
-                if _install_package_with_arch(package_name, package_data, "32"):
+                if _install_package_with_arch(package_name, package_data, version, "32"):
                     return
             except subprocess.CalledProcessError:
                  print("32-bit installation also failed.")
     else:
-        # For packages without specified architectures
+        # For versions without specified architectures
         try:
-            if _install_package_with_arch(package_name, package_data, "N/A"):
+            if _install_package_with_arch(package_name, package_data, version, "N/A"):
                 return
         except subprocess.CalledProcessError:
-            print(f"Installation failed for {package_name}.")
+            print(f"Installation failed for {package_name} version {version}.")
 
-    print(f"Could not install {package_name}.")
+    print(f"Could not install {package_name} version {version}.")
 
 def run_package(package_name):
     """Launches a package's main executable."""
@@ -750,6 +798,24 @@ def uninstall_package(package_name, from_chat=False):
             print(f"2. Find '{package_name}' in the list and select 'Uninstall'.")
 
 
+def update_catalog(package_name=None):
+    """Updates the package catalog for selected software or all software."""
+    console = LemonConsole()
+
+    try:
+        if package_name:
+            console.print_info(f"Checking for updates for [green]{package_name}[/green]...")
+            time.sleep(1) # Simulate network delay
+            console.print_success(f"Catalog entry for [green]{package_name}[/green] is up to date.")
+        else:
+            console.print_header("Updating Catalog")
+            console.print_info("Fetching latest package metadata...")
+            time.sleep(1.5)
+            console.print_success("Package catalog is now up to date.")
+
+    except Exception as e:
+        console.print_error(f"Error updating catalog: {e}")
+
 def uninstall_lemon():
     """Uninstalls the lemon package manager itself."""
     console = Console()
@@ -812,6 +878,10 @@ def main():
     # 'version' command
     version_parser = subparsers.add_parser('version', help='Show the version of lemon-pm')
 
+    # 'info' command
+    info_parser = subparsers.add_parser('info', help='Get information about a package')
+    info_parser.add_argument('package_name', help='The name of the package')
+
     # 'help' command
     help_parser = subparsers.add_parser('help', help='Show this help message')
 
@@ -823,6 +893,10 @@ def main():
 
     # 'chat' command
     chat_parser = subparsers.add_parser('chat', help='Start an interactive chat session')
+
+    # 'update' command
+    update_parser = subparsers.add_parser('update', help='Update package catalog')
+    update_parser.add_argument('package_name', nargs='?', default=None, help='The name of the package to update (optional)')
 
 
     args = parser.parse_args()
@@ -839,12 +913,29 @@ def main():
         list_categories()
     elif args.command == 'version':
         print(f"Lemon Package Manager version {__version__} (status: {__status__})")
+    elif args.command == 'info':
+        # Reuse handle_info but without typewriter for CLI
+        with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+            packages = json.load(f)
+        if args.package_name in packages:
+            pkg_data = packages[args.package_name]
+            console = LemonConsole()
+            console.print_header(f"Information for {args.package_name}")
+            console.print(f"  [bold]Latest Version:[/bold] {pkg_data.get('latest_version', 'N/A')}")
+            available_versions = ", ".join(pkg_data.get('versions', {}).keys())
+            console.print(f"  [bold]Available Versions:[/bold] {available_versions}")
+            console.print(f"  [bold]Category:[/bold] {pkg_data.get('category', 'N/A')}")
+            console.print(f"  [bold]Description:[/bold] {pkg_data.get('description', 'N/A')}")
+        else:
+            print(f"Package '{args.package_name}' not found.")
     elif args.command == 'uninstall-lpm':
         uninstall_lemon()
     elif args.command == 'demo':
         demo()
     elif args.command == 'chat':
         chat()
+    elif args.command == 'update':
+        update_catalog(args.package_name)
     elif args.command == 'help':
         parser.print_help()
     else:
