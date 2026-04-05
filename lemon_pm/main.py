@@ -493,11 +493,12 @@ def _install_package_with_arch(package_name, package_data, arch):
         os.chmod(temp_filepath, 0o755)
 
         if package_type == 'installer':
-            command = [temp_filepath]
             if temp_filepath.endswith('.msi'):
                 command = ['msiexec', '/i', temp_filepath] + install_command
+            elif temp_filepath.endswith('.msix') or temp_filepath.endswith('.msixbundle'):
+                command = ['powershell', '-Command', f'Add-AppxPackage -Path "{temp_filepath}"']
             else:
-                command += install_command
+                command = [temp_filepath] + install_command
 
             subprocess.run(command, check=True, capture_output=True, text=True, shell=False)
             print(f"Successfully installed {package_name}.")
