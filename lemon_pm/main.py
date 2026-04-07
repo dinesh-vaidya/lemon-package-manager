@@ -13,6 +13,7 @@ import shutil
 import time
 import random
 import difflib
+import zipfile
 from rich.console import Console
 from rich.table import Table
 from rich.live import Live
@@ -204,10 +205,12 @@ def handle_install(user_input, package_names, console):
         typewriter_effect("Please specify a package to install.", console, style="grey50")
 
 def handle_smart_suggestions(user_input, packages, console):
+    user_input_lower = user_input.lower()
     categories = set(data.get('category', 'Uncategorized').lower() for data in packages.values())
     found_category = None
     for cat in categories:
-        if cat in user_input:
+        # Check if the category name (or its singular form) is in the input
+        if cat in user_input_lower or (cat.endswith('s') and cat[:-1] in user_input_lower):
             found_category = cat
             break
 
@@ -251,13 +254,13 @@ def demo():
     console.print("$ lemon list Utilities", style="cyan")
     list_packages(category_filter="Utilities", animate=True)
 
-    typewriter_effect("\n3. Install a package:", console)
+    typewriter_effect("\n3. Install a package (Supports EXE, MSI, MSIX, and Portable):", console)
     console.print("$ lemon install 7-zip", style="cyan")
-    typewriter_effect("   (This will download and run the installer for 7-zip)", console)
+    typewriter_effect("   (This will download and silently run the installer for 7-zip)", console)
 
     typewriter_effect("\n4. Uninstall a package:", console)
     console.print("$ lemon uninstall 7-zip", style="cyan")
-    typewriter_effect("   (This will run the uninstaller for 7-zip)", console)
+    typewriter_effect("   (This will silently run the uninstaller for 7-zip)", console)
 
     typewriter_effect("\n5. Run a package:", console)
     console.print("$ lemon run 7-zip", style="cyan")
@@ -267,11 +270,15 @@ def demo():
     console.print("$ lemon categories", style="cyan")
     list_categories()
 
-    typewriter_effect("\n7. Show the version of lemon-pm:", console)
+    typewriter_effect("\n7. Chat with the Assistant (Smart suggestions, fuzzy search):", console)
+    console.print("$ lemon chat", style="cyan")
+    typewriter_effect("   (Starts an interactive session to manage packages with natural language)", console)
+
+    typewriter_effect("\n8. Show the version of lemon-pm:", console)
     console.print("$ lemon version", style="cyan")
     console.print(f"Lemon Package Manager version {__version__} (status: {__status__})")
 
-    typewriter_effect("\n8. Uninstall the lemon package manager itself:", console)
+    typewriter_effect("\n9. Uninstall the lemon package manager itself:", console)
     console.print("$ lemon uninstall-lpm", style="cyan")
     typewriter_effect("   (This will prompt for confirmation before uninstalling)", console)
 
@@ -507,8 +514,55 @@ def _install_package_with_arch(package_name, package_data, arch):
             bin_dir = get_portable_bin_dir()
             executable_name = package_data.get('executable_name', filename)
             final_filepath = os.path.join(bin_dir, executable_name)
-            os.rename(temp_filepath, final_filepath)
-            os.chmod(final_filepath, 0o755)
+            os.makedirs(os.path.dirname(final_filepath), exist_ok=True)
+
+            if temp_filepath.endswith('.zip'):
+                print(f"Extracting {filename} to {bin_dir}...")
+                with zipfile.ZipFile(temp_filepath, 'r') as zip_ref:
+                    # Security Check: Zip Slip protection
+                    for member in zip_ref.namelist():
+                        member_path = os.path.join(bin_dir, member)
+                        if not os.path.abspath(member_path).startswith(os.path.abspath(bin_dir)):
+                             print(f"ERROR: Potential Zip Slip vulnerability detected in {filename}. Extraction aborted.")
+                             return False
+
+                    # Check if all files are under a single top-level directory
+                    members = zip_ref.namelist()
+                    top_level_dirs = {m.split('/')[0] for m in members if '/' in m}
+                    only_files_in_root = all('/' not in m for m in members if not m.endswith('/'))
+
+                    zip_ref.extractall(bin_dir)
+
+                    # If everything is in a single subfolder, move it up to flatten
+                    if not only_files_in_root and len(top_level_dirs) == 1:
+                        top_dir = list(top_level_dirs)[0]
+                        top_dir_path = os.path.join(bin_dir, top_dir)
+                        if os.path.isdir(top_dir_path):
+                            for item in os.listdir(top_dir_path):
+                                shutil.move(os.path.join(top_dir_path, item), os.path.join(bin_dir, item))
+                            try:
+                                os.rmdir(top_dir_path)
+                            except OSError:
+                                pass # Directory not empty or other issue
+
+                if os.path.exists(final_filepath):
+                    os.chmod(final_filepath, 0o755)
+                else:
+                    # Fallback: search for the executable if not in the expected path
+                    base_exe = os.path.basename(executable_name)
+                    for root, dirs, files in os.walk(bin_dir):
+                        if base_exe in files:
+                            source_path = os.path.join(root, base_exe)
+                            if source_path != final_filepath:
+                                shutil.move(source_path, final_filepath)
+                            os.chmod(final_filepath, 0o755)
+                            break
+            else:
+                if os.path.exists(final_filepath):
+                    os.remove(final_filepath)
+                os.rename(temp_filepath, final_filepath)
+                os.chmod(final_filepath, 0o755)
+
             print(f"Successfully installed {package_name} to {final_filepath}")
             return True
     except subprocess.CalledProcessError as e:

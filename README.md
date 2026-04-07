@@ -6,10 +6,11 @@ A simple, command-line package manager for Windows devices, designed to quickly 
 
 ## Features
 
--   **Install Packages:** Silently installs packages from a predefined list of trusted URLs.
--   **Uninstall Packages:** Silently uninstalls packages.
+-   **Install Packages:** Silently installs packages from a predefined list of trusted URLs. Supports EXE, MSI, MSIX, and Portable applications.
+-   **Uninstall Packages:** Silently uninstalls packages using robust, version-agnostic methods.
 -   **Run Applications:** Launch installed applications directly from the terminal.
 -   **Categorized Package List:** View all available software, neatly grouped by category.
+-   **AI Chat Assistant:** Manage packages using natural language with built-in smart suggestions and fuzzy search.
 -   **Administrator Check:** Automatically detects if administrator privileges are needed and provides clear instructions.
 -   **Simple and Lightweight:** No complex dependencies or configuration required.
 
@@ -93,6 +94,7 @@ To see the current version of the `lemon-pm` tool.
 ```bash
 # Example
 lemon version
+# Output: Lemon Package Manager version 1.1.1 (status: beta)
 ```
 
 ### `lemon help` or `lpm help`
@@ -123,10 +125,13 @@ You can use the following commands in the chat:
 - `install <package_name>`: Install a package.
 - `info <package_name>`: Get more information about a package.
 - `uninstall <package_name>`: Uninstall a package.
+- `exit`: Close the chat session.
 
 The assistant also has some smart features:
-- **Smart Suggestions**: If you ask for a "browser" or "media player", the assistant will suggest relevant packages.
-- **Fuzzy Search**: If you misspell a package name, the assistant will try to guess what you meant.
+- **Smart Suggestions**: If you ask for a category (e.g., "browser" or "media player"), the assistant will suggest relevant packages from that category.
+- **Fuzzy Search**: If you misspell a package name during an `install` command, the assistant will try to guess what you meant and ask for confirmation.
+- **Package Count**: You can ask "how many packages are there?" to get the total count.
+- **Conversational**: Responds politely to "thanks" or "ok".
 
 ```bash
 # Example
@@ -141,6 +146,14 @@ To uninstall the lemon package manager itself. This will remove the `lemon` and 
 # Example
 lpm uninstall-lpm
 ```
+
+## Supported Package Types
+
+Lemon Package Manager supports several types of Windows applications:
+-   **EXE (Inno Setup, NSIS, etc.)**: Standard installers with silent flags.
+-   **MSI**: Windows Installer packages.
+-   **MSIX / MSIXBUNDLE**: Modern Windows application packages.
+-   **Portable**: Single-executable or ZIP-archived applications that don't require formal installation.
 
 ## Available Packages
 
