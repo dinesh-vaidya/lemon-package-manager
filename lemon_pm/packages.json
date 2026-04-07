@@ -20,6 +20,36 @@
         ],
         "uninstall_command": "\"%ProgramFiles(x86)%\\7-Zip\\Uninstall.exe\" /S"
       }
+    },
+    "versions": {
+      "24.09": {
+        "architectures": {
+          "64": {
+            "url": "https://github.com/ip7z/7zip/releases/download/24.09/7z2409-x64.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\7-Zip\\Uninstall.exe\" /S"
+          },
+          "32": {
+            "url": "https://github.com/ip7z/7zip/releases/download/24.09/7z2409.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles(x86)%\\7-Zip\\Uninstall.exe\" /S"
+          }
+        }
+      },
+      "23.01": {
+        "architectures": {
+          "64": {
+            "url": "https://github.com/ip7z/7zip/releases/download/23.01/7z2301-x64.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\7-Zip\\Uninstall.exe\" /S"
+          },
+          "32": {
+            "url": "https://github.com/ip7z/7zip/releases/download/23.01/7z2301.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles(x86)%\\7-Zip\\Uninstall.exe\" /S"
+          }
+        }
+      }
     }
   },
   "notepad++": {
@@ -43,6 +73,36 @@
         ],
         "uninstall_command": "\"%ProgramFiles(x86)%\\Notepad++\\uninstall.exe\" /S"
       }
+    },
+    "versions": {
+      "8.8.4": {
+        "architectures": {
+          "64": {
+            "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.4/npp.8.8.4.Installer.x64.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\Notepad++\\uninstall.exe\" /S"
+          },
+          "32": {
+            "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.4/npp.8.8.4.Installer.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles(x86)%\\Notepad++\\uninstall.exe\" /S"
+          }
+        }
+      },
+      "8.8.3": {
+        "architectures": {
+          "64": {
+            "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.3/npp.8.8.3.Installer.x64.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\Notepad++\\uninstall.exe\" /S"
+          },
+          "32": {
+            "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.3/npp.8.8.3.Installer.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles(x86)%\\Notepad++\\uninstall.exe\" /S"
+          }
+        }
+      }
     }
   },
   "vlc": {
@@ -65,6 +125,36 @@
           "/S"
         ],
         "uninstall_command": "\"%ProgramFiles(x86)%\\VideoLAN\\VLC\\uninstall.exe\" /S"
+      }
+    },
+    "versions": {
+      "3.0.20": {
+        "architectures": {
+          "64": {
+            "url": "https://get.videolan.org/vlc/3.0.20/win64/vlc-3.0.20-win64.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\VideoLAN\\VLC\\uninstall.exe\" /S"
+          },
+          "32": {
+            "url": "https://get.videolan.org/vlc/3.0.20/win32/vlc-3.0.20-win32.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles(x86)%\\VideoLAN\\VLC\\uninstall.exe\" /S"
+          }
+        }
+      },
+      "3.0.19": {
+        "architectures": {
+          "64": {
+            "url": "https://get.videolan.org/vlc/3.0.19/win64/vlc-3.0.19-win64.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\VideoLAN\\VLC\\uninstall.exe\" /S"
+          },
+          "32": {
+            "url": "https://get.videolan.org/vlc/3.0.19/win32/vlc-3.0.19-win32.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles(x86)%\\VideoLAN\\VLC\\uninstall.exe\" /S"
+          }
+        }
       }
     }
   },
@@ -107,6 +197,26 @@
           "/MERGETASKS=!runcode"
         ],
         "uninstall_command": "\"%LocalAppData%\\Programs\\Microsoft VS Code\\unins000.exe\" /VERYSILENT /NORESTART"
+      }
+    },
+    "versions": {
+      "1.96.2": {
+        "architectures": {
+          "64": {
+            "url": "https://update.code.visualstudio.com/1.96.2/win32-x64-user/stable",
+            "install_command": ["/VERYSILENT", "/MERGETASKS=!runcode"],
+            "uninstall_command": "\"%LocalAppData%\\Programs\\Microsoft VS Code\\unins000.exe\" /VERYSILENT /NORESTART"
+          }
+        }
+      },
+      "1.95.3": {
+        "architectures": {
+          "64": {
+            "url": "https://update.code.visualstudio.com/1.95.3/win32-x64-user/stable",
+            "install_command": ["/VERYSILENT", "/MERGETASKS=!runcode"],
+            "uninstall_command": "\"%LocalAppData%\\Programs\\Microsoft VS Code\\unins000.exe\" /VERYSILENT /NORESTART"
+          }
+        }
       }
     }
   },
@@ -199,6 +309,26 @@
           "/VERYSILENT"
         ],
         "uninstall_command": "\"%ProgramFiles(x86)%\\Git\\unins000.exe\" /VERYSILENT /NORESTART"
+      }
+    },
+    "versions": {
+      "2.49.0": {
+        "architectures": {
+          "64": {
+            "url": "https://github.com/git-for-windows/git/releases/download/v2.49.0.windows.1/Git-2.49.0-64-bit.exe",
+            "install_command": ["/VERYSILENT"],
+            "uninstall_command": "\"%ProgramFiles%\\Git\\unins000.exe\" /VERYSILENT /NORESTART"
+          }
+        }
+      },
+      "2.48.1": {
+        "architectures": {
+          "64": {
+            "url": "https://github.com/git-for-windows/git/releases/download/v2.48.1.windows.1/Git-2.48.1-64-bit.exe",
+            "install_command": ["/VERYSILENT"],
+            "uninstall_command": "\"%ProgramFiles%\\Git\\unins000.exe\" /VERYSILENT /NORESTART"
+          }
+        }
       }
     }
   },

@@ -262,23 +262,27 @@ def demo():
     console.print("$ lemon uninstall 7-zip", style="cyan")
     typewriter_effect("   (This will silently run the uninstaller for 7-zip)", console)
 
-    typewriter_effect("\n5. Run a package:", console)
+    typewriter_effect("\n5. Upgrade a package or all packages:", console)
+    console.print("$ lemon upgrade", style="cyan")
+    typewriter_effect("   (This will upgrade all tracked packages to their latest versions)", console)
+
+    typewriter_effect("\n6. Run a package:", console)
     console.print("$ lemon run 7-zip", style="cyan")
     typewriter_effect("   (This will attempt to launch the main executable for 7-zip)", console)
 
-    typewriter_effect("\n6. List all available categories:", console)
+    typewriter_effect("\n7. List all available categories:", console)
     console.print("$ lemon categories", style="cyan")
     list_categories()
 
-    typewriter_effect("\n7. Chat with the Assistant (Smart suggestions, fuzzy search):", console)
+    typewriter_effect("\n8. Chat with the Assistant (Smart suggestions, fuzzy search):", console)
     console.print("$ lemon chat", style="cyan")
     typewriter_effect("   (Starts an interactive session to manage packages with natural language)", console)
 
-    typewriter_effect("\n8. Show the version of lemon-pm:", console)
+    typewriter_effect("\n9. Show the version of lemon-pm:", console)
     console.print("$ lemon version", style="cyan")
     console.print(f"Lemon Package Manager version {__version__} (status: {__status__})")
 
-    typewriter_effect("\n9. Uninstall the lemon package manager itself:", console)
+    typewriter_effect("\n10. Uninstall the lemon package manager itself:", console)
     console.print("$ lemon uninstall-lpm", style="cyan")
     typewriter_effect("   (This will prompt for confirmation before uninstalling)", console)
 
@@ -381,21 +385,63 @@ def list_packages(category_filter=None, animate=False):
 
     console.print("End of list.", style="bold white")
 
-def get_portable_bin_dir():
-    """Gets the directory for storing portable application binaries."""
-    # On Windows, this will expand to C:\\Users\\<user>\\AppData\\Local
-    local_app_data = os.path.expandvars('%LOCALAPPDATA%')
-    if '%LOCALAPPDATA%' in local_app_data:
-        # If the variable wasn't expanded (on non-Windows), use a fallback
-        # This is mainly for testing in the sandbox environment.
+def get_lemon_dir():
+    """Gets the base directory for Lemon Package Manager data."""
+    local_app_data = os.environ.get('LOCALAPPDATA')
+    if not local_app_data:
+        # Fallback for non-Windows or if env var is missing
         home = os.path.expanduser("~")
         local_app_data = os.path.join(home, '.local', 'share')
 
     lemon_dir = os.path.join(local_app_data, 'lemon')
-    bin_dir = os.path.join(lemon_dir, 'bin')
+    os.makedirs(lemon_dir, exist_ok=True)
+    return lemon_dir
+
+def get_portable_bin_dir():
+    """Gets the directory for storing portable application binaries."""
+    bin_dir = os.path.join(get_lemon_dir(), 'bin')
     os.makedirs(bin_dir, exist_ok=True)
     return bin_dir
 
+def get_state_file():
+    """Gets the path to the installed packages state file."""
+    return os.path.join(get_lemon_dir(), 'installed.json')
+
+def track_installation(package_name, version):
+    """Tracks an installed package and its version."""
+    state_file = get_state_file()
+    state = {}
+    if os.path.exists(state_file):
+        try:
+            with open(state_file, 'r') as f:
+                state = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    state[package_name] = {
+        'version': version,
+        'install_time': time.strftime('%Y-%m-%d %H:%M:%S')
+    }
+
+    try:
+        with open(state_file, 'w') as f:
+            json.dump(state, f, indent=2)
+    except OSError as e:
+        print(f"Warning: Could not save installation state: {e}")
+
+def untrack_installation(package_name):
+    """Removes a package from the tracking state."""
+    state_file = get_state_file()
+    if os.path.exists(state_file):
+        try:
+            with open(state_file, 'r') as f:
+                state = json.load(f)
+            if package_name in state:
+                del state[package_name]
+                with open(state_file, 'w') as f:
+                    json.dump(state, f, indent=2)
+        except (json.JSONDecodeError, OSError):
+            pass
 
 def is_installed(package_name, arch=None):
     """Checks if a package is installed by checking for the executable."""
@@ -508,7 +554,8 @@ def _install_package_with_arch(package_name, package_data, arch):
                 command = [temp_filepath] + install_command
 
             subprocess.run(command, check=True, capture_output=True, text=True, shell=False)
-            print(f"Successfully installed {package_name}.")
+            print(f"Successfully installed {package_name} version {version}.")
+            track_installation(package_name, version)
             return True
         elif package_type == 'portable':
             bin_dir = get_portable_bin_dir()
@@ -563,7 +610,8 @@ def _install_package_with_arch(package_name, package_data, arch):
                 os.rename(temp_filepath, final_filepath)
                 os.chmod(final_filepath, 0o755)
 
-            print(f"Successfully installed {package_name} to {final_filepath}")
+            print(f"Successfully installed {package_name} version {version} to {final_filepath}")
+            track_installation(package_name, version)
             return True
     except subprocess.CalledProcessError as e:
         print(f"Installation failed for {arch}-bit architecture.")
@@ -578,7 +626,7 @@ def _install_package_with_arch(package_name, package_data, arch):
             os.remove(temp_filepath)
     return False
 
-def install_package(package_name, from_chat=False):
+def install_package(package_name, from_chat=False, target_version=None):
     """Downloads and installs a package, with fallback for architecture."""
     if sys.platform == 'win32' and not is_admin():
         print("ERROR: Administrator privileges are required to install packages.")
@@ -587,15 +635,57 @@ def install_package(package_name, from_chat=False):
     with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
         packages = json.load(f)
 
+    # Handle package@version syntax
+    if not target_version and '@' in package_name:
+        package_name, target_version = package_name.split('@', 1)
+
     if package_name not in packages:
         print(f"Package '{package_name}' not found.")
         return
 
     package_data = packages[package_name]
 
+    if target_version:
+        if target_version == package_data.get('version'):
+            # Already set to use latest version details
+            pass
+        elif "versions" in package_data and target_version in package_data["versions"]:
+            # Use specific version data, but merge with base package metadata (category, type, etc.)
+            base_data = package_data.copy()
+            version_specific_data = base_data.pop("versions")[target_version]
+            base_data.update(version_specific_data)
+            base_data['version'] = target_version
+            package_data = base_data
+        else:
+            print(f"Version '{target_version}' not found for '{package_name}'.")
+            available_versions = [package_data.get('version')] + list(package_data.get('versions', {}).keys())
+            print(f"Available versions: {', '.join(filter(None, available_versions))}")
+            return
+
     if is_installed(package_name):
-        print(f"'{package_name}' is already installed.")
-        return
+        state_file = get_state_file()
+        current_version = None
+        if os.path.exists(state_file):
+            try:
+                with open(state_file, 'r') as f:
+                    state = json.load(f)
+                    current_version = state.get(package_name, {}).get('version')
+            except (json.JSONDecodeError, OSError):
+                pass
+
+        # If target_version is specified and different from current, or if it's an upgrade, allow installation
+        if target_version and current_version and target_version == current_version:
+            print(f"'{package_name}' version {target_version} is already installed.")
+            return
+        elif not target_version and current_version == package_data.get('version'):
+            print(f"'{package_name}' is already at the latest version ({current_version}).")
+            return
+        elif not current_version:
+             # Package is installed but not tracked. For safety, we assume latest.
+             print(f"'{package_name}' is already installed (version untracked). Use 'uninstall' first if you want to change versions.")
+             return
+        else:
+            print(f"Software '{package_name}' found. Proceeding with version change/upgrade ({current_version} -> {target_version or package_data.get('version')})...")
 
     if "architectures" in package_data:
         is_64bit_os = sys.maxsize > 2**32
@@ -750,6 +840,7 @@ def uninstall_package(package_name, from_chat=False):
             try:
                 os.remove(final_filepath)
                 print(f"Successfully removed '{final_filepath}'.")
+                untrack_installation(package_name)
             except OSError as e:
                 print(f"Error removing file '{final_filepath}': {e}")
         else:
@@ -783,6 +874,7 @@ def uninstall_package(package_name, from_chat=False):
                 result = subprocess.run(command_parts, check=True, capture_output=True, text=True, shell=False)
 
                 print(f"Uninstallation command for {package_name} completed.")
+                untrack_installation(package_name)
                 if result.stdout:
                     print("Output:", result.stdout)
                 if result.stderr:
@@ -803,6 +895,60 @@ def uninstall_package(package_name, from_chat=False):
             print("1. Open Settings > Apps > Apps & features.")
             print(f"2. Find '{package_name}' in the list and select 'Uninstall'.")
 
+
+def upgrade_package(package_name=None):
+    """Upgrades a specific package or all installed packages."""
+    state_file = get_state_file()
+    if not os.path.exists(state_file):
+        print("No packages tracked for upgrade. Use 'lemon install' to install packages first.")
+        return
+
+    try:
+        with open(state_file, 'r') as f:
+            installed_packages = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        print("Error reading installation state.")
+        return
+
+    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+        available_packages = json.load(f)
+
+    to_upgrade = {}
+    if package_name:
+        if package_name in installed_packages:
+            to_upgrade[package_name] = installed_packages[package_name]
+        else:
+            print(f"Package '{package_name}' is not currently tracked as installed.")
+            return
+    else:
+        to_upgrade = installed_packages
+
+    upgraded_count = 0
+    for name, data in to_upgrade.items():
+        if name not in available_packages:
+            continue
+
+        current_version = data.get('version')
+        latest_version = available_packages[name].get('version')
+
+        if not latest_version or latest_version == "latest":
+            print(f"Checking for updates for {name} (Current: {current_version})...")
+            # For 'latest' packages, we just reinstall to be sure
+            install_package(name)
+            upgraded_count += 1
+        elif latest_version != current_version:
+            print(f"Upgrading {name}: {current_version} -> {latest_version}")
+            install_package(name)
+            upgraded_count += 1
+        else:
+            if package_name:
+                print(f"{name} is already at the latest version ({latest_version}).")
+
+    if not package_name:
+        if upgraded_count == 0:
+            print("All packages are already up to date.")
+        else:
+            print(f"Successfully upgraded {upgraded_count} packages.")
 
 def uninstall_lemon():
     """Uninstalls the lemon package manager itself."""
@@ -852,6 +998,10 @@ def main():
     uninstall_parser = subparsers.add_parser('uninstall', help='Uninstall a package')
     uninstall_parser.add_argument('package_name', help='The name of the package to uninstall')
 
+    # 'upgrade' command
+    upgrade_parser = subparsers.add_parser('upgrade', help='Upgrade a package or all packages')
+    upgrade_parser.add_argument('package_name', nargs='?', default=None, help='The name of the package to upgrade (optional)')
+
     # 'list' command
     list_parser = subparsers.add_parser('list', help='List available packages, optionally filtered by category')
     list_parser.add_argument('category', nargs='?', default=None, help='The category to filter by')
@@ -885,6 +1035,8 @@ def main():
         install_package(args.package_name)
     elif args.command == 'uninstall':
         uninstall_package(args.package_name)
+    elif args.command == 'upgrade':
+        upgrade_package(args.package_name)
     elif args.command == 'run':
         run_package(args.package_name)
     elif args.command == 'list':

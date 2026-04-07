@@ -58,13 +58,28 @@ To see a list of all available package categories.
 lemon categories
 ```
 
-### `lemon install <package_name>` or `lpm install <package_name>`
+### `lemon install <package_name>[@version]` or `lpm install <package_name>[@version]`
 
-To install a package, use the `install` command followed by the package name. The installer will be downloaded and run silently in the background.
+To install a package, use the `install` command. You can optionally specify a version using the `@version` syntax. If no version is specified, the latest available version will be installed.
 
 ```bash
-# Example
+# Install the latest version
 lpm install notepad++
+
+# Install a specific version
+lpm install notepad++@8.8.4
+```
+
+### `lemon upgrade [package_name]` or `lpm upgrade [package_name]`
+
+To upgrade your installed packages to the latest available versions. You can upgrade a specific package by providing its name, or upgrade all tracked packages by omitting it.
+
+```bash
+# Upgrade all packages
+lemon upgrade
+
+# Upgrade only a specific package
+lpm upgrade vlc
 ```
 
 ### `lemon uninstall <package_name>` or `lpm uninstall <package_name>`
