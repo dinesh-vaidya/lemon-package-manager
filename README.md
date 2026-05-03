@@ -137,7 +137,8 @@ Starts an interactive chat session with an AI assistant to help you manage packa
 You can use the following commands in the chat:
 - `list`: Show all available packages.
 - `search <package_name>`: Search for a specific package.
-- `install <package_name>`: Install a package.
+- `install <package_name>[@version]`: Install a specific version.
+- `upgrade [package_name]`: Upgrade a specific or all packages.
 - `info <package_name>`: Get more information about a package.
 - `uninstall <package_name>`: Uninstall a package.
 - `exit`: Close the chat session.
