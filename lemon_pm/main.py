@@ -37,7 +37,7 @@ def chat():
 
     console.print("Assistant:", style="bold cyan", end=" ")
     typewriter_effect("I can help you manage packages. Here are the commands you can use:", console, style="grey50")
-    console.print("  list, search <pkg>, install <pkg>, info <pkg>, uninstall <pkg>, exit", style="grey50")
+    console.print("  list, search <pkg>, install <pkg>[@version], upgrade [pkg], info <pkg>, uninstall <pkg>, exit", style="grey50")
 
     try:
         with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
@@ -84,9 +84,11 @@ def chat():
                 handle_uninstall(user_input, package_names, console)
             elif user_input.startswith("install"):
                 handle_install(user_input, package_names, console)
+            elif user_input.startswith("upgrade"):
+                handle_upgrade(user_input, console)
             else:
                 console.print("Assistant:", style="bold cyan", end=" ")
-                typewriter_effect("I'm not sure how to help with that. You can ask me to 'list', 'search', 'install', 'info', or 'uninstall'.", console)
+                typewriter_effect("I'm not sure how to help with that. You can ask me to 'list', 'search', 'install', 'upgrade', 'info', or 'uninstall'.", console)
 
         except (KeyboardInterrupt, EOFError):
             print("\n")
@@ -166,10 +168,18 @@ def handle_uninstall(user_input, package_names, console):
         console.print("Assistant:", style="bold cyan", end=" ")
         typewriter_effect("Please specify a package to uninstall.", console, style="grey50")
 
+def handle_upgrade(user_input, console):
+    parts = user_input.split(maxsplit=1)
+    package_name = parts[1] if len(parts) > 1 else None
+    upgrade_package(package_name)
+
 def handle_install(user_input, package_names, console):
     parts = user_input.split(maxsplit=1)
     if len(parts) > 1:
-        package_name = parts[1]
+        raw_package_name = parts[1]
+        package_name = raw_package_name.split('@')[0]
+        target_version = raw_package_name.split('@')[1] if '@' in raw_package_name else None
+
         if package_name in package_names:
             console.print("Assistant:", style="bold cyan", end=" ")
             typewriter_effect(f"I found '{package_name}' in our list. It is available.", console, style="grey50")
@@ -178,8 +188,11 @@ def handle_install(user_input, package_names, console):
             confirmation = input().lower().strip()
             if confirmation == 'y':
                 console.print("Assistant:", style="bold cyan", end=" ")
-                typewriter_effect(f"Great! Starting the installation for {package_name}.", console, style="grey50")
-                install_package(package_name, from_chat=True)
+                msg = f"Great! Starting the installation for {package_name}."
+                if target_version:
+                    msg = f"Great! Starting the installation for {package_name} version {target_version}."
+                typewriter_effect(msg, console, style="grey50")
+                install_package(raw_package_name, from_chat=True)
             else:
                 console.print("Assistant:", style="bold cyan", end=" ")
                 typewriter_effect("Understood. I will not install it.", console, style="grey50")
@@ -932,10 +945,14 @@ def upgrade_package(package_name=None):
         latest_version = available_packages[name].get('version')
 
         if not latest_version or latest_version == "latest":
-            print(f"Checking for updates for {name} (Current: {current_version})...")
-            # For 'latest' packages, we just reinstall to be sure
-            install_package(name)
-            upgraded_count += 1
+            # For 'latest' packages, we just reinstall to be sure if requested specifically
+            if package_name:
+                 print(f"Checking for updates for {name} (Current: {current_version})...")
+                 install_package(name)
+                 upgraded_count += 1
+            else:
+                 # In bulk upgrade, skipping 'latest' to avoid redundant downloads unless we have a hash check (future)
+                 pass
         elif latest_version != current_version:
             print(f"Upgrading {name}: {current_version} -> {latest_version}")
             install_package(name)

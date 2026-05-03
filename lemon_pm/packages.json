@@ -264,6 +264,26 @@
         ],
         "uninstall_command": "\"%ProgramFiles(x86)%\\Mozilla Firefox\\uninstall\\helper.exe\" /S"
       }
+    },
+    "versions": {
+      "140.0": {
+        "architectures": {
+          "64": {
+            "url": "https://archive.mozilla.org/pub/firefox/releases/140.0/win64/en-US/Firefox%20Setup%20140.0.msi",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\Mozilla Firefox\\uninstall\\helper.exe\" /S"
+          }
+        }
+      },
+      "139.0": {
+        "architectures": {
+          "64": {
+            "url": "https://archive.mozilla.org/pub/firefox/releases/139.0/win64/en-US/Firefox%20Setup%20139.0.msi",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\Mozilla Firefox\\uninstall\\helper.exe\" /S"
+          }
+        }
+      }
     }
   },
   "brave": {
@@ -385,6 +405,26 @@
         ],
         "uninstall_command": "\"%ProgramFiles(x86)%\\OBS Studio\\uninstall.exe\" /S"
       }
+    },
+    "versions": {
+      "30.1.1": {
+        "architectures": {
+          "64": {
+            "url": "https://github.com/obsproject/obs-studio/releases/download/30.1.1/OBS-Studio-30.1.1-Full-Installer-x64.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\OBS Studio\\uninstall.exe\" /S"
+          }
+        }
+      },
+      "30.1.0": {
+        "architectures": {
+          "64": {
+            "url": "https://github.com/obsproject/obs-studio/releases/download/30.1.0/OBS-Studio-30.1.0-Full-Installer-x64.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\OBS Studio\\uninstall.exe\" /S"
+          }
+        }
+      }
     }
   },
   "blender": {
@@ -408,6 +448,26 @@
         ],
         "uninstall_command": "msiexec /x {56E5E671-9136-473E-8DB3-32EC84E704DF} /quiet"
       }
+    },
+    "versions": {
+      "4.1.1": {
+        "architectures": {
+          "64": {
+            "url": "https://download.blender.org/release/Blender4.1/blender-4.1.1-windows-x64.msi",
+            "install_command": ["/quiet"],
+            "uninstall_command": "msiexec /x {85D6F591-6E63-441F-959D-33C6E5C8B490} /quiet"
+          }
+        }
+      },
+      "4.0.2": {
+        "architectures": {
+          "64": {
+            "url": "https://download.blender.org/release/Blender4.0/blender-4.0.2-windows-x64.msi",
+            "install_command": ["/quiet"],
+            "uninstall_command": "msiexec /x {56E5E671-9136-473E-8DB3-32EC84E704DF} /quiet"
+          }
+        }
+      }
     }
   },
   "qbittorrent": {
@@ -430,6 +490,26 @@
           "/S"
         ],
         "uninstall_command": "\"%ProgramFiles(x86)%\\qBittorrent\\uninst.exe\" /S"
+      }
+    },
+    "versions": {
+      "4.6.4": {
+        "architectures": {
+          "64": {
+            "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-4.6.4/qbittorrent_4.6.4_x64_setup.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\qBittorrent\\uninst.exe\" /S"
+          }
+        }
+      },
+      "4.6.3": {
+        "architectures": {
+          "64": {
+            "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-4.6.3/qbittorrent_4.6.3_x64_setup.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\qBittorrent\\uninst.exe\" /S"
+          }
+        }
       }
     }
   },
@@ -493,6 +573,26 @@
         ],
         "uninstall_command": "wmic product where \"name like 'LibreOffice%'\" call uninstall /nointeractive"
       }
+    },
+    "versions": {
+      "25.2.0": {
+        "architectures": {
+          "64": {
+            "url": "https://downloadarchive.documentfoundation.org/libreoffice/old/25.2.0.1/win/x86_64/LibreOffice_25.2.0.1_Win_x86-64.msi",
+            "install_command": ["/quiet"],
+            "uninstall_command": "wmic product where \"name like 'LibreOffice%'\" call uninstall /nointeractive"
+          }
+        }
+      },
+      "24.8.4": {
+        "architectures": {
+          "64": {
+            "url": "https://downloadarchive.documentfoundation.org/libreoffice/old/24.8.4.2/win/x86_64/LibreOffice_24.8.4.2_Win_x86-64.msi",
+            "install_command": ["/quiet"],
+            "uninstall_command": "wmic product where \"name like 'LibreOffice%'\" call uninstall /nointeractive"
+          }
+        }
+      }
     }
   },
   "audacity": {
@@ -515,6 +615,26 @@
           "/VERYSILENT"
         ],
         "uninstall_command": "\"%ProgramFiles(x86)%\\Audacity\\unins000.exe\" /VERYSILENT"
+      }
+    },
+    "versions": {
+      "3.6.0": {
+        "architectures": {
+          "64": {
+            "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.6.0/audacity-win-3.6.0-64bit.exe",
+            "install_command": ["/VERYSILENT"],
+            "uninstall_command": "\"%ProgramFiles%\\Audacity\\unins000.exe\" /VERYSILENT"
+          }
+        }
+      },
+      "3.5.1": {
+        "architectures": {
+          "64": {
+            "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.5.1/audacity-win-3.5.1-64bit.exe",
+            "install_command": ["/VERYSILENT"],
+            "uninstall_command": "\"%ProgramFiles%\\Audacity\\unins000.exe\" /VERYSILENT"
+          }
+        }
       }
     }
   },
@@ -682,7 +802,17 @@
     "uninstall_command": "msiexec /x {45b3032f-22cc-40cd-9e97-4da7095fa5a2} /quiet",
     "type": "installer",
     "category": "Development",
-    "executable": "putty.exe"
+    "executable": "putty.exe",
+    "versions": {
+      "0.82": {
+        "url": "https://the.earth.li/~sgtatham/putty/0.82/w64/putty-64bit-0.82-installer.msi",
+        "uninstall_command": "msiexec /x {C8A8C3E5-9D2F-4C82-9D9A-2B5C1B6E0A9F} /quiet"
+      },
+      "0.81": {
+        "url": "https://the.earth.li/~sgtatham/putty/0.81/w64/putty-64bit-0.81-installer.msi",
+        "uninstall_command": "msiexec /x {A523E6E6-2A42-4217-A63A-228373A66352} /quiet"
+      }
+    }
   },
   "treesize": {
     "url": "https://downloads.jam-software.de/treesize_free/TreeSizeFree-Portable.zip",
