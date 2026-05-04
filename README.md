@@ -72,16 +72,34 @@ lpm install notepad++
 lpm install notepad++@8.8.4
 ```
 
-### `lemon upgrade [package_name]` or `lpm upgrade [package_name]`
+### `lemon check` or `lpm check`
 
-To upgrade your installed packages to the latest available versions. You can upgrade a specific package by providing its name, or upgrade all tracked packages by omitting it.
+Checks all your tracked packages against the archive list and displays a table of available updates.
 
 ```bash
-# Upgrade all packages
+# Check for updates
+lpm check
+```
+
+### `lemon upgrade [package_name]` or `lpm upgrade [package_name]`
+
+To upgrade your installed packages to the latest available versions. Running `upgrade` without a package name will show a summary of all available updates and prompt you to upgrade "All", a "Specific" package, or "None".
+
+```bash
+# Interactive bulk upgrade
 lemon upgrade
 
-# Upgrade only a specific package
+# Directly upgrade a specific package
 lpm upgrade vlc
+```
+
+### `lemon update` or `lpm update`
+
+Syncs your local package archive with the remote repository to ensure you have the latest definitions and version information.
+
+```bash
+# Sync package archive
+lemon update
 ```
 
 ### `lemon uninstall <package_name>` or `lpm uninstall <package_name>`
@@ -140,7 +158,9 @@ You can use the following commands in the chat:
 - `list`: Show all available packages.
 - `search <package_name>`: Search for a specific package.
 - `install <package_name>[@version]`: Install a specific version.
+- `check`: Check for available updates.
 - `upgrade [package_name]`: Upgrade a specific or all packages.
+- `update`: Sync the package archive with remote repository.
 - `info <package_name>`: Get more information about a package.
 - `uninstall <package_name>`: Uninstall a package.
 - `exit`: Close the chat session.
