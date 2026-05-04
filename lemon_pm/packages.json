@@ -1801,5 +1801,28 @@
       "/NORESTART"
     ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\IDrive\\IDrive.exe\" /SILENT"
+  },
+  "editplus": {
+    "version": "6.1",
+    "description": "A powerful text editor, HTML editor, PHP editor and Java editor for Windows.",
+    "type": "installer",
+    "category": "Development",
+    "executable": "editplus.exe",
+    "url": "https://www.editplus.com/ftp/epp610_0780_64bit.exe",
+    "install_command": [
+      "-s",
+      "-sp-s"
+    ],
+    "uninstall_command": "\"%ProgramFiles%\\EditPlus\\unins000.exe\" /VERYSILENT",
+    "versions": {
+      "5.7": {
+        "url": "https://www.editplus.com/ftp/epp570_4630_64bit.exe",
+        "install_command": ["-s", "-sp-s"]
+      },
+      "4.3": {
+        "url": "https://www.editplus.com/ftp/epp430_2751_64bit.exe",
+        "install_command": ["-s", "-sp-s"]
+      }
+    }
   }
 }
