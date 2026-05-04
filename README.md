@@ -9,8 +9,10 @@ A simple, command-line package manager for Windows devices, designed to quickly 
 -   **Install Packages:** Silently installs packages from a predefined list of trusted URLs. Supports EXE, MSI, MSIX, and Portable applications.
 -   **Uninstall Packages:** Silently uninstalls packages using robust, version-agnostic methods.
 -   **Run Applications:** Launch installed applications directly from the terminal.
--   **Categorized Package List:** View all available software, neatly grouped by category.
+-   **Categorized Package List:** View all available software, neatly grouped by category, with real-time installation status.
 -   **AI Chat Assistant:** Manage packages using natural language with built-in smart suggestions and fuzzy search.
+-   **Software Detection:** Automatically detects software already installed on your system, even if not installed via LPM.
+-   **External Management:** LPM can 'adopt' manually installed software to handle future upgrades and uninstalls.
 -   **Administrator Check:** Automatically detects if administrator privileges are needed and provides clear instructions.
 -   **Simple and Lightweight:** No complex dependencies or configuration required.
 
