@@ -27,6 +27,39 @@ def typewriter_effect(text, console, delay=0.05, style=None):
         time.sleep(delay)
     print()
 
+def get_packages():
+    """Reads the package list, prioritizing the updated local archive if it exists."""
+    local_archive = os.path.join(get_lemon_dir(), 'packages.json')
+    if os.path.exists(local_archive):
+        try:
+            with open(local_archive, 'r') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # Fallback to the bundled version
+    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+        return json.load(f)
+
+def sync_archive():
+    """Fetches the latest packages.json from the remote repository."""
+    # Using the primary repository URL for Priyanka's lemon-pm
+    url = "https://raw.githubusercontent.com/dinesh-vaidya/lemon-package-manager/main/lemon_pm/packages.json"
+    print("Syncing package archive...")
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        new_packages = response.json()
+
+        local_archive = os.path.join(get_lemon_dir(), 'packages.json')
+        with open(local_archive, 'w') as f:
+            json.dump(new_packages, f, indent=2)
+        print("Successfully updated package archive.")
+        return True
+    except Exception as e:
+        print(f"Failed to sync archive: {e}")
+        return False
+
 def chat():
     """Starts an interactive chat session to manage packages."""
     console = Console()
@@ -37,14 +70,9 @@ def chat():
 
     console.print("Assistant:", style="bold cyan", end=" ")
     typewriter_effect("I can help you manage packages. Here are the commands you can use:", console, style="grey50")
-    console.print("  list, search <pkg>, install <pkg>[@version], upgrade [pkg], info <pkg>, uninstall <pkg>, exit", style="grey50")
+    console.print("  list, search <pkg>, install <pkg>[@version], check, upgrade [pkg], update, info <pkg>, uninstall <pkg>, exit", style="grey50")
 
-    try:
-        with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
-            packages = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"Error reading package list: {e}")
-        return
+    packages = get_packages()
 
     package_names = list(packages.keys())
     goodbye_messages = [
@@ -86,9 +114,15 @@ def chat():
                 handle_install(user_input, package_names, console)
             elif user_input.startswith("upgrade"):
                 handle_upgrade(user_input, console)
+            elif user_input.startswith("check"):
+                check_updates()
+            elif user_input.startswith("update"):
+                sync_archive()
+            elif any(p in user_input for p in ["check for updates", "any updates", "available updates"]):
+                check_updates()
             else:
                 console.print("Assistant:", style="bold cyan", end=" ")
-                typewriter_effect("I'm not sure how to help with that. You can ask me to 'list', 'search', 'install', 'upgrade', 'info', or 'uninstall'.", console)
+                typewriter_effect("I'm not sure how to help with that. You can ask me to 'list', 'search', 'install', 'check', 'upgrade', 'update', 'info', or 'uninstall'.", console)
 
         except (KeyboardInterrupt, EOFError):
             print("\n")
@@ -275,27 +309,35 @@ def demo():
     console.print("$ lemon uninstall 7-zip", style="cyan")
     typewriter_effect("   (This will silently run the uninstaller for 7-zip)", console)
 
-    typewriter_effect("\n5. Upgrade a package or all packages:", console)
-    console.print("$ lemon upgrade", style="cyan")
-    typewriter_effect("   (This will upgrade all tracked packages to their latest versions)", console)
+    typewriter_effect("\n5. Check for updates:", console)
+    console.print("$ lemon check", style="cyan")
+    typewriter_effect("   (Shows a table of packages with newer versions available)", console)
 
-    typewriter_effect("\n6. Run a package:", console)
+    typewriter_effect("\n6. Upgrade packages interactively:", console)
+    console.print("$ lemon upgrade", style="cyan")
+    typewriter_effect("   (Prompts to upgrade all or specific outdated packages)", console)
+
+    typewriter_effect("\n7. Sync the package archive:", console)
+    console.print("$ lemon update", style="cyan")
+    typewriter_effect("   (Fetches the latest package definitions from the remote repo)", console)
+
+    typewriter_effect("\n8. Run a package:", console)
     console.print("$ lemon run 7-zip", style="cyan")
     typewriter_effect("   (This will attempt to launch the main executable for 7-zip)", console)
 
-    typewriter_effect("\n7. List all available categories:", console)
+    typewriter_effect("\n9. List all available categories:", console)
     console.print("$ lemon categories", style="cyan")
     list_categories()
 
-    typewriter_effect("\n8. Chat with the Assistant (Smart suggestions, fuzzy search):", console)
+    typewriter_effect("\n10. Chat with the Assistant (Smart suggestions, fuzzy search):", console)
     console.print("$ lemon chat", style="cyan")
     typewriter_effect("   (Starts an interactive session to manage packages with natural language)", console)
 
-    typewriter_effect("\n9. Show the version of lemon-pm:", console)
+    typewriter_effect("\n11. Show the version of lemon-pm:", console)
     console.print("$ lemon version", style="cyan")
     console.print(f"Lemon Package Manager version {__version__} (status: {__status__})")
 
-    typewriter_effect("\n10. Uninstall the lemon package manager itself:", console)
+    typewriter_effect("\n12. Uninstall the lemon package manager itself:", console)
     console.print("$ lemon uninstall-lpm", style="cyan")
     typewriter_effect("   (This will prompt for confirmation before uninstalling)", console)
 
@@ -328,12 +370,7 @@ def list_packages_chat(packages, console):
 
 def list_packages(category_filter=None, animate=False):
     """Lists all available packages in a category-wise table."""
-    try:
-        with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
-            packages = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"Error reading package list: {e}")
-        return
+    packages = get_packages()
 
     categorized_packages = {}
     for name, data in packages.items():
@@ -547,8 +584,7 @@ def find_installed_executable(package_data):
 
 def is_installed(package_name):
     """Checks if a package is installed by checking for the executable."""
-    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
-        packages = json.load(f)
+    packages = get_packages()
 
     if package_name not in packages:
         return False
@@ -568,8 +604,7 @@ def get_package_status(package_name):
         except (json.JSONDecodeError, OSError):
             pass
 
-    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
-        packages = json.load(f)
+    packages = get_packages()
 
     if package_name not in packages:
         return "Not in package list", None
@@ -716,8 +751,7 @@ def install_package(package_name, from_chat=False, target_version=None):
         print("ERROR: Administrator privileges are required to install packages.")
         sys.exit(1)
 
-    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
-        packages = json.load(f)
+    packages = get_packages()
 
     # Handle package@version syntax
     if not target_version and '@' in package_name:
@@ -809,8 +843,7 @@ def install_package(package_name, from_chat=False, target_version=None):
 
 def run_package(package_name):
     """Launches a package's main executable."""
-    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
-        packages = json.load(f)
+    packages = get_packages()
 
     if package_name not in packages:
         print(f"Package '{package_name}' not found.")
@@ -913,8 +946,7 @@ def uninstall_package(package_name, from_chat=False):
         print("Please re-run this command from a terminal with administrator privileges.")
         sys.exit(1)
 
-    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
-        packages = json.load(f)
+    packages = get_packages()
 
     if package_name not in packages:
         print(f"Package '{package_name}' not found.")
@@ -993,87 +1025,134 @@ def uninstall_package(package_name, from_chat=False):
             print(f"2. Find '{package_name}' in the list and select 'Uninstall'.")
 
 
-def upgrade_package(package_name=None):
-    """Upgrades a specific package or all installed packages."""
+def check_for_updates(quiet=False):
+    """Checks for available updates and returns a list of packages that can be upgraded."""
     state_file = get_state_file()
     if not os.path.exists(state_file):
-        print("No packages tracked for upgrade. Use 'lemon install' to install packages first.")
-        return
+        if not quiet: print("No packages tracked for upgrade. Use 'lemon install' to install packages first.")
+        return []
 
     try:
         with open(state_file, 'r') as f:
             installed_packages = json.load(f)
     except (json.JSONDecodeError, OSError):
-        print("Error reading installation state.")
-        return
+        if not quiet: print("Error reading installation state.")
+        return []
 
-    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
-        available_packages = json.load(f)
+    available_packages = get_packages()
+    updates = []
 
-    to_upgrade = {}
-    manual_installs = []
-
-    if package_name:
-        status, ver = get_package_status(package_name)
-        if status == "Tracked":
-            to_upgrade[package_name] = installed_packages[package_name]
-        elif status == "Manual Install":
-            print(f"Package '{package_name}' was installed manually (Version: {ver}).")
-            print("Would you like LPM to 'adopt' this package by upgrading it to the latest version?")
-            if input("Proceed? (y/n): ").lower() == 'y':
-                 to_upgrade[package_name] = {'version': ver}
-            else:
-                 return
-        else:
-            print(f"Package '{package_name}' is not installed.")
-            return
-    else:
-        # For bulk upgrade, we only upgrade tracked packages
-        to_upgrade = installed_packages
-
-        # Also check for manual installs to inform user
-        for name in available_packages:
-            if name not in installed_packages:
-                status, ver = get_package_status(name)
-                if status == "Manual Install":
-                    manual_installs.append((name, ver))
-
-    upgraded_count = 0
-    for name, data in to_upgrade.items():
+    for name, data in installed_packages.items():
         if name not in available_packages:
             continue
 
         current_version = data.get('version')
         latest_version = available_packages[name].get('version')
 
-        if not latest_version or latest_version == "latest":
-            # For 'latest' packages, we just reinstall to be sure if requested specifically
-            if package_name:
-                 print(f"Checking for updates for {name} (Current: {current_version})...")
-                 install_package(name)
-                 upgraded_count += 1
-            else:
-                 # In bulk upgrade, skipping 'latest' to avoid redundant downloads unless we have a hash check (future)
-                 pass
-        elif latest_version != current_version:
-            print(f"Upgrading {name}: {current_version} -> {latest_version}")
-            install_package(name)
-            upgraded_count += 1
-        else:
-            if package_name:
-                print(f"{name} is already at the latest version ({latest_version}).")
+        if latest_version and latest_version != "latest" and latest_version != current_version:
+            updates.append({
+                'name': name,
+                'current': current_version,
+                'latest': latest_version
+            })
 
-    if not package_name:
-        if upgraded_count == 0:
-            print("All tracked packages are already up to date.")
+    return updates
+
+def check_updates():
+    """Checks for and displays available updates."""
+    updates = check_for_updates()
+    if not updates:
+        print("All tracked packages are already up to date.")
+        return
+
+    print("Available updates:")
+    table = Table(show_header=True, header_style="bold magenta")
+    table.add_column("Package", style="green")
+    table.add_column("Current Version", style="yellow")
+    table.add_column("Latest Version", style="cyan")
+
+    for up in updates:
+        table.add_row(up['name'], up['current'], up['latest'])
+
+    console = Console()
+    console.print(table)
+    print("\nRun 'lemon upgrade' to install these updates.")
+
+def upgrade_package(package_name=None):
+    """Upgrades a specific package or all installed packages interactively."""
+    available_packages = get_packages()
+    state_file = get_state_file()
+
+    try:
+        with open(state_file, 'r') as f:
+            installed_packages = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        installed_packages = {}
+
+    if package_name:
+        status, ver = get_package_status(package_name)
+        if status == "Tracked":
+            latest = available_packages[package_name].get('version')
+            if latest == "latest":
+                 print(f"Re-installing {package_name} to ensure latest version...")
+                 install_package(package_name)
+            elif latest != ver:
+                 print(f"Upgrading {package_name}: {ver} -> {latest}")
+                 install_package(package_name)
+            else:
+                 print(f"{package_name} is already up to date ({ver}).")
+        elif status == "Manual Install":
+            print(f"Package '{package_name}' was installed manually (Version: {ver}).")
+            if input("Would you like LPM to adopt and upgrade it? (y/n): ").lower() == 'y':
+                 install_package(package_name)
         else:
-            print(f"Successfully upgraded {upgraded_count} packages.")
+            print(f"Package '{package_name}' is not installed.")
+        return
+
+    # Bulk Upgrade Flow
+    updates = check_for_updates(quiet=True)
+
+    if not updates:
+        print("All tracked packages are already up to date.")
+        # Check for manual installs anyway to be helpful
+        manual_installs = []
+        for name in available_packages:
+            if name not in installed_packages:
+                status, ver = get_package_status(name)
+                if status == "Manual Install":
+                    manual_installs.append((name, ver))
 
         if manual_installs:
-            print("\nNote: The following packages were detected as manual installs and were NOT upgraded:")
+            print("\nFound manual installations that LPM can manage:")
             for name, ver in manual_installs:
                 print(f"- {name} (Version: {ver})")
-            print("Use 'lemon upgrade <package_name>' to have LPM adopt and upgrade any of these.")
+            print("Use 'lemon upgrade <name>' to adopt any of these.")
+        return
+
+    print("Available updates:")
+    table = Table(show_header=True, header_style="bold magenta")
+    table.add_column("Package", style="green")
+    table.add_column("Current Version", style="yellow")
+    table.add_column("Latest Version", style="cyan")
+
+    for up in updates:
+        table.add_row(up['name'], up['current'], up['latest'])
+
+    console = Console()
+    console.print(table)
+
+    choice = input("\nUpgrade all? (y) / Upgrade specific? (s) / Cancel (n): ").lower()
+
+    if choice == 'y':
+        for up in updates:
+            print(f"\n--- Upgrading {up['name']} ---")
+            install_package(up['name'])
+    elif choice == 's':
+        pkg = input("Enter package name to upgrade: ").strip()
+        if pkg in [u['name'] for up in updates]:
+             install_package(pkg)
+        else:
+             print("Invalid selection or package not in update list.")
 
 def uninstall_lemon():
     """Uninstalls the lemon package manager itself."""
@@ -1097,12 +1176,7 @@ def uninstall_lemon():
 
 def list_categories():
     """Lists all available package categories."""
-    try:
-        with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
-            packages = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"Error reading package list: {e}")
-        return
+    packages = get_packages()
 
     categories = set(data.get('category', 'Uncategorized') for data in packages.values())
     console = Console()
@@ -1124,8 +1198,14 @@ def main():
     uninstall_parser.add_argument('package_name', help='The name of the package to uninstall')
 
     # 'upgrade' command
-    upgrade_parser = subparsers.add_parser('upgrade', help='Upgrade a package or all packages')
+    upgrade_parser = subparsers.add_parser('upgrade', help='Upgrade a package or all packages interactively')
     upgrade_parser.add_argument('package_name', nargs='?', default=None, help='The name of the package to upgrade (optional)')
+
+    # 'check' command
+    check_parser = subparsers.add_parser('check', help='Check for available updates')
+
+    # 'update' command
+    update_parser = subparsers.add_parser('update', help='Sync the package archive with remote repository')
 
     # 'list' command
     list_parser = subparsers.add_parser('list', help='List available packages, optionally filtered by category')
@@ -1162,6 +1242,10 @@ def main():
         uninstall_package(args.package_name)
     elif args.command == 'upgrade':
         upgrade_package(args.package_name)
+    elif args.command == 'check':
+        check_updates()
+    elif args.command == 'update':
+        sync_archive()
     elif args.command == 'run':
         run_package(args.package_name)
     elif args.command == 'list':
