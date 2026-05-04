@@ -342,9 +342,25 @@ def list_packages(category_filter=None, animate=False):
             continue
         if category not in categorized_packages:
             categorized_packages[category] = []
+
+        status, local_ver = get_package_status(name)
+        status_style = "white"
+        if status == "Tracked": status_style = "bold green"
+        elif status == "Manual Install": status_style = "bold yellow"
+
+        display_status = status
+        if local_ver:
+             display_status = f"{status} ({local_ver})"
+
         version = data.get('version', 'N/A')
         description = data.get('description', 'No description available.')
-        categorized_packages[category].append({'name': name, 'version': version, 'description': description})
+        categorized_packages[category].append({
+            'name': name,
+            'version': version,
+            'description': description,
+            'status': display_status,
+            'status_style': status_style
+        })
 
     console = Console()
     console.print("Available packages:", style="bold white")
@@ -362,16 +378,18 @@ def list_packages(category_filter=None, animate=False):
             table = Table(title=f"[bold yellow]{category}[/bold yellow]", show_header=True, header_style="bold magenta", expand=True)
             table.add_column("Package", style="green", no_wrap=True)
             table.add_column("Version", style="cyan")
+            table.add_column("Status", no_wrap=True)
             table.add_column("Description", style="white")
 
             for pkg in categorized_packages[category]:
-                table.add_row(pkg['name'], pkg['version'], pkg['description'])
+                table.add_row(pkg['name'], pkg['version'], f"[{pkg['status_style']}]{pkg['status']}[/]", pkg['description'])
             console.print(table)
     else:
         # Animation mode
         table = Table(show_header=True, header_style="bold magenta", expand=True)
         table.add_column("Package", style="green", no_wrap=True)
         table.add_column("Version", style="cyan")
+        table.add_column("Status", no_wrap=True)
         table.add_column("Description", style="white")
 
         current_category = None
@@ -385,14 +403,14 @@ def list_packages(category_filter=None, animate=False):
                 if current_category != category:
                     if current_category is not None:
                         # Add a separator before the new category
-                        table.add_row("---", "---", "---")
+                        table.add_row("---", "---", "---", "---")
                     table.title = f"[bold yellow]{category}[/bold yellow]"
                     current_category = category
                     live.update(table) # Refresh to show the new title
                     time.sleep(0.5)
 
                 for pkg in categorized_packages[category]:
-                    table.add_row(pkg['name'], pkg['version'], pkg['description'])
+                    table.add_row(pkg['name'], pkg['version'], f"[{pkg['status_style']}]{pkg['status']}[/]", pkg['description'])
                     live.update(table)
                     time.sleep(0.1)
 
@@ -456,24 +474,26 @@ def untrack_installation(package_name):
         except (json.JSONDecodeError, OSError):
             pass
 
-def is_installed(package_name, arch=None):
-    """Checks if a package is installed by checking for the executable."""
-    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
-        packages = json.load(f)
+def get_exe_version(filepath):
+    """Attempts to get the file version of an executable on Windows."""
+    if sys.platform != 'win32' or not os.path.exists(filepath):
+        return None
+    try:
+        # Use PowerShell as a cross-arch reliable way to get file version
+        cmd = ['powershell', '-Command', f'(Get-Item "{filepath}").VersionInfo.FileVersion']
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        version = result.stdout.strip()
+        return version if version else None
+    except Exception:
+        return None
 
-    if package_name not in packages:
-        return False
-
-    package_data = packages[package_name]
-
+def find_installed_executable(package_data):
+    """Finds the path to an installed executable based on package data."""
     arches_to_check = []
     if "architectures" in package_data:
-        if arch and arch in package_data["architectures"]:
-            arches_to_check.append(arch)
-        else:  # Check all available architectures if a specific one isn't provided
-            arches_to_check.extend(package_data["architectures"].keys())
+        arches_to_check.extend(package_data["architectures"].keys())
     else:
-        arches_to_check.append(None)  # For non-arch-specific packages
+        arches_to_check.append(None)
 
     for arch_key in arches_to_check:
         package_info = package_data
@@ -492,6 +512,8 @@ def is_installed(package_name, arch=None):
             replacements = {
                 '%ProgramFiles%': os.environ.get('ProgramW6432', os.environ.get('ProgramFiles')),
                 '%ProgramFiles(x86)%': os.environ.get('ProgramFiles(x86)', os.environ.get('ProgramFiles')),
+                '%LocalAppData%': os.environ.get('LOCALAPPDATA'),
+                '%AppData%': os.environ.get('APPDATA'),
             }
             for var, val in replacements.items():
                 if val:
@@ -505,15 +527,64 @@ def is_installed(package_name, arch=None):
             uninstaller_path = pathlib.Path(parts[0])
             install_dir = uninstaller_path.parent
 
-            # Check common locations relative to uninstaller
-            if (install_dir / executable).exists():
-                return True
-            if (install_dir / 'bin' / executable).exists():
-                return True
-        except Exception:
-            continue  # Ignore errors in path parsing
+            # Sub-sub folder check (e.g. .../Installer/setup.exe)
+            if install_dir.name.lower() == 'installer':
+                 install_dir = install_dir.parent
 
-    return False
+            # Potential locations
+            search_paths = [
+                install_dir / executable,
+                install_dir / 'bin' / executable,
+                install_dir / 'Application' / executable, # Chrome
+            ]
+
+            for path in search_paths:
+                if path.exists():
+                    return str(path)
+        except Exception:
+            continue
+    return None
+
+def is_installed(package_name):
+    """Checks if a package is installed by checking for the executable."""
+    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+        packages = json.load(f)
+
+    if package_name not in packages:
+        return False
+
+    return find_installed_executable(packages[package_name]) is not None
+
+def get_package_status(package_name):
+    """Returns detailed installation status of a package."""
+    # Check if tracked by LPM
+    state_file = get_state_file()
+    tracked_version = None
+    if os.path.exists(state_file):
+        try:
+            with open(state_file, 'r') as f:
+                state = json.load(f)
+                tracked_version = state.get(package_name, {}).get('version')
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
+        packages = json.load(f)
+
+    if package_name not in packages:
+        return "Not in package list", None
+
+    exe_path = find_installed_executable(packages[package_name])
+
+    if exe_path:
+        if tracked_version:
+            return "Tracked", tracked_version
+        else:
+            # Found on disk but not in installed.json
+            found_version = get_exe_version(exe_path)
+            return "Manual Install", found_version or "Unknown"
+
+    return "Not Installed", None
 
 
 def _install_package_with_arch(package_name, package_data, arch):
@@ -694,9 +765,12 @@ def install_package(package_name, from_chat=False, target_version=None):
             print(f"'{package_name}' is already at the latest version ({current_version}).")
             return
         elif not current_version:
-             # Package is installed but not tracked. For safety, we assume latest.
-             print(f"'{package_name}' is already installed (version untracked). Use 'uninstall' first if you want to change versions.")
-             return
+             # Manual install detected
+             print(f"'{package_name}' was installed manually (LPM version untracked).")
+             print(f"To manage it with LPM, we will install the requested version ({target_version or package_data.get('version')}).")
+             confirmation = input("Proceed? (y/n): ")
+             if confirmation.lower() != 'y':
+                  return
         else:
             print(f"Software '{package_name}' found. Proceeding with version change/upgrade ({current_version} -> {target_version or package_data.get('version')})...")
 
@@ -819,6 +893,16 @@ def run_package(package_name):
 
 def uninstall_package(package_name, from_chat=False):
     """Uninstalls a package using its uninstall command, or provides instructions."""
+    status, ver = get_package_status(package_name)
+    if status == "Not Installed":
+         print(f"Package '{package_name}' is not installed.")
+         return
+    elif status == "Manual Install":
+         print(f"Warning: '{package_name}' was installed manually (LPM version untracked).")
+         print("LPM will attempt to run its built-in uninstaller.")
+         if input("Proceed? (y/n): ").lower() != 'y':
+              return
+
     if sys.platform == 'win32' and not is_admin():
         if from_chat:
             console = Console()
@@ -927,14 +1011,32 @@ def upgrade_package(package_name=None):
         available_packages = json.load(f)
 
     to_upgrade = {}
+    manual_installs = []
+
     if package_name:
-        if package_name in installed_packages:
+        status, ver = get_package_status(package_name)
+        if status == "Tracked":
             to_upgrade[package_name] = installed_packages[package_name]
+        elif status == "Manual Install":
+            print(f"Package '{package_name}' was installed manually (Version: {ver}).")
+            print("Would you like LPM to 'adopt' this package by upgrading it to the latest version?")
+            if input("Proceed? (y/n): ").lower() == 'y':
+                 to_upgrade[package_name] = {'version': ver}
+            else:
+                 return
         else:
-            print(f"Package '{package_name}' is not currently tracked as installed.")
+            print(f"Package '{package_name}' is not installed.")
             return
     else:
+        # For bulk upgrade, we only upgrade tracked packages
         to_upgrade = installed_packages
+
+        # Also check for manual installs to inform user
+        for name in available_packages:
+            if name not in installed_packages:
+                status, ver = get_package_status(name)
+                if status == "Manual Install":
+                    manual_installs.append((name, ver))
 
     upgraded_count = 0
     for name, data in to_upgrade.items():
@@ -963,9 +1065,15 @@ def upgrade_package(package_name=None):
 
     if not package_name:
         if upgraded_count == 0:
-            print("All packages are already up to date.")
+            print("All tracked packages are already up to date.")
         else:
             print(f"Successfully upgraded {upgraded_count} packages.")
+
+        if manual_installs:
+            print("\nNote: The following packages were detected as manual installs and were NOT upgraded:")
+            for name, ver in manual_installs:
+                print(f"- {name} (Version: {ver})")
+            print("Use 'lemon upgrade <package_name>' to have LPM adopt and upgrade any of these.")
 
 def uninstall_lemon():
     """Uninstalls the lemon package manager itself."""
