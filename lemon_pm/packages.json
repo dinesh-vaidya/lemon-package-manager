@@ -353,11 +353,11 @@
     }
   },
   "discord": {
-    "version": "2025.03.25",
+    "version": "1.0.9236",
     "description": "A VoIP, instant messaging and digital distribution platform designed for creating communities.",
     "type": "installer",
     "category": "Social",
-    "executable": null,
+    "executable": "Discord.exe",
     "architectures": {
       "64": {
         "url": "https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x64",
@@ -553,42 +553,50 @@
     }
   },
   "libreoffice": {
-    "version": "25.8.3",
+    "version": "26.2.3",
     "description": "A free and open-source office productivity software suite.",
     "type": "installer",
     "category": "Utilities",
     "executable": "soffice.exe",
     "architectures": {
       "64": {
-        "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.3/win/x86_64/LibreOffice_25.8.3_Win_x86-64.msi",
+        "url": "https://download.documentfoundation.org/libreoffice/stable/26.2.3/win/x86_64/LibreOffice_26.2.3_Win_x86-64.msi",
         "install_command": [
-          "/quiet"
+          "/qn",
+          "/norestart"
         ],
         "uninstall_command": "wmic product where \"name like 'LibreOffice%'\" call uninstall /nointeractive"
       },
       "32": {
-        "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.3/win/x86/LibreOffice_25.8.3_Win_x86.msi",
+        "url": "https://download.documentfoundation.org/libreoffice/stable/26.2.3/win/x86/LibreOffice_26.2.3_Win_x86.msi",
         "install_command": [
-          "/quiet"
+          "/qn",
+          "/norestart"
         ],
         "uninstall_command": "wmic product where \"name like 'LibreOffice%'\" call uninstall /nointeractive"
       }
     },
     "versions": {
-      "25.2.0": {
+      "25.8.7": {
         "architectures": {
           "64": {
-            "url": "https://downloadarchive.documentfoundation.org/libreoffice/old/25.2.0.1/win/x86_64/LibreOffice_25.2.0.1_Win_x86-64.msi",
-            "install_command": ["/quiet"],
+            "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.7/win/x86_64/LibreOffice_25.8.7_Win_x86-64.msi",
+            "install_command": [
+              "/qn",
+              "/norestart"
+            ],
             "uninstall_command": "wmic product where \"name like 'LibreOffice%'\" call uninstall /nointeractive"
           }
         }
       },
-      "24.8.4": {
+      "25.8.3": {
         "architectures": {
           "64": {
-            "url": "https://downloadarchive.documentfoundation.org/libreoffice/old/24.8.4.2/win/x86_64/LibreOffice_24.8.4.2_Win_x86-64.msi",
-            "install_command": ["/quiet"],
+            "url": "https://downloadarchive.documentfoundation.org/libreoffice/old/25.8.3.2/win/x86_64/LibreOffice_25.8.3.2_Win_x86-64.msi",
+            "install_command": [
+              "/qn",
+              "/norestart"
+            ],
             "uninstall_command": "wmic product where \"name like 'LibreOffice%'\" call uninstall /nointeractive"
           }
         }
@@ -993,8 +1001,8 @@
     "executable": "HandBrake.exe"
   },
   "pidgin": {
-    "url": "https://webwerks.dl.sourceforge.net/project/pidgin/Pidgin/2.14.10/pidgin-2.14.10-offline.exe",
-    "version": "2.14.10",
+    "url": "https://downloads.sourceforge.net/project/pidgin/Pidgin/2.14.14/pidgin-2.14.14-offline.exe",
+    "version": "2.14.14",
     "description": "A free and open-source multi-platform instant messaging client.",
     "install_command": [
       "/S"
@@ -1227,8 +1235,8 @@
     "executable": "bleachbit.exe"
   },
   "thunderbird": {
-    "url": "https://archive.mozilla.org/pub/thunderbird/releases/128.5.2esr/win64/en-US/Thunderbird%20Setup%20128.5.2esr.msi",
-    "version": "128.5.2esr",
+    "url": "https://archive.mozilla.org/pub/thunderbird/releases/150.0.2/win64/en-US/Thunderbird%20Setup%20150.0.2.msi",
+    "version": "150.0.2",
     "description": "A free and open-source email, newsfeed, chat, and calendaring client.",
     "install_command": [
       "/quiet"
@@ -1689,12 +1697,12 @@
     "uninstall_command": "\"%ProgramFiles%\\IrfanView\\iv_uninstall.exe\" /silent"
   },
   "zoom": {
-    "version": "6.1.6",
+    "version": "7.0.2.34412",
     "description": "A proprietary videotelephony software program developed by Zoom Video Communications.",
     "type": "installer",
     "category": "Social",
     "executable": "Zoom.exe",
-    "url": "https://cdn.zoom.us/prod/6.1.6.43767/ZoomInstallerFull.msi",
+    "url": "https://cdn.zoom.us/prod/7.0.2.34412/x64/ZoomInstallerFull.msi",
     "install_command": [
       "/qn",
       "/norestart"
@@ -1702,12 +1710,12 @@
     "uninstall_command": "wmic product where \"name like 'Zoom Workplace%'\" call uninstall /nointeractive"
   },
   "zoom-workplace": {
-    "version": "6.1.6",
+    "version": "7.0.2.34412",
     "description": "A proprietary videotelephony software program developed by Zoom Video Communications.",
     "type": "installer",
     "category": "Social",
     "executable": "Zoom.exe",
-    "url": "https://cdn.zoom.us/prod/6.1.6.43767/ZoomInstallerFull.msi",
+    "url": "https://cdn.zoom.us/prod/7.0.2.34412/x64/ZoomInstallerFull.msi",
     "install_command": [
       "/qn",
       "/norestart"
@@ -1824,5 +1832,88 @@
         "install_command": ["-s", "-sp-s"]
       }
     }
+  },
+  "vivaldi": {
+    "version": "7.1.3570.39",
+    "description": "A feature-packed, privacy-focused web browser built by the founders of Opera Software.",
+    "type": "installer",
+    "category": "Browsers",
+    "executable": "vivaldi.exe",
+    "architectures": {
+      "64": {
+        "url": "https://downloads.vivaldi.com/stable/Vivaldi.7.1.3570.39.x64.exe",
+        "install_command": [
+          "--system-level",
+          "--vivaldi-silent",
+          "--do-not-launch-chrome"
+        ],
+        "uninstall_command": "wmic product where \"name like 'Vivaldi%'\" call uninstall /nointeractive"
+      }
+    }
+  },
+  "teams": {
+    "version": "26072.519.4556.7438",
+    "description": "Microsoft Teams is the ultimate messaging app for your organization—a workspace for real-time collaboration and communication, meetings, file and app sharing, and even the occasional emoji!",
+    "type": "installer",
+    "category": "Social",
+    "executable": "ms-teams.exe",
+    "url": "https://statics.teams.cdn.office.net/production-windows-x64/26072.519.4556.7438/MSTeams-x64.msix",
+    "install_command": [],
+    "uninstall_command": "powershell -Command \"Get-AppxPackage *MSTeams* | Remove-AppxPackage\""
+  },
+  "trillian": {
+    "version": "6.6.0.14",
+    "description": "A modern and secure instant messaging app for business and individuals.",
+    "type": "installer",
+    "category": "Social",
+    "executable": "trillian.exe",
+    "url": "https://trillian.im/get/windows/6.6/trillian-v6.6.0.14.msi",
+    "install_command": [
+      "/qn",
+      "/norestart"
+    ],
+    "uninstall_command": "wmic product where \"name like 'Trillian%'\" call uninstall /nointeractive"
+  },
+  "foxit-reader": {
+    "version": "2026.1.1",
+    "description": "A small, fast, and feature rich PDF viewer which allows you to open, view, and print any PDF file.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "FoxitPDFReader.exe",
+    "url": "https://cdn01.foxitsoftware.com/product/reader/desktop/win/2026.1.1/FoxitPDFReader202611_L10N_Setup_Prom_x64.exe",
+    "install_command": [
+      "/quiet",
+      "/norestart"
+    ],
+    "uninstall_command": "wmic product where \"name like 'Foxit PDF Reader%'\" call uninstall /nointeractive"
+  },
+  "sumatrapdf": {
+    "version": "3.6.1",
+    "description": "Sumatra PDF is a free PDF, eBook (ePub, Mobi), XPS, DjVu, CHM, Comic Book (CBZ and CBR) viewer for Windows.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "SumatraPDF.exe",
+    "architectures": {
+      "64": {
+        "url": "https://www.sumatrapdfreader.org/dl/rel/3.6.1/SumatraPDF-3.6.1-64-install.exe",
+        "install_command": [
+          "-install",
+          "-s"
+        ],
+        "uninstall_command": "\"%LocalAppData%\\SumatraPDF\\SumatraPDF.exe\" -uninstall"
+      }
+    }
+  },
+  "cutepdf": {
+    "version": "4.0.1.3",
+    "description": "CutePDF Writer is the free version of commercial PDF creation software.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "CuteWriter.exe",
+    "url": "https://www.cutepdf.com/download/CuteWriter.exe",
+    "install_command": [
+      "/s"
+    ],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\Acro Software\\CutePDF Writer\\unins000.exe\" /S"
   }
 }
