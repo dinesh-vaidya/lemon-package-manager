@@ -106,21 +106,21 @@
     }
   },
   "vlc": {
-    "version": "3.0.21",
+    "version": "3.0.23",
     "description": "A free and open-source, portable, cross-platform media player software and streaming media server.",
     "type": "installer",
     "category": "Media",
     "executable": "vlc.exe",
     "architectures": {
       "64": {
-        "url": "https://get.videolan.org/vlc/3.0.21/win64/vlc-3.0.21-win64.exe",
+        "url": "https://get.videolan.org/vlc/3.0.23/win64/vlc-3.0.23-win64.exe",
         "install_command": [
           "/S"
         ],
         "uninstall_command": "\"%ProgramFiles%\\VideoLAN\\VLC\\uninstall.exe\" /S"
       },
       "32": {
-        "url": "https://get.videolan.org/vlc/3.0.21/win32/vlc-3.0.21-win32.exe",
+        "url": "https://get.videolan.org/vlc/3.0.23/win32/vlc-3.0.23-win32.exe",
         "install_command": [
           "/S"
         ],
@@ -128,6 +128,20 @@
       }
     },
     "versions": {
+      "3.0.21": {
+        "architectures": {
+          "64": {
+            "url": "https://get.videolan.org/vlc/3.0.21/win64/vlc-3.0.21-win64.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\VideoLAN\\VLC\\uninstall.exe\" /S"
+          },
+          "32": {
+            "url": "https://get.videolan.org/vlc/3.0.21/win32/vlc-3.0.21-win32.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles(x86)%\\VideoLAN\\VLC\\uninstall.exe\" /S"
+          }
+        }
+      },
       "3.0.20": {
         "architectures": {
           "64": {
@@ -369,7 +383,7 @@
     }
   },
   "spotify": {
-    "version": "1.2.45.828",
+    "version": "1.2.85.513",
     "description": "A digital music, podcast, and video service that gives you access to millions of songs and other content from creators all over the world.",
     "type": "installer",
     "category": "Media",
@@ -471,21 +485,21 @@
     }
   },
   "qbittorrent": {
-    "version": "4.6.5",
+    "version": "5.2.0",
     "description": "A cross-platform free and open-source BitTorrent client.",
     "type": "installer",
     "category": "Utilities",
     "executable": "qbittorrent.exe",
     "architectures": {
       "64": {
-        "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-4.6.5/qbittorrent_4.6.5_x64_setup.exe",
+        "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-5.2.0/qbittorrent_5.2.0_x64_setup.exe",
         "install_command": [
           "/S"
         ],
         "uninstall_command": "\"%ProgramFiles%\\qBittorrent\\uninst.exe\" /S"
       },
       "32": {
-        "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-4.6.5/qbittorrent_4.6.5_setup.exe",
+        "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-5.2.0/qbittorrent_5.2.0_setup.exe",
         "install_command": [
           "/S"
         ],
@@ -493,6 +507,15 @@
       }
     },
     "versions": {
+      "4.6.5": {
+        "architectures": {
+          "64": {
+            "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-4.6.5/qbittorrent_4.6.5_x64_setup.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\qBittorrent\\uninst.exe\" /S"
+          }
+        }
+      },
       "4.6.4": {
         "architectures": {
           "64": {
@@ -604,21 +627,21 @@
     }
   },
   "audacity": {
-    "version": "3.6.1",
+    "version": "3.7.7",
     "description": "A free and open-source digital audio editor and recording application software.",
     "type": "installer",
     "category": "Media",
     "executable": "audacity.exe",
     "architectures": {
       "64": {
-        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.6.1/audacity-win-3.6.1-64bit.exe",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.7/audacity-win-3.7.7-64bit.exe",
         "install_command": [
           "/VERYSILENT"
         ],
         "uninstall_command": "\"%ProgramFiles%\\Audacity\\unins000.exe\" /VERYSILENT"
       },
       "32": {
-        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.6.1/audacity-win-3.6.1-32bit.exe",
+        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.7/audacity-win-3.7.7-32bit.exe",
         "install_command": [
           "/VERYSILENT"
         ],
@@ -626,6 +649,15 @@
       }
     },
     "versions": {
+      "3.6.1": {
+        "architectures": {
+          "64": {
+            "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.6.1/audacity-win-3.6.1-64bit.exe",
+            "install_command": ["/VERYSILENT"],
+            "uninstall_command": "\"%ProgramFiles%\\Audacity\\unins000.exe\" /VERYSILENT"
+          }
+        }
+      },
       "3.6.0": {
         "architectures": {
           "64": {
@@ -1915,5 +1947,220 @@
       "/s"
     ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\Acro Software\\CutePDF Writer\\unins000.exe\" /S"
+  },
+  "aimp": {
+    "version": "5.40.2716",
+    "description": "A powerful audio player with a beautiful interface.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "AIMP.exe",
+    "url": "https://www.aimp.ru/files/aimp_5.40.2716.exe",
+    "install_command": ["/AUTO", "/SILENT"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\AIMP\\Uninstall.exe\" /SILENT"
+  },
+  "foobar2000": {
+    "version": "2.25.8",
+    "description": "An advanced freeware audio player for the Windows platform.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "foobar2000.exe",
+    "architectures": {
+      "64": {
+        "url": "https://www.foobar2000.org/downloads/foobar2000-x64_v2.25.8.exe",
+        "install_command": ["/S", "/allusers"],
+        "uninstall_command": "\"%ProgramFiles%\\foobar2000\\uninstall.exe\" /S"
+      },
+      "32": {
+        "url": "https://www.foobar2000.org/downloads/foobar2000_v2.25.8.exe",
+        "install_command": ["/S", "/allusers"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\foobar2000\\uninstall.exe\" /S"
+      }
+    }
+  },
+  "winamp": {
+    "version": "5.9.2.10042",
+    "description": "A classic media player for Windows.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "Winamp.exe",
+    "url": "https://download.nullsoft.com/winamp/client/winamp592_10042_full_en-us.exe",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\Winamp\\Uninst.exe\" /S"
+  },
+  "k-lite-codec-pack": {
+    "version": "19.7.0",
+    "description": "A collection of audio and video components for Microsoft Windows.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "mpc-hc64.exe",
+    "url": "https://files3.codecguide.com/K-Lite_Codec_Pack_1970_Mega.exe",
+    "install_command": ["/verysilent"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\K-Lite Codec Pack\\uninstall.exe\""
+  },
+  "gom-player": {
+    "version": "2.3.14.5270",
+    "description": "A powerful video player with many features.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "Gom.exe",
+    "url": "https://cdn.gomlab.com/gretech/player/GOMPLAYERENSETUP.EXE",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\GRETECH\\GomPlayer\\Uninstall.exe\""
+  },
+  "mediamonkey": {
+    "version": "2024.1.0.3113",
+    "description": "The media organizer for serious collectors.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "MediaMonkey.exe",
+    "url": "https://www.mediamonkey.com/sw/MediaMonkey_2024.1.0.3113.exe",
+    "install_command": ["/silent"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\MediaMonkey 5\\unins000.exe\" /SILENT"
+  },
+  "dropbox": {
+    "version": "252.4.3485",
+    "description": "A modern workspace that keeps your files organized.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "Dropbox.exe",
+    "url": "https://www.dropbox.com/download?plat=win&type=full",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\Dropbox\\Client\\DropboxUninstaller.exe\" /S"
+  },
+  "google-drive": {
+    "version": "125.0.0.0",
+    "description": "Access all of your Google Drive content directly from your computer.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "GoogleDriveFS.exe",
+    "url": "https://dl.google.com/drive-file-stream/GoogleDriveSetup.exe",
+    "install_command": ["--silent", "--desktop_shortcut"],
+    "uninstall_command": "msiexec /x {6BBAE539-2232-434A-A4E5-9A33560C6283} /quiet"
+  },
+  "onedrive": {
+    "version": "26.070.0414.0001",
+    "description": "Access your files from anywhere, on any device.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "OneDrive.exe",
+    "url": "https://oneclient.sfx.ms/Win/Installers/26.070.0414.0001/amd64/OneDriveSetup.exe",
+    "install_command": ["/silent"],
+    "uninstall_command": "%SystemRoot%\\SysWOW64\\OneDriveSetup.exe /uninstall"
+  },
+  "sugarsync": {
+    "version": "latest",
+    "description": "Cloud file sharing, online backup, and syncing service.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "SugarSync.exe",
+    "url": "https://www.sugarsync.com/pc-download/SugarSyncSetup.exe",
+    "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/SP-"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\SugarSync\\unins000.exe\" /SILENT"
+  },
+  "malwarebytes": {
+    "version": "5.5.5.253",
+    "description": "Proactive protection against malware, ransomware, and other online threats.",
+    "type": "installer",
+    "category": "Security",
+    "executable": "mbam.exe",
+    "url": "https://downloads.malwarebytes.com/file/mb5/",
+    "install_command": ["/VERYSILENT", "/NORESTART"],
+    "uninstall_command": "\"%ProgramFiles%\\Malwarebytes\\Anti-Malware\\unins000.exe\" /VERYSILENT"
+  },
+  "spybot": {
+    "version": "2.9.85.5",
+    "description": "Spybot - Search & Destroy detects and removes spyware.",
+    "type": "installer",
+    "category": "Security",
+    "executable": "SDWelcome.exe",
+    "url": "https://downloads.spybot.info/Spybot2/spybotsd-2.9.85.5.exe",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\Spybot - Search & Destroy 2\\unins000.exe\" /S"
+  },
+  "superantispyware": {
+    "version": "10.0.1288",
+    "description": "Detect and remove Spyware, Adware, Malware, Trojans, KeyLoggers, Dialers, HiJackers, and Worms.",
+    "type": "installer",
+    "category": "Security",
+    "executable": "SUPERAntiSpyware.exe",
+    "url": "https://www.superantispyware.com/SUPERAntiSpyware.exe",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles%\\SUPERAntiSpyware\\uninst.exe\" /S"
+  },
+  "itunes": {
+    "version": "12.13.10.3",
+    "description": "A free application for Mac and PC. It plays all your digital music and video.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "iTunes.exe",
+    "architectures": {
+      "64": {
+        "url": "https://www.apple.com/itunes/download/win64",
+        "install_command": ["/quiet"],
+        "uninstall_command": "wmic product where \"name like 'iTunes%'\" call uninstall /nointeractive"
+      },
+      "32": {
+        "url": "https://www.apple.com/itunes/download/win32",
+        "install_command": ["/quiet"],
+        "uninstall_command": "wmic product where \"name like 'iTunes%'\" call uninstall /nointeractive"
+      }
+    }
+  },
+  "musicbee": {
+    "version": "3.6.9403.32563",
+    "description": "The ultimate music manager and player.",
+    "type": "portable",
+    "category": "Media",
+    "executable_name": "MusicBee.exe",
+    "url": "https://getmusicbee.com/download/latest/MusicBeeSetup_3_6_9403.zip"
+  },
+  "cccp": {
+    "version": "2015.10.18",
+    "description": "The Combined Community Codec Pack is a simple playback pack for Windows.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "mpc-hc.exe",
+    "architectures": {
+      "64": {
+        "url": "http://www.cccp-project.net/download.php?file=Combined-Community-Codec-Pack-64bit-2015-10-18.exe",
+        "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/TYPE=Full"],
+        "uninstall_command": "\"%ProgramFiles%\\Combined Community Codec Pack 64bit\\unins000.exe\" /VERYSILENT"
+      },
+      "32": {
+        "url": "http://www.cccp-project.net/download.php?file=Combined-Community-Codec-Pack-2015-10-18.exe",
+        "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/TYPE=Full"],
+        "uninstall_command": "\"%ProgramFiles%\\Combined Community Codec Pack\\unins000.exe\" /VERYSILENT"
+      }
+    }
+  },
+  "avast": {
+    "version": "26.4.10932.3593",
+    "description": "Cloud-light, award-winning free antivirus protection.",
+    "type": "installer",
+    "category": "Security",
+    "executable": "AvastUI.exe",
+    "url": "https://bits.avast.com/inst/avast_free_antivirus_setup_online.exe",
+    "install_command": ["/silent"],
+    "uninstall_command": "\"%ProgramFiles%\\Avast Software\\Avast\\aswUpd.exe\" /silent /uninstall"
+  },
+  "avg": {
+    "version": "26.3.10886.3577",
+    "description": "Free antivirus protection for all your devices.",
+    "type": "installer",
+    "category": "Security",
+    "executable": "avgui.exe",
+    "url": "https://bits.avast.com/inst/avg_antivirus_free_setup_online.exe",
+    "install_command": ["/silent"],
+    "uninstall_command": "\"%ProgramFiles%\\AVG\\Antivirus\\aswUpd.exe\" /silent /uninstall"
+  },
+  "avira": {
+    "version": "15.0.2201.2134",
+    "description": "Free antivirus with award-winning protection.",
+    "type": "installer",
+    "category": "Security",
+    "executable": "avcenter.exe",
+    "url": "https://package.avira.com/package/oeav/win/int/avira_free_antivirus_en-us.exe",
+    "install_command": ["/VERYSILENT"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\Avira\\Antivirus\\setup.exe\" /uninstall /silent"
   }
 }
