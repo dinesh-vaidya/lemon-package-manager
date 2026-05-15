@@ -156,6 +156,32 @@
         ],
         "uninstall_command": "\"%LocalAppData%\\Programs\\Microsoft VS Code\\unins000.exe\" /VERYSILENT /NORESTART"
       }
+    },
+    "versions": {
+      "1.103.1": {
+        "architectures": {
+          "64": {
+            "url": "https://update.code.visualstudio.com/1.103.1/win32-x64-user/stable",
+            "install_command": [
+              "/VERYSILENT",
+              "/MERGETASKS=!runcode"
+            ],
+            "uninstall_command": "\"%LocalAppData%\\Programs\\Microsoft VS Code\\unins000.exe\" /VERYSILENT /NORESTART"
+          }
+        }
+      },
+      "1.96.2": {
+        "architectures": {
+          "64": {
+            "url": "https://update.code.visualstudio.com/1.96.2/win32-x64-user/stable",
+            "install_command": [
+              "/VERYSILENT",
+              "/MERGETASKS=!runcode"
+            ],
+            "uninstall_command": "\"%LocalAppData%\\Programs\\Microsoft VS Code\\unins000.exe\" /VERYSILENT /NORESTART"
+          }
+        }
+      }
     }
   },
   "chrome": {
@@ -776,9 +802,9 @@
     "executable": "PowerToys.exe"
   },
   "sharex": {
-    "url": "https://github.com/ShareX/ShareX/releases/download/v16.0.1/ShareX-16.0.1-setup.exe",
-    "version": "16.0.1",
-    "description": "A free and open source program that lets you capture or record any area of your screen and share it with a single press of a key.",
+    "url": "https://github.com/ShareX/ShareX/releases/download/v20.1.0/ShareX-20.1.0-setup-x64.exe",
+    "version": "20.1.0",
+    "description": "A free and open source program for screen capture and file sharing.",
     "install_command": [
       "/VERYSILENT"
     ],
@@ -1047,16 +1073,16 @@
     "executable_name": "PhotoDemon.exe"
   },
   "ccleaner": {
-    "url": "https://download.ccleaner.com/ccsetup616.exe",
-    "version": "6.16",
-    "description": "A utility used to clean potentially unwanted files and invalid Windows Registry entries from a computer.",
+    "version": "7.07",
+    "description": "A utility used to clean potentially unwanted files.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "CCleaner64.exe",
+    "url": "https://download.ccleaner.com/ccsetup707.exe",
     "install_command": [
       "/S"
     ],
-    "uninstall_command": "\"%ProgramFiles%\\CCleaner\\uninst.exe\" /S",
-    "type": "installer",
-    "category": "Utilities",
-    "executable": "CCleaner64.exe"
+    "uninstall_command": "\"%ProgramFiles%\\CCleaner\\uninst.exe\" /S"
   },
   "bleachbit": {
     "url": "https://download.bleachbit.org/BleachBit-4.4.2-setup.exe",
@@ -1363,8 +1389,8 @@
     "uninstall_command": "\"%LocalAppData%\\Programs\\ProtonPass\\Uninstall ProtonPass.exe\" /S"
   },
   "teamviewer": {
-    "version": "latest",
-    "description": "Remote desktop, online collaboration and allow users to connect to any computer or server around the world.",
+    "version": "15.76.6",
+    "description": "Remote desktop, online collaboration and allow users to connect to any computer.",
     "type": "installer",
     "category": "Utilities",
     "executable": "TeamViewer.exe",
@@ -1464,7 +1490,7 @@
   },
   "teracopy": {
     "version": "3.17",
-    "description": "TeraCopy is a lightweight program designed to copy and move files at the maximum possible speed.",
+    "description": "Copy and move files at the maximum possible speed.",
     "type": "installer",
     "category": "Utilities",
     "executable": "TeraCopy.exe",
@@ -1511,12 +1537,16 @@
     "uninstall_command": "wmic product where \"name like 'OneCommander%'\" call uninstall /nointeractive"
   },
   "faststone-image-viewer": {
-    "version": "7.8",
+    "version": "8.3",
     "description": "A fast, stable, user-friendly image browser, converter and editor.",
-    "type": "portable",
+    "type": "installer",
     "category": "Media",
-    "executable_name": "FSViewer.exe",
-    "url": "https://www.faststonesoft.net/DN/FSViewer78.zip"
+    "executable": "FSViewer.exe",
+    "url": "https://www.faststonesoft.net/DN/FSViewerSetup83.exe",
+    "install_command": [
+      "/S"
+    ],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\FastStone Image Viewer\\uninst.exe\" /S"
   },
   "irfanview": {
     "version": "4.73",
@@ -2163,7 +2193,7 @@
           "/qn",
           "/norestart"
         ],
-        "uninstall_command": "msiexec /x {python2718-x64-guid} /quiet"
+        "uninstall_command": "msiexec /x {99264580-0C81-11E1-9494-0800200C9A66} /quiet"
       }
     }
   },
@@ -2238,5 +2268,176 @@
       "/S"
     ],
     "uninstall_command": "\"%LocalAppData%\\Programs\\cursor\\Uninstall Cursor.exe\" /S"
+  },
+  "anydesk": {
+    "version": "9.7.3",
+    "description": "Fast and secure remote desktop software.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "AnyDesk.exe",
+    "url": "https://download.anydesk.com/AnyDesk.exe",
+    "install_command": [
+      "--install",
+      "/S"
+    ],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\AnyDesk\\AnyDesk.exe\" --uninstall"
+  },
+  "imgburn": {
+    "version": "2.5.8.0",
+    "description": "A free and powerful disc burner.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "ImgBurn.exe",
+    "url": "http://download.imgburn.com/SetupImgBurn_2.5.8.0.exe",
+    "install_command": [
+      "/S"
+    ],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\ImgBurn\\uninstall.exe\" /S"
+  },
+  "realvnc-server": {
+    "version": "7.17.0.5",
+    "description": "Remote access software for desktop and mobile.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "vncserver.exe",
+    "url": "https://downloads.realvnc.com/download/file/vnc.files/VNC-Server-7.17.0-Windows.exe",
+    "install_command": [
+      "/qn"
+    ],
+    "uninstall_command": "wmic product where \"name like 'RealVNC Server%'\" call uninstall /nointeractive"
+  },
+  "realvnc-viewer": {
+    "version": "7.15.1.18",
+    "description": "Connect to a remote computer using VNC.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "vncviewer.exe",
+    "url": "https://downloads.realvnc.com/download/file/viewer.files/VNC-Viewer-7.15.1-Windows.exe",
+    "install_command": [
+      "/qn"
+    ],
+    "uninstall_command": "wmic product where \"name like 'RealVNC Viewer%'\" call uninstall /nointeractive"
+  },
+  "tightvnc": {
+    "version": "2.8.87",
+    "description": "Free remote desktop software.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "tvnserver.exe",
+    "architectures": {
+      "64": {
+        "url": "https://www.tightvnc.com/download/2.8.87/tightvnc-2.8.87-setup-64bit.msi",
+        "install_command": [
+          "/qn"
+        ],
+        "uninstall_command": "wmic product where \"name like 'TightVNC%'\" call uninstall /nointeractive"
+      },
+      "32": {
+        "url": "https://www.tightvnc.com/download/2.8.87/tightvnc-2.8.87-setup-32bit.msi",
+        "install_command": [
+          "/qn"
+        ],
+        "uninstall_command": "wmic product where \"name like 'TightVNC%'\" call uninstall /nointeractive"
+      }
+    }
+  },
+  "cdburnerxp": {
+    "version": "4.5.8.7128",
+    "description": "A free application to burn CDs and DVDs.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "cdbxp.exe",
+    "url": "https://download.cdburnerxp.se/cdbxp_setup_4.5.8.7128.exe",
+    "install_command": [
+      "/VERYSILENT"
+    ],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\CDBurnerXP\\unins000.exe\" /VERYSILENT"
+  },
+  "revo-uninstaller": {
+    "version": "2.7.0",
+    "description": "Powerful uninstaller tool to clean your PC.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "RevoUnin.exe",
+    "url": "https://www.revouninstaller.com/download/revosetup.exe",
+    "install_command": [
+      "/VERYSILENT"
+    ],
+    "uninstall_command": "\"%ProgramFiles%\\VS Revo Group\\Revo Uninstaller\\unins000.exe\" /VERYSILENT"
+  },
+  "launchy": {
+    "version": "2.5",
+    "description": "A free cross-platform utility to launch your applications.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "Launchy.exe",
+    "url": "https://www.launchy.net/downloads/wm/Launchy2.5.exe",
+    "install_command": [
+      "/S"
+    ],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\Launchy\\uninstall.exe\" /S"
+  },
+  "windirstat": {
+    "version": "2.5.0",
+    "description": "A disk usage statistics viewer and cleanup tool.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "windirstat.exe",
+    "url": "https://github.com/windirstat/windirstat/releases/download/v2.5.0/WinDirStat-x64.msi",
+    "install_command": [
+      "/qn"
+    ],
+    "uninstall_command": "wmic product where \"name like 'WinDirStat%'\" call uninstall /nointeractive"
+  },
+  "wiztree": {
+    "version": "4.31",
+    "description": "Find and sort files that take up the most space on your hard drive.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "WizTree.exe",
+    "url": "https://diskanalyzer.com/files/wiztree_4_31_setup.exe",
+    "install_command": [
+      "/SP-",
+      "/VERYSILENT",
+      "/SUPPRESSMSGBOXES",
+      "/NORESTART"
+    ],
+    "uninstall_command": "\"%ProgramFiles%\\WizTree\\unins000.exe\" /VERYSILENT"
+  },
+  "glary-utilities": {
+    "version": "6.41.0.45",
+    "description": "A collection of system tools and utilities to fix, speed up, maintain and protect your PC.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "Integrator.exe",
+    "url": "https://download.glarysoft.com/gu6setup.exe",
+    "install_command": [
+      "/S"
+    ],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\Glary Utilities 6\\unins000.exe\" /S"
+  },
+  "infrarecorder": {
+    "version": "0.53.0",
+    "description": "A free and open-source CD/DVD burning solution.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "infrarecorder.exe",
+    "url": "https://sourceforge.net/projects/infrarecorder/files/InfraRecorder/0.53/ir053.exe/download",
+    "install_command": [
+      "/S"
+    ],
+    "uninstall_command": "\"%ProgramFiles%\\InfraRecorder\\uninstall.exe\" /S"
+  },
+  "open-shell": {
+    "version": "4.4.196",
+    "description": "Classic style Start menu for Windows 7, 8, 8.1, 10, and 11.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "OpenShellMenu.exe",
+    "url": "https://github.com/Open-Shell/Open-Shell-Menu/releases/download/v4.4.196/OpenShellSetup_4_4_196.exe",
+    "install_command": [
+      "/qn"
+    ],
+    "uninstall_command": "wmic product where \"name like 'Open-Shell%'\" call uninstall /nointeractive"
   }
 }
