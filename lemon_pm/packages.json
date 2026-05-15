@@ -1,20 +1,20 @@
 {
   "7-zip": {
-    "version": "25.01",
+    "version": "26.01",
     "description": "A free and open-source file archiver with a high compression ratio.",
     "type": "installer",
     "category": "Utilities",
     "executable": "7zFM.exe",
     "architectures": {
       "64": {
-        "url": "https://github.com/ip7z/7zip/releases/download/25.01/7z2501-x64.exe",
+        "url": "https://www.7-zip.org/a/7z2601-x64.exe",
         "install_command": [
           "/S"
         ],
         "uninstall_command": "\"%ProgramFiles%\\7-Zip\\Uninstall.exe\" /S"
       },
       "32": {
-        "url": "https://github.com/ip7z/7zip/releases/download/25.01/7z2501.exe",
+        "url": "https://www.7-zip.org/a/7z2601.exe",
         "install_command": [
           "/S"
         ],
@@ -22,6 +22,20 @@
       }
     },
     "versions": {
+      "25.01": {
+        "architectures": {
+          "64": {
+            "url": "https://github.com/ip7z/7zip/releases/download/25.01/7z2501-x64.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\7-Zip\\Uninstall.exe\" /S"
+          },
+          "32": {
+            "url": "https://github.com/ip7z/7zip/releases/download/25.01/7z2501.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles(x86)%\\7-Zip\\Uninstall.exe\" /S"
+          }
+        }
+      },
       "24.09": {
         "architectures": {
           "64": {
@@ -173,19 +187,32 @@
     }
   },
   "greenshot": {
-    "version": "1.3.296",
+    "version": "1.3.315",
     "description": "A light-weight screenshot software tool for Windows with the possibility to edit and annotate screenshots.",
     "type": "installer",
     "category": "Utilities",
     "executable": "greenshot.exe",
     "architectures": {
       "64": {
-        "url": "https://github.com/greenshot/greenshot/releases/download/v1.3.296/Greenshot-INSTALLER-1.3.296-RELEASE.exe",
+        "url": "https://github.com/greenshot/greenshot/releases/download/v1.3.315/Greenshot-INSTALLER-1.3.315-RELEASE.exe",
         "install_command": [
           "/VERYSILENT",
-          "/SUPPRESSMSGBOXES"
+          "/SUPPRESSMSGBOXES",
+          "/NORESTART",
+          "/SP-"
         ],
         "uninstall_command": "\"%ProgramFiles%\\Greenshot\\unins000.exe\" /VERYSILENT /SUPPRESSMSGBOXES"
+      }
+    },
+    "versions": {
+      "1.3.296": {
+        "architectures": {
+          "64": {
+            "url": "https://github.com/greenshot/greenshot/releases/download/v1.3.296/Greenshot-INSTALLER-1.3.296-RELEASE.exe",
+            "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES"],
+            "uninstall_command": "\"%ProgramFiles%\\Greenshot\\unins000.exe\" /VERYSILENT /SUPPRESSMSGBOXES"
+          }
+        }
       }
     }
   },
@@ -442,28 +469,30 @@
     }
   },
   "blender": {
-    "version": "4.2.0",
+    "version": "5.1.1",
     "description": "A free and open-source 3D computer graphics software toolset used for creating animated films, visual effects, art, 3D printed models, motion graphics, interactive 3D applications, and virtual reality.",
     "type": "installer",
     "category": "Media",
     "executable": "blender.exe",
     "architectures": {
       "64": {
-        "url": "https://download.blender.org/release/Blender4.2/blender-4.2.0-windows-x64.msi",
+        "url": "https://download.blender.org/release/Blender5.1/blender-5.1.1-windows-x64.msi",
         "install_command": [
           "/quiet"
         ],
-        "uninstall_command": "msiexec /x {56E5E671-9136-473E-8DB3-32EC84E704DF} /quiet"
-      },
-      "32": {
-        "url": "https://download.blender.org/release/Blender4.2/blender-4.2.0-windows-i686.msi",
-        "install_command": [
-          "/quiet"
-        ],
-        "uninstall_command": "msiexec /x {56E5E671-9136-473E-8DB3-32EC84E704DF} /quiet"
+        "uninstall_command": "wmic product where \"name like 'Blender%'\" call uninstall /nointeractive"
       }
     },
     "versions": {
+      "4.2.0": {
+        "architectures": {
+          "64": {
+            "url": "https://download.blender.org/release/Blender4.2/blender-4.2.0-windows-x64.msi",
+            "install_command": ["/quiet"],
+            "uninstall_command": "msiexec /x {56E5E671-9136-473E-8DB3-32EC84E704DF} /quiet"
+          }
+        }
+      },
       "4.1.1": {
         "architectures": {
           "64": {
@@ -560,18 +589,33 @@
     }
   },
   "gimp": {
-    "version": "2.10.38",
+    "version": "3.2.4",
     "description": "A free and open-source raster graphics editor used for image manipulation and image editing, free-form drawing, transcoding between different image file formats, and more specialized tasks.",
     "type": "installer",
     "category": "Media",
-    "executable": "gimp-2.10.exe",
+    "executable": "gimp-3.2.exe",
     "architectures": {
       "64": {
-        "url": "https://download.gimp.org/mirror/pub/gimp/v2.10/windows/gimp-2.10.38-setup.exe",
+        "url": "https://download.gimp.org/pub/gimp/v3.2/windows/gimp-3.2.4-setup.exe",
         "install_command": [
-          "/VERYSILENT"
+          "/SP-",
+          "/VERYSILENT",
+          "/SUPPRESSMSGBOXES",
+          "/ALLUSERS",
+          "/NORESTART"
         ],
-        "uninstall_command": "\"%ProgramFiles%\\GIMP 2\\uninst\\unins000.exe\" /VERYSILENT"
+        "uninstall_command": "\"%ProgramFiles%\\GIMP 3\\uninst\\unins000.exe\" /VERYSILENT"
+      }
+    },
+    "versions": {
+      "2.10.38": {
+        "architectures": {
+          "64": {
+            "url": "https://download.gimp.org/mirror/pub/gimp/v2.10/windows/gimp-2.10.38-setup.exe",
+            "install_command": ["/VERYSILENT"],
+            "uninstall_command": "\"%ProgramFiles%\\GIMP 2\\uninst\\unins000.exe\" /VERYSILENT"
+          }
+        }
       }
     }
   },
@@ -702,25 +746,41 @@
     }
   },
   "winrar": {
-    "version": "7.00",
+    "version": "7.22",
     "description": "A trialware file archiver utility for Windows.",
     "type": "installer",
     "category": "Utilities",
     "executable": "WinRAR.exe",
     "architectures": {
       "64": {
-        "url": "https://www.win-rar.com/fileadmin/winrar-versions/winrar-x64-700.exe",
+        "url": "https://www.win-rar.com/fileadmin/winrar-versions/winrar-x64-722.exe",
         "install_command": [
           "/S"
         ],
         "uninstall_command": "\"%ProgramFiles%\\WinRAR\\uninstall.exe\" /S"
       },
       "32": {
-        "url": "https://www.win-rar.com/fileadmin/winrar-versions/winrar-x32-700.exe",
+        "url": "https://www.win-rar.com/fileadmin/winrar-versions/winrar-x32-722.exe",
         "install_command": [
           "/S"
         ],
         "uninstall_command": "\"%ProgramFiles(x86)%\\WinRAR\\uninstall.exe\" /S"
+      }
+    },
+    "versions": {
+      "7.00": {
+        "architectures": {
+          "64": {
+            "url": "https://www.win-rar.com/fileadmin/winrar-versions/winrar-x64-700.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles%\\WinRAR\\uninstall.exe\" /S"
+          },
+          "32": {
+            "url": "https://www.win-rar.com/fileadmin/winrar-versions/winrar-x32-700.exe",
+            "install_command": ["/S"],
+            "uninstall_command": "\"%ProgramFiles(x86)%\\WinRAR\\uninstall.exe\" /S"
+          }
+        }
       }
     }
   },
@@ -972,8 +1032,8 @@
     "executable": "PowerToys.exe"
   },
   "sharex": {
-    "url": "https://github.com/ShareX/ShareX/releases/download/v16.0.1/ShareX-16.0.1-setup.exe",
-    "version": "16.0.1",
+    "url": "https://github.com/ShareX/ShareX/releases/download/v20.1.0/ShareX-20.1.0-setup-x64.exe",
+    "version": "20.1.0",
     "description": "A free and open source program that lets you capture or record any area of your screen and share it with a single press of a key.",
     "install_command": [
       "/VERYSILENT"
@@ -996,14 +1056,14 @@
     "executable": "KeePassXC.exe"
   },
   "inkscape": {
-    "url": "https://inkscape.org/gallery/item/44619/inkscape-1.3.2_2023-11-25_091e20e-x64.msi",
-    "version": "1.3.2",
+    "url": "https://inkscape.org/gallery/item/58914/inkscape-1.4.3_2026-03-12_86a8ad7-x64.msi",
+    "version": "1.4.3",
     "description": "A free and open-source vector graphics editor.",
     "install_command": [
       "/qn",
       "/norestart"
     ],
-    "uninstall_command": "msiexec /x {4E9A1766-6BA4-4015-BA8D-05A268638587} /qn",
+    "uninstall_command": "wmic product where \"name like 'Inkscape%'\" call uninstall /nointeractive",
     "type": "installer",
     "category": "Media",
     "executable": "inkscape.exe"
@@ -1083,8 +1143,8 @@
     "executable": "ollama.exe"
   },
   "krita": {
-    "url": "https://download.kde.org/stable/krita/5.2.2/krita-x64-5.2.2-setup.exe",
-    "version": "5.2.2",
+    "url": "https://download.kde.org/stable/krita/5.3.1/krita-x64-5.3.1-setup.exe",
+    "version": "5.3.1.100",
     "description": "A free and open-source raster graphics editor designed primarily for digital painting and 2D animation.",
     "install_command": [
       "/S"
@@ -1107,8 +1167,8 @@
     "executable": "darktable.exe"
   },
   "paint.net": {
-    "url": "https://www.getpaint.net/release/paint.net_5.0.13.install.x64.zip",
-    "version": "5.0.13",
+    "url": "https://www.getpaint.net/release/paint.net_5.112.9563.32325.install.x64.zip",
+    "version": "5.112.9563.32325",
     "description": "A freeware raster graphics editor program for Microsoft Windows.",
     "install_command": [
       "/auto"
@@ -1707,12 +1767,14 @@
     "uninstall_command": "wmic product where \"name like 'OneCommander%'\" call uninstall /nointeractive"
   },
   "faststone-image-viewer": {
-    "version": "7.8",
+    "version": "8.3",
     "description": "A fast, stable, user-friendly image browser, converter and editor.",
-    "type": "portable",
+    "type": "installer",
     "category": "Media",
-    "executable_name": "FSViewer.exe",
-    "url": "https://www.faststonesoft.net/DN/FSViewer78.zip"
+    "executable": "FSViewer.exe",
+    "url": "https://www.faststonesoft.net/DN/FSViewerSetup83.exe",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\FastStone Image Viewer\\uninst.exe\" /S"
   },
   "irfanview": {
     "version": "4.73",
@@ -2115,7 +2177,7 @@
     "url": "https://getmusicbee.com/download/latest/MusicBeeSetup_3_6_9403.zip"
   },
   "cccp": {
-    "version": "2015.10.18",
+    "version": "2015.10.19",
     "description": "The Combined Community Codec Pack is a simple playback pack for Windows.",
     "type": "installer",
     "category": "Media",
@@ -2162,5 +2224,34 @@
     "url": "https://package.avira.com/package/oeav/win/int/avira_free_antivirus_en-us.exe",
     "install_command": ["/VERYSILENT"],
     "uninstall_command": "\"%ProgramFiles(x86)%\\Avira\\Antivirus\\setup.exe\" /uninstall /silent"
+  },
+  "xnview": {
+    "version": "2.52.5",
+    "description": "A powerful image viewer, browser and converter.",
+    "type": "installer",
+    "category": "Media",
+    "executable": "xnview.exe",
+    "url": "https://download.xnview.com/XnView-win.exe",
+    "install_command": ["/SP-", "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\XnView\\unins000.exe\" /VERYSILENT"
+  },
+  "peazip": {
+    "version": "11.1.0",
+    "description": "A free and open-source file archiver and file manager.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "peazip.exe",
+    "architectures": {
+      "64": {
+        "url": "https://github.com/peazip/PeaZip/releases/download/11.1.0/peazip-11.1.0.WINDOWS.x86_64.exe",
+        "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/SP-"],
+        "uninstall_command": "\"%ProgramFiles%\\PeaZip\\unins000.exe\" /VERYSILENT"
+      },
+      "32": {
+        "url": "https://github.com/peazip/PeaZip/releases/download/11.1.0/peazip-11.1.0.WINDOWS.exe",
+        "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/SP-"],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\PeaZip\\unins000.exe\" /VERYSILENT"
+      }
+    }
   }
 }
