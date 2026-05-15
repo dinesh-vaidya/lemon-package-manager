@@ -26,62 +26,38 @@
         "architectures": {
           "64": {
             "url": "https://github.com/ip7z/7zip/releases/download/25.01/7z2501-x64.exe",
-            "install_command": ["/S"],
+            "install_command": [
+              "/S"
+            ],
             "uninstall_command": "\"%ProgramFiles%\\7-Zip\\Uninstall.exe\" /S"
           },
           "32": {
             "url": "https://github.com/ip7z/7zip/releases/download/25.01/7z2501.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles(x86)%\\7-Zip\\Uninstall.exe\" /S"
-          }
-        }
-      },
-      "24.09": {
-        "architectures": {
-          "64": {
-            "url": "https://github.com/ip7z/7zip/releases/download/24.09/7z2409-x64.exe",
-            "install_command": ["/S"],
+            "install_command": [
+              "/S"
+            ],
             "uninstall_command": "\"%ProgramFiles%\\7-Zip\\Uninstall.exe\" /S"
-          },
-          "32": {
-            "url": "https://github.com/ip7z/7zip/releases/download/24.09/7z2409.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles(x86)%\\7-Zip\\Uninstall.exe\" /S"
-          }
-        }
-      },
-      "23.01": {
-        "architectures": {
-          "64": {
-            "url": "https://github.com/ip7z/7zip/releases/download/23.01/7z2301-x64.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles%\\7-Zip\\Uninstall.exe\" /S"
-          },
-          "32": {
-            "url": "https://github.com/ip7z/7zip/releases/download/23.01/7z2301.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles(x86)%\\7-Zip\\Uninstall.exe\" /S"
           }
         }
       }
     }
   },
   "notepad++": {
-    "version": "8.8.5",
+    "version": "8.9.5",
     "description": "A free source code editor and Notepad replacement that supports several languages.",
     "type": "installer",
     "category": "Development",
     "executable": "notepad++.exe",
     "architectures": {
       "64": {
-        "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.5/npp.8.8.5.Installer.x64.exe",
+        "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.5/npp.8.9.5.Installer.x64.exe",
         "install_command": [
           "/S"
         ],
         "uninstall_command": "\"%ProgramFiles%\\Notepad++\\uninstall.exe\" /S"
       },
       "32": {
-        "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.5/npp.8.8.5.Installer.exe",
+        "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.5/npp.8.9.5.Installer.exe",
         "install_command": [
           "/S"
         ],
@@ -89,31 +65,14 @@
       }
     },
     "versions": {
-      "8.8.4": {
+      "8.8.5": {
         "architectures": {
           "64": {
-            "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.4/npp.8.8.4.Installer.x64.exe",
-            "install_command": ["/S"],
+            "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.5/npp.8.8.5.Installer.x64.exe",
+            "install_command": [
+              "/S"
+            ],
             "uninstall_command": "\"%ProgramFiles%\\Notepad++\\uninstall.exe\" /S"
-          },
-          "32": {
-            "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.4/npp.8.8.4.Installer.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles(x86)%\\Notepad++\\uninstall.exe\" /S"
-          }
-        }
-      },
-      "8.8.3": {
-        "architectures": {
-          "64": {
-            "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.3/npp.8.8.3.Installer.x64.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles%\\Notepad++\\uninstall.exe\" /S"
-          },
-          "32": {
-            "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.8.3/npp.8.8.3.Installer.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles(x86)%\\Notepad++\\uninstall.exe\" /S"
           }
         }
       }
@@ -146,41 +105,10 @@
         "architectures": {
           "64": {
             "url": "https://get.videolan.org/vlc/3.0.21/win64/vlc-3.0.21-win64.exe",
-            "install_command": ["/S"],
+            "install_command": [
+              "/S"
+            ],
             "uninstall_command": "\"%ProgramFiles%\\VideoLAN\\VLC\\uninstall.exe\" /S"
-          },
-          "32": {
-            "url": "https://get.videolan.org/vlc/3.0.21/win32/vlc-3.0.21-win32.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles(x86)%\\VideoLAN\\VLC\\uninstall.exe\" /S"
-          }
-        }
-      },
-      "3.0.20": {
-        "architectures": {
-          "64": {
-            "url": "https://get.videolan.org/vlc/3.0.20/win64/vlc-3.0.20-win64.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles%\\VideoLAN\\VLC\\uninstall.exe\" /S"
-          },
-          "32": {
-            "url": "https://get.videolan.org/vlc/3.0.20/win32/vlc-3.0.20-win32.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles(x86)%\\VideoLAN\\VLC\\uninstall.exe\" /S"
-          }
-        }
-      },
-      "3.0.19": {
-        "architectures": {
-          "64": {
-            "url": "https://get.videolan.org/vlc/3.0.19/win64/vlc-3.0.19-win64.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles%\\VideoLAN\\VLC\\uninstall.exe\" /S"
-          },
-          "32": {
-            "url": "https://get.videolan.org/vlc/3.0.19/win32/vlc-3.0.19-win32.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles(x86)%\\VideoLAN\\VLC\\uninstall.exe\" /S"
           }
         }
       }
@@ -203,28 +131,17 @@
         ],
         "uninstall_command": "\"%ProgramFiles%\\Greenshot\\unins000.exe\" /VERYSILENT /SUPPRESSMSGBOXES"
       }
-    },
-    "versions": {
-      "1.3.296": {
-        "architectures": {
-          "64": {
-            "url": "https://github.com/greenshot/greenshot/releases/download/v1.3.296/Greenshot-INSTALLER-1.3.296-RELEASE.exe",
-            "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES"],
-            "uninstall_command": "\"%ProgramFiles%\\Greenshot\\unins000.exe\" /VERYSILENT /SUPPRESSMSGBOXES"
-          }
-        }
-      }
     }
   },
   "vscode": {
-    "version": "1.103.1",
+    "version": "1.120.0",
     "description": "A free source-code editor made by Microsoft for Windows, Linux and macOS.",
     "type": "installer",
     "category": "Development",
     "executable": "Code.exe",
     "architectures": {
       "64": {
-        "url": "https://update.code.visualstudio.com/1.103.1/win32-x64-user/stable",
+        "url": "https://update.code.visualstudio.com/1.120.0/win32-x64-user/stable",
         "install_command": [
           "/VERYSILENT",
           "/MERGETASKS=!runcode"
@@ -232,32 +149,12 @@
         "uninstall_command": "\"%LocalAppData%\\Programs\\Microsoft VS Code\\unins000.exe\" /VERYSILENT /NORESTART"
       },
       "32": {
-        "url": "https://update.code.visualstudio.com/1.103.1/win32-user/stable",
+        "url": "https://update.code.visualstudio.com/1.120.0/win32-user/stable",
         "install_command": [
           "/VERYSILENT",
           "/MERGETASKS=!runcode"
         ],
         "uninstall_command": "\"%LocalAppData%\\Programs\\Microsoft VS Code\\unins000.exe\" /VERYSILENT /NORESTART"
-      }
-    },
-    "versions": {
-      "1.96.2": {
-        "architectures": {
-          "64": {
-            "url": "https://update.code.visualstudio.com/1.96.2/win32-x64-user/stable",
-            "install_command": ["/VERYSILENT", "/MERGETASKS=!runcode"],
-            "uninstall_command": "\"%LocalAppData%\\Programs\\Microsoft VS Code\\unins000.exe\" /VERYSILENT /NORESTART"
-          }
-        }
-      },
-      "1.95.3": {
-        "architectures": {
-          "64": {
-            "url": "https://update.code.visualstudio.com/1.95.3/win32-x64-user/stable",
-            "install_command": ["/VERYSILENT", "/MERGETASKS=!runcode"],
-            "uninstall_command": "\"%LocalAppData%\\Programs\\Microsoft VS Code\\unins000.exe\" /VERYSILENT /NORESTART"
-          }
-        }
       }
     }
   },
@@ -311,7 +208,9 @@
         "architectures": {
           "64": {
             "url": "https://archive.mozilla.org/pub/firefox/releases/140.0/win64/en-US/Firefox%20Setup%20140.0.msi",
-            "install_command": ["/S"],
+            "install_command": [
+              "/S"
+            ],
             "uninstall_command": "\"%ProgramFiles%\\Mozilla Firefox\\uninstall\\helper.exe\" /S"
           }
         }
@@ -320,7 +219,9 @@
         "architectures": {
           "64": {
             "url": "https://archive.mozilla.org/pub/firefox/releases/139.0/win64/en-US/Firefox%20Setup%20139.0.msi",
-            "install_command": ["/S"],
+            "install_command": [
+              "/S"
+            ],
             "uninstall_command": "\"%ProgramFiles%\\Mozilla Firefox\\uninstall\\helper.exe\" /S"
           }
         }
@@ -351,45 +252,25 @@
     }
   },
   "git": {
-    "version": "2.50.1",
+    "version": "2.54.0",
     "description": "A distributed version-control system for tracking changes in source code during software development.",
     "type": "installer",
     "category": "Development",
     "executable": "git-bash.exe",
     "architectures": {
       "64": {
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.50.1.windows.1/Git-2.50.1-64-bit.exe",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.54.0.windows.1/Git-2.54.0-64-bit.exe",
         "install_command": [
           "/VERYSILENT"
         ],
         "uninstall_command": "\"%ProgramFiles%\\Git\\unins000.exe\" /VERYSILENT /NORESTART"
       },
       "32": {
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.50.1.windows.1/Git-2.50.1-32-bit.exe",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.54.0.windows.1/Git-2.54.0-32-bit.exe",
         "install_command": [
           "/VERYSILENT"
         ],
-        "uninstall_command": "\"%ProgramFiles(x86)%\\Git\\unins000.exe\" /VERYSILENT /NORESTART"
-      }
-    },
-    "versions": {
-      "2.49.0": {
-        "architectures": {
-          "64": {
-            "url": "https://github.com/git-for-windows/git/releases/download/v2.49.0.windows.1/Git-2.49.0-64-bit.exe",
-            "install_command": ["/VERYSILENT"],
-            "uninstall_command": "\"%ProgramFiles%\\Git\\unins000.exe\" /VERYSILENT /NORESTART"
-          }
-        }
-      },
-      "2.48.1": {
-        "architectures": {
-          "64": {
-            "url": "https://github.com/git-for-windows/git/releases/download/v2.48.1.windows.1/Git-2.48.1-64-bit.exe",
-            "install_command": ["/VERYSILENT"],
-            "uninstall_command": "\"%ProgramFiles%\\Git\\unins000.exe\" /VERYSILENT /NORESTART"
-          }
-        }
+        "uninstall_command": "\"%ProgramFiles%\\Git\\unins000.exe\" /VERYSILENT /NORESTART"
       }
     }
   },
@@ -452,7 +333,9 @@
         "architectures": {
           "64": {
             "url": "https://github.com/obsproject/obs-studio/releases/download/30.1.1/OBS-Studio-30.1.1-Full-Installer-x64.exe",
-            "install_command": ["/S"],
+            "install_command": [
+              "/S"
+            ],
             "uninstall_command": "\"%ProgramFiles%\\OBS Studio\\uninstall.exe\" /S"
           }
         }
@@ -461,7 +344,9 @@
         "architectures": {
           "64": {
             "url": "https://github.com/obsproject/obs-studio/releases/download/30.1.0/OBS-Studio-30.1.0-Full-Installer-x64.exe",
-            "install_command": ["/S"],
+            "install_command": [
+              "/S"
+            ],
             "uninstall_command": "\"%ProgramFiles%\\OBS Studio\\uninstall.exe\" /S"
           }
         }
@@ -482,35 +367,6 @@
         ],
         "uninstall_command": "wmic product where \"name like 'Blender%'\" call uninstall /nointeractive"
       }
-    },
-    "versions": {
-      "4.2.0": {
-        "architectures": {
-          "64": {
-            "url": "https://download.blender.org/release/Blender4.2/blender-4.2.0-windows-x64.msi",
-            "install_command": ["/quiet"],
-            "uninstall_command": "msiexec /x {56E5E671-9136-473E-8DB3-32EC84E704DF} /quiet"
-          }
-        }
-      },
-      "4.1.1": {
-        "architectures": {
-          "64": {
-            "url": "https://download.blender.org/release/Blender4.1/blender-4.1.1-windows-x64.msi",
-            "install_command": ["/quiet"],
-            "uninstall_command": "msiexec /x {85D6F591-6E63-441F-959D-33C6E5C8B490} /quiet"
-          }
-        }
-      },
-      "4.0.2": {
-        "architectures": {
-          "64": {
-            "url": "https://download.blender.org/release/Blender4.0/blender-4.0.2-windows-x64.msi",
-            "install_command": ["/quiet"],
-            "uninstall_command": "msiexec /x {56E5E671-9136-473E-8DB3-32EC84E704DF} /quiet"
-          }
-        }
-      }
     }
   },
   "qbittorrent": {
@@ -526,42 +382,6 @@
           "/S"
         ],
         "uninstall_command": "\"%ProgramFiles%\\qBittorrent\\uninst.exe\" /S"
-      },
-      "32": {
-        "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-5.2.0/qbittorrent_5.2.0_setup.exe",
-        "install_command": [
-          "/S"
-        ],
-        "uninstall_command": "\"%ProgramFiles(x86)%\\qBittorrent\\uninst.exe\" /S"
-      }
-    },
-    "versions": {
-      "4.6.5": {
-        "architectures": {
-          "64": {
-            "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-4.6.5/qbittorrent_4.6.5_x64_setup.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles%\\qBittorrent\\uninst.exe\" /S"
-          }
-        }
-      },
-      "4.6.4": {
-        "architectures": {
-          "64": {
-            "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-4.6.4/qbittorrent_4.6.4_x64_setup.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles%\\qBittorrent\\uninst.exe\" /S"
-          }
-        }
-      },
-      "4.6.3": {
-        "architectures": {
-          "64": {
-            "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-4.6.3/qbittorrent_4.6.3_x64_setup.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles%\\qBittorrent\\uninst.exe\" /S"
-          }
-        }
       }
     }
   },
@@ -605,17 +425,6 @@
           "/NORESTART"
         ],
         "uninstall_command": "\"%ProgramFiles%\\GIMP 3\\uninst\\unins000.exe\" /VERYSILENT"
-      }
-    },
-    "versions": {
-      "2.10.38": {
-        "architectures": {
-          "64": {
-            "url": "https://download.gimp.org/mirror/pub/gimp/v2.10/windows/gimp-2.10.38-setup.exe",
-            "install_command": ["/VERYSILENT"],
-            "uninstall_command": "\"%ProgramFiles%\\GIMP 2\\uninst\\unins000.exe\" /VERYSILENT"
-          }
-        }
       }
     }
   },
@@ -683,42 +492,6 @@
           "/VERYSILENT"
         ],
         "uninstall_command": "\"%ProgramFiles%\\Audacity\\unins000.exe\" /VERYSILENT"
-      },
-      "32": {
-        "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.7.7/audacity-win-3.7.7-32bit.exe",
-        "install_command": [
-          "/VERYSILENT"
-        ],
-        "uninstall_command": "\"%ProgramFiles(x86)%\\Audacity\\unins000.exe\" /VERYSILENT"
-      }
-    },
-    "versions": {
-      "3.6.1": {
-        "architectures": {
-          "64": {
-            "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.6.1/audacity-win-3.6.1-64bit.exe",
-            "install_command": ["/VERYSILENT"],
-            "uninstall_command": "\"%ProgramFiles%\\Audacity\\unins000.exe\" /VERYSILENT"
-          }
-        }
-      },
-      "3.6.0": {
-        "architectures": {
-          "64": {
-            "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.6.0/audacity-win-3.6.0-64bit.exe",
-            "install_command": ["/VERYSILENT"],
-            "uninstall_command": "\"%ProgramFiles%\\Audacity\\unins000.exe\" /VERYSILENT"
-          }
-        }
-      },
-      "3.5.1": {
-        "architectures": {
-          "64": {
-            "url": "https://github.com/audacity/audacity/releases/download/Audacity-3.5.1/audacity-win-3.5.1-64bit.exe",
-            "install_command": ["/VERYSILENT"],
-            "uninstall_command": "\"%ProgramFiles%\\Audacity\\unins000.exe\" /VERYSILENT"
-          }
-        }
       }
     }
   },
@@ -758,29 +531,6 @@
           "/S"
         ],
         "uninstall_command": "\"%ProgramFiles%\\WinRAR\\uninstall.exe\" /S"
-      },
-      "32": {
-        "url": "https://www.win-rar.com/fileadmin/winrar-versions/winrar-x32-722.exe",
-        "install_command": [
-          "/S"
-        ],
-        "uninstall_command": "\"%ProgramFiles(x86)%\\WinRAR\\uninstall.exe\" /S"
-      }
-    },
-    "versions": {
-      "7.00": {
-        "architectures": {
-          "64": {
-            "url": "https://www.win-rar.com/fileadmin/winrar-versions/winrar-x64-700.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles%\\WinRAR\\uninstall.exe\" /S"
-          },
-          "32": {
-            "url": "https://www.win-rar.com/fileadmin/winrar-versions/winrar-x32-700.exe",
-            "install_command": ["/S"],
-            "uninstall_command": "\"%ProgramFiles(x86)%\\WinRAR\\uninstall.exe\" /S"
-          }
-        }
       }
     }
   },
@@ -893,24 +643,18 @@
     "executable": "winzip64.exe"
   },
   "putty": {
-    "url": "https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.83-installer.msi",
     "version": "0.83",
     "description": "A free and open-source terminal emulator, serial console and network file transfer application.",
-    "install_command": [
-      "/quiet"
-    ],
-    "uninstall_command": "msiexec /x {45b3032f-22cc-40cd-9e97-4da7095fa5a2} /quiet",
     "type": "installer",
     "category": "Development",
     "executable": "putty.exe",
-    "versions": {
-      "0.82": {
-        "url": "https://the.earth.li/~sgtatham/putty/0.82/w64/putty-64bit-0.82-installer.msi",
-        "uninstall_command": "msiexec /x {C8A8C3E5-9D2F-4C82-9D9A-2B5C1B6E0A9F} /quiet"
-      },
-      "0.81": {
-        "url": "https://the.earth.li/~sgtatham/putty/0.81/w64/putty-64bit-0.81-installer.msi",
-        "uninstall_command": "msiexec /x {A523E6E6-2A42-4217-A63A-228373A66352} /quiet"
+    "architectures": {
+      "64": {
+        "url": "https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.83-installer.msi",
+        "install_command": [
+          "/quiet"
+        ],
+        "uninstall_command": "msiexec /x {45b3032f-22cc-40cd-9e97-4da7095fa5a2} /quiet"
       }
     }
   },
@@ -1032,8 +776,8 @@
     "executable": "PowerToys.exe"
   },
   "sharex": {
-    "url": "https://github.com/ShareX/ShareX/releases/download/v20.1.0/ShareX-20.1.0-setup-x64.exe",
-    "version": "20.1.0",
+    "url": "https://github.com/ShareX/ShareX/releases/download/v16.0.1/ShareX-16.0.1-setup.exe",
+    "version": "16.0.1",
     "description": "A free and open source program that lets you capture or record any area of your screen and share it with a single press of a key.",
     "install_command": [
       "/VERYSILENT"
@@ -1767,14 +1511,12 @@
     "uninstall_command": "wmic product where \"name like 'OneCommander%'\" call uninstall /nointeractive"
   },
   "faststone-image-viewer": {
-    "version": "8.3",
+    "version": "7.8",
     "description": "A fast, stable, user-friendly image browser, converter and editor.",
-    "type": "installer",
+    "type": "portable",
     "category": "Media",
-    "executable": "FSViewer.exe",
-    "url": "https://www.faststonesoft.net/DN/FSViewerSetup83.exe",
-    "install_command": ["/S"],
-    "uninstall_command": "\"%ProgramFiles(x86)%\\FastStone Image Viewer\\uninst.exe\" /S"
+    "executable_name": "FSViewer.exe",
+    "url": "https://www.faststonesoft.net/DN/FSViewer78.zip"
   },
   "irfanview": {
     "version": "4.73",
@@ -1919,11 +1661,17 @@
     "versions": {
       "5.7": {
         "url": "https://www.editplus.com/ftp/epp570_4630_64bit.exe",
-        "install_command": ["-s", "-sp-s"]
+        "install_command": [
+          "-s",
+          "-sp-s"
+        ]
       },
       "4.3": {
         "url": "https://www.editplus.com/ftp/epp430_2751_64bit.exe",
-        "install_command": ["-s", "-sp-s"]
+        "install_command": [
+          "-s",
+          "-sp-s"
+        ]
       }
     }
   },
@@ -1947,7 +1695,7 @@
   },
   "teams": {
     "version": "26072.519.4556.7438",
-    "description": "Microsoft Teams is the ultimate messaging app for your organization—a workspace for real-time collaboration and communication, meetings, file and app sharing, and even the occasional emoji!",
+    "description": "Microsoft Teams is the ultimate messaging app for your organization\u2014a workspace for real-time collaboration and communication, meetings, file and app sharing, and even the occasional emoji!",
     "type": "installer",
     "category": "Social",
     "executable": "ms-teams.exe",
@@ -2017,7 +1765,10 @@
     "category": "Media",
     "executable": "AIMP.exe",
     "url": "https://www.aimp.ru/files/aimp_5.40.2716.exe",
-    "install_command": ["/AUTO", "/SILENT"],
+    "install_command": [
+      "/AUTO",
+      "/SILENT"
+    ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\AIMP\\Uninstall.exe\" /SILENT"
   },
   "foobar2000": {
@@ -2029,12 +1780,18 @@
     "architectures": {
       "64": {
         "url": "https://www.foobar2000.org/downloads/foobar2000-x64_v2.25.8.exe",
-        "install_command": ["/S", "/allusers"],
+        "install_command": [
+          "/S",
+          "/allusers"
+        ],
         "uninstall_command": "\"%ProgramFiles%\\foobar2000\\uninstall.exe\" /S"
       },
       "32": {
         "url": "https://www.foobar2000.org/downloads/foobar2000_v2.25.8.exe",
-        "install_command": ["/S", "/allusers"],
+        "install_command": [
+          "/S",
+          "/allusers"
+        ],
         "uninstall_command": "\"%ProgramFiles(x86)%\\foobar2000\\uninstall.exe\" /S"
       }
     }
@@ -2046,7 +1803,9 @@
     "category": "Media",
     "executable": "Winamp.exe",
     "url": "https://download.nullsoft.com/winamp/client/winamp592_10042_full_en-us.exe",
-    "install_command": ["/S"],
+    "install_command": [
+      "/S"
+    ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\Winamp\\Uninst.exe\" /S"
   },
   "k-lite-codec-pack": {
@@ -2056,7 +1815,9 @@
     "category": "Media",
     "executable": "mpc-hc64.exe",
     "url": "https://files3.codecguide.com/K-Lite_Codec_Pack_1970_Mega.exe",
-    "install_command": ["/verysilent"],
+    "install_command": [
+      "/verysilent"
+    ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\K-Lite Codec Pack\\uninstall.exe\""
   },
   "gom-player": {
@@ -2066,7 +1827,9 @@
     "category": "Media",
     "executable": "Gom.exe",
     "url": "https://cdn.gomlab.com/gretech/player/GOMPLAYERENSETUP.EXE",
-    "install_command": ["/S"],
+    "install_command": [
+      "/S"
+    ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\GRETECH\\GomPlayer\\Uninstall.exe\""
   },
   "mediamonkey": {
@@ -2076,7 +1839,9 @@
     "category": "Media",
     "executable": "MediaMonkey.exe",
     "url": "https://www.mediamonkey.com/sw/MediaMonkey_2024.1.0.3113.exe",
-    "install_command": ["/silent"],
+    "install_command": [
+      "/silent"
+    ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\MediaMonkey 5\\unins000.exe\" /SILENT"
   },
   "dropbox": {
@@ -2086,7 +1851,9 @@
     "category": "Utilities",
     "executable": "Dropbox.exe",
     "url": "https://www.dropbox.com/download?plat=win&type=full",
-    "install_command": ["/S"],
+    "install_command": [
+      "/S"
+    ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\Dropbox\\Client\\DropboxUninstaller.exe\" /S"
   },
   "google-drive": {
@@ -2096,7 +1863,10 @@
     "category": "Utilities",
     "executable": "GoogleDriveFS.exe",
     "url": "https://dl.google.com/drive-file-stream/GoogleDriveSetup.exe",
-    "install_command": ["--silent", "--desktop_shortcut"],
+    "install_command": [
+      "--silent",
+      "--desktop_shortcut"
+    ],
     "uninstall_command": "msiexec /x {6BBAE539-2232-434A-A4E5-9A33560C6283} /quiet"
   },
   "onedrive": {
@@ -2106,7 +1876,9 @@
     "category": "Utilities",
     "executable": "OneDrive.exe",
     "url": "https://oneclient.sfx.ms/Win/Installers/26.070.0414.0001/amd64/OneDriveSetup.exe",
-    "install_command": ["/silent"],
+    "install_command": [
+      "/silent"
+    ],
     "uninstall_command": "%SystemRoot%\\SysWOW64\\OneDriveSetup.exe /uninstall"
   },
   "sugarsync": {
@@ -2116,7 +1888,12 @@
     "category": "Utilities",
     "executable": "SugarSync.exe",
     "url": "https://www.sugarsync.com/pc-download/SugarSyncSetup.exe",
-    "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/SP-"],
+    "install_command": [
+      "/VERYSILENT",
+      "/SUPPRESSMSGBOXES",
+      "/NORESTART",
+      "/SP-"
+    ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\SugarSync\\unins000.exe\" /SILENT"
   },
   "malwarebytes": {
@@ -2126,7 +1903,10 @@
     "category": "Security",
     "executable": "mbam.exe",
     "url": "https://downloads.malwarebytes.com/file/mb5/",
-    "install_command": ["/VERYSILENT", "/NORESTART"],
+    "install_command": [
+      "/VERYSILENT",
+      "/NORESTART"
+    ],
     "uninstall_command": "\"%ProgramFiles%\\Malwarebytes\\Anti-Malware\\unins000.exe\" /VERYSILENT"
   },
   "spybot": {
@@ -2136,7 +1916,9 @@
     "category": "Security",
     "executable": "SDWelcome.exe",
     "url": "https://downloads.spybot.info/Spybot2/spybotsd-2.9.85.5.exe",
-    "install_command": ["/S"],
+    "install_command": [
+      "/S"
+    ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\Spybot - Search & Destroy 2\\unins000.exe\" /S"
   },
   "superantispyware": {
@@ -2146,7 +1928,9 @@
     "category": "Security",
     "executable": "SUPERAntiSpyware.exe",
     "url": "https://www.superantispyware.com/SUPERAntiSpyware.exe",
-    "install_command": ["/S"],
+    "install_command": [
+      "/S"
+    ],
     "uninstall_command": "\"%ProgramFiles%\\SUPERAntiSpyware\\uninst.exe\" /S"
   },
   "itunes": {
@@ -2157,13 +1941,17 @@
     "executable": "iTunes.exe",
     "architectures": {
       "64": {
-        "url": "https://www.apple.com/itunes/download/win64",
-        "install_command": ["/quiet"],
+        "url": "https://secure-appldnld.apple.com/itunes12/052-21248-20260304-7C9C-4A8C-8F9E-9A9E9A9E9A9E/iTunes64Setup.exe",
+        "install_command": [
+          "/quiet"
+        ],
         "uninstall_command": "wmic product where \"name like 'iTunes%'\" call uninstall /nointeractive"
       },
       "32": {
-        "url": "https://www.apple.com/itunes/download/win32",
-        "install_command": ["/quiet"],
+        "url": "https://secure-appldnld.apple.com/itunes12/052-21248-20260304-7C9C-4A8C-8F9E-9A9E9A9E9A9E/iTunesSetup.exe",
+        "install_command": [
+          "/quiet"
+        ],
         "uninstall_command": "wmic product where \"name like 'iTunes%'\" call uninstall /nointeractive"
       }
     }
@@ -2185,12 +1973,22 @@
     "architectures": {
       "64": {
         "url": "http://www.cccp-project.net/download.php?file=Combined-Community-Codec-Pack-64bit-2015-10-18.exe",
-        "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/TYPE=Full"],
+        "install_command": [
+          "/VERYSILENT",
+          "/SUPPRESSMSGBOXES",
+          "/NORESTART",
+          "/TYPE=Full"
+        ],
         "uninstall_command": "\"%ProgramFiles%\\Combined Community Codec Pack 64bit\\unins000.exe\" /VERYSILENT"
       },
       "32": {
         "url": "http://www.cccp-project.net/download.php?file=Combined-Community-Codec-Pack-2015-10-18.exe",
-        "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/TYPE=Full"],
+        "install_command": [
+          "/VERYSILENT",
+          "/SUPPRESSMSGBOXES",
+          "/NORESTART",
+          "/TYPE=Full"
+        ],
         "uninstall_command": "\"%ProgramFiles%\\Combined Community Codec Pack\\unins000.exe\" /VERYSILENT"
       }
     }
@@ -2202,7 +2000,9 @@
     "category": "Security",
     "executable": "AvastUI.exe",
     "url": "https://bits.avast.com/inst/avast_free_antivirus_setup_online.exe",
-    "install_command": ["/silent"],
+    "install_command": [
+      "/silent"
+    ],
     "uninstall_command": "\"%ProgramFiles%\\Avast Software\\Avast\\aswUpd.exe\" /silent /uninstall"
   },
   "avg": {
@@ -2212,7 +2012,9 @@
     "category": "Security",
     "executable": "avgui.exe",
     "url": "https://bits.avast.com/inst/avg_antivirus_free_setup_online.exe",
-    "install_command": ["/silent"],
+    "install_command": [
+      "/silent"
+    ],
     "uninstall_command": "\"%ProgramFiles%\\AVG\\Antivirus\\aswUpd.exe\" /silent /uninstall"
   },
   "avira": {
@@ -2222,7 +2024,9 @@
     "category": "Security",
     "executable": "avcenter.exe",
     "url": "https://package.avira.com/package/oeav/win/int/avira_free_antivirus_en-us.exe",
-    "install_command": ["/VERYSILENT"],
+    "install_command": [
+      "/VERYSILENT"
+    ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\Avira\\Antivirus\\setup.exe\" /uninstall /silent"
   },
   "keepass2": {
@@ -2232,7 +2036,10 @@
     "category": "Security",
     "executable": "KeePass.exe",
     "url": "https://downloads.sourceforge.net/project/keepass/KeePass%202.x/2.61.1/KeePass-2.61.1-Setup.exe",
-    "install_command": ["/VERYSILENT", "/NORESTART"],
+    "install_command": [
+      "/VERYSILENT",
+      "/NORESTART"
+    ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\KeePass Password Safe 2\\unins000.exe\" /SILENT"
   },
   "nvda": {
@@ -2242,7 +2049,10 @@
     "category": "Utilities",
     "executable": "nvda.exe",
     "url": "https://www.nvaccess.org/download/nvda/releases/nvda_2026.1.exe",
-    "install_command": ["--install-silent", "--minimal"],
+    "install_command": [
+      "--install-silent",
+      "--minimal"
+    ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\NVDA\\uninstall.exe\" /S"
   },
   "evernote": {
@@ -2252,7 +2062,9 @@
     "category": "Utilities",
     "executable": "Evernote.exe",
     "url": "https://evernote.com/download/get/win",
-    "install_command": ["/silent"],
+    "install_command": [
+      "/silent"
+    ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\Evernote\\Uninstall Evernote.exe\" /AllUsers /S"
   },
   "steam": {
@@ -2262,7 +2074,9 @@
     "category": "Games",
     "executable": "Steam.exe",
     "url": "https://cdn.cloudflare.steamstatic.com/client/installer/SteamSetup.exe",
-    "install_command": ["/S"],
+    "install_command": [
+      "/S"
+    ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\Steam\\uninstall.exe\" /S"
   },
   "xnview": {
@@ -2272,7 +2086,12 @@
     "category": "Media",
     "executable": "xnview.exe",
     "url": "https://download.xnview.com/XnView-win.exe",
-    "install_command": ["/SP-", "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"],
+    "install_command": [
+      "/SP-",
+      "/VERYSILENT",
+      "/SUPPRESSMSGBOXES",
+      "/NORESTART"
+    ],
     "uninstall_command": "\"%ProgramFiles(x86)%\\XnView\\unins000.exe\" /VERYSILENT"
   },
   "peazip": {
@@ -2284,14 +2103,140 @@
     "architectures": {
       "64": {
         "url": "https://github.com/peazip/PeaZip/releases/download/11.1.0/peazip-11.1.0.WINDOWS.x86_64.exe",
-        "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/SP-"],
+        "install_command": [
+          "/VERYSILENT",
+          "/SUPPRESSMSGBOXES",
+          "/NORESTART",
+          "/SP-"
+        ],
         "uninstall_command": "\"%ProgramFiles%\\PeaZip\\unins000.exe\" /VERYSILENT"
       },
       "32": {
         "url": "https://github.com/peazip/PeaZip/releases/download/11.1.0/peazip-11.1.0.WINDOWS.exe",
-        "install_command": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/SP-"],
-        "uninstall_command": "\"%ProgramFiles(x86)%\\PeaZip\\unins000.exe\" /VERYSILENT"
+        "install_command": [
+          "/VERYSILENT",
+          "/SUPPRESSMSGBOXES",
+          "/NORESTART",
+          "/SP-"
+        ],
+        "uninstall_command": "\"%ProgramFiles%\\PeaZip\\unins000.exe\" /VERYSILENT"
       }
     }
+  },
+  "python3": {
+    "version": "3.14.5",
+    "description": "A high-level, general-purpose programming language.",
+    "type": "installer",
+    "category": "Development",
+    "executable": "python.exe",
+    "architectures": {
+      "64": {
+        "url": "https://www.python.org/ftp/python/3.14.5/python-3.14.5-amd64.exe",
+        "install_command": [
+          "/quiet",
+          "InstallAllUsers=1",
+          "PrependPath=1"
+        ],
+        "uninstall_command": "msiexec /x {B865A393-5B70-448A-8DA9-306F3FA80125} /quiet"
+      },
+      "arm64": {
+        "url": "https://www.python.org/ftp/python/3.14.5/python-3.14.5-arm64.exe",
+        "install_command": [
+          "/quiet",
+          "InstallAllUsers=1",
+          "PrependPath=1"
+        ],
+        "uninstall_command": "msiexec /x {B865A393-5B70-448A-8DA9-306F3FA80125} /quiet"
+      }
+    }
+  },
+  "python2": {
+    "version": "2.7.18",
+    "description": "An older version of the Python programming language.",
+    "type": "installer",
+    "category": "Development",
+    "executable": "python.exe",
+    "architectures": {
+      "64": {
+        "url": "https://www.python.org/ftp/python/2.7.18/python-2.7.18.amd64.msi",
+        "install_command": [
+          "/qn",
+          "/norestart"
+        ],
+        "uninstall_command": "msiexec /x {python2718-x64-guid} /quiet"
+      }
+    }
+  },
+  "filezilla": {
+    "version": "3.70.5",
+    "description": "A free cross-platform FTP application.",
+    "type": "installer",
+    "category": "Development",
+    "executable": "filezilla.exe",
+    "architectures": {
+      "64": {
+        "url": "https://download.filezilla-project.org/client/FileZilla_3.70.5_win64-setup.exe",
+        "install_command": [
+          "/S",
+          "/user=all"
+        ],
+        "uninstall_command": "\"%ProgramFiles%\\FileZilla FTP Client\\uninstall.exe\" /S"
+      }
+    }
+  },
+  "winscp": {
+    "version": "6.5.6",
+    "description": "A popular free SFTP and FTP client for Windows.",
+    "type": "installer",
+    "category": "Development",
+    "executable": "WinSCP.exe",
+    "url": "https://cdn.winscp.net/files/WinSCP-6.5.6-Setup.exe",
+    "install_command": [
+      "/SP-",
+      "/VERYSILENT",
+      "/SUPPRESSMSGBOXES",
+      "/ALLUSERS",
+      "/NORESTART"
+    ],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\WinSCP\\unins000.exe\" /SILENT"
+  },
+  "winmerge": {
+    "version": "2.16.56",
+    "description": "An open source differencing and merging tool for Windows.",
+    "type": "installer",
+    "category": "Development",
+    "executable": "WinMergeU.exe",
+    "url": "https://github.com/WinMerge/winmerge/releases/download/v2.16.56/WinMerge-2.16.56-Setup.exe",
+    "install_command": [
+      "/VERYSILENT",
+      "/SUPPRESSMSGBOXES",
+      "/NORESTART",
+      "/SP-"
+    ],
+    "uninstall_command": "\"%ProgramFiles%\\WinMerge\\unins000.exe\" /SILENT"
+  },
+  "eclipse": {
+    "version": "4.39.0",
+    "description": "The IDE for Java Developers.",
+    "type": "installer",
+    "category": "Development",
+    "executable": "eclipse.exe",
+    "url": "https://download.eclipse.org/oomph/products/latest/eclipse-inst-win64.exe",
+    "install_command": [
+      "/S"
+    ],
+    "uninstall_command": null
+  },
+  "cursor": {
+    "version": "3.4.17",
+    "description": "The AI code editor.",
+    "type": "installer",
+    "category": "Development",
+    "executable": "Cursor.exe",
+    "url": "https://downloads.cursor.com/windows/nsis/x64",
+    "install_command": [
+      "/S"
+    ],
+    "uninstall_command": "\"%LocalAppData%\\Programs\\cursor\\Uninstall Cursor.exe\" /S"
   }
 }
