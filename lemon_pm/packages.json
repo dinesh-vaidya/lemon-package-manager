@@ -821,13 +821,13 @@
     "executable": null
   },
   "epic-games-launcher": {
-    "url": "https://epicgames-download1.akamaized.net/Builds/UnrealEngineLauncher/Installers/EpicGamesLauncherInstaller.msi",
-    "version": "16.2.7",
+    "url": "https://launcher-public-service-prod06.ol.epicgames.com/launcher/api/installer/download/EpicGamesLauncherInstaller.msi",
+    "version": "19.2.2",
     "description": "A digital distribution platform for video games and software.",
     "install_command": [
       "/quiet"
     ],
-    "uninstall_command": "msiexec /x {F3FECF09-E5A3-4A9B-9BC3-33834B5C6E6E} /quiet",
+    "uninstall_command": "wmic product where \"name like 'Epic Games Launcher%'\" call uninstall /nointeractive",
     "type": "installer",
     "category": "Games",
     "executable": "EpicGamesLauncher.exe"
@@ -1707,7 +1707,7 @@
     "url": "https://www.spacejock.com/files/yWriter7.zip"
   },
   "google-earth-pro": {
-    "version": "latest",
+    "version": "7.3.7.1155",
     "description": "Google Earth Pro is a free-to-download desktop application that allows you to fly anywhere on Earth.",
     "type": "installer",
     "category": "Utilities",
@@ -1868,12 +1868,12 @@
     "uninstall_command": "\"%LocalAppData%\\WhatsApp\\Update.exe\" --uninstall -s"
   },
   "everything": {
-    "version": "1.4.1.1028",
+    "version": "1.4.1.1032",
     "description": "Locate files and folders by name instantly.",
     "type": "installer",
     "category": "Utilities",
     "executable": "Everything.exe",
-    "url": "https://www.voidtools.com/Everything-1.4.1.1028.x64-Setup.exe",
+    "url": "https://www.voidtools.com/Everything-1.4.1.1032.x64-Setup.exe",
     "install_command": [
       "/S"
     ],
@@ -2224,6 +2224,46 @@
     "url": "https://package.avira.com/package/oeav/win/int/avira_free_antivirus_en-us.exe",
     "install_command": ["/VERYSILENT"],
     "uninstall_command": "\"%ProgramFiles(x86)%\\Avira\\Antivirus\\setup.exe\" /uninstall /silent"
+  },
+  "keepass2": {
+    "version": "2.61.1",
+    "description": "A lightweight and easy-to-use password manager.",
+    "type": "installer",
+    "category": "Security",
+    "executable": "KeePass.exe",
+    "url": "https://downloads.sourceforge.net/project/keepass/KeePass%202.x/2.61.1/KeePass-2.61.1-Setup.exe",
+    "install_command": ["/VERYSILENT", "/NORESTART"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\KeePass Password Safe 2\\unins000.exe\" /SILENT"
+  },
+  "nvda": {
+    "version": "2026.1",
+    "description": "A free and open-source screen reader for Windows.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "nvda.exe",
+    "url": "https://www.nvaccess.org/download/nvda/releases/nvda_2026.1.exe",
+    "install_command": ["--install-silent", "--minimal"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\NVDA\\uninstall.exe\" /S"
+  },
+  "evernote": {
+    "version": "11.16.3",
+    "description": "Organize your notes, and your life.",
+    "type": "installer",
+    "category": "Utilities",
+    "executable": "Evernote.exe",
+    "url": "https://evernote.com/download/get/win",
+    "install_command": ["/silent"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\Evernote\\Uninstall Evernote.exe\" /AllUsers /S"
+  },
+  "steam": {
+    "version": "latest",
+    "description": "The ultimate destination for playing, discussing, and creating games.",
+    "type": "installer",
+    "category": "Games",
+    "executable": "Steam.exe",
+    "url": "https://cdn.cloudflare.steamstatic.com/client/installer/SteamSetup.exe",
+    "install_command": ["/S"],
+    "uninstall_command": "\"%ProgramFiles(x86)%\\Steam\\uninstall.exe\" /S"
   },
   "xnview": {
     "version": "2.52.5",
