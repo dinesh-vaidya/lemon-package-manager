@@ -661,6 +661,11 @@ def _install_package_with_arch(package_name, package_data, arch):
                 sys.stdout.write(f"\r[{'=' * done}{' ' * (50-done)}] {downloaded}/{total_size} bytes")
                 sys.stdout.flush()
         sys.stdout.write('\n')
+
+        if total_size and downloaded < total_size:
+            print(f"\nERROR: Download incomplete. Expected {total_size} bytes, got {downloaded} bytes.")
+            return False
+
         print(f"Downloaded '{filename}'.")
         os.chmod(temp_filepath, 0o755)
 
@@ -815,29 +820,31 @@ def install_package(package_name, from_chat=False, target_version=None):
             try:
                 if _install_package_with_arch(package_name, package_data, "64"):
                     return
-            except subprocess.CalledProcessError as e:
+            except (subprocess.CalledProcessError, OSError) as e:
                 # This specific error code can indicate a 64-bit app on a 32-bit OS
-                if e.winerror == 216 and "32" in package_data["architectures"]:
-                    print("64-bit installation failed, attempting 32-bit fallback.")
+                # WinError 216: This version of %1 is not compatible with the version of Windows you're running.
+                win_err = getattr(e, 'winerror', None)
+                if win_err == 216 and "32" in package_data["architectures"]:
+                    print("64-bit installation failed (Architecture mismatch), attempting 32-bit fallback.")
                     if _install_package_with_arch(package_name, package_data, "32"):
                         return
                 else:
-                    print("64-bit installation failed.")
+                    print(f"64-bit installation failed: {e}")
 
         # If 64-bit failed or wasn't attempted, try 32-bit
         if "32" in package_data["architectures"]:
             try:
                 if _install_package_with_arch(package_name, package_data, "32"):
                     return
-            except subprocess.CalledProcessError:
-                 print("32-bit installation also failed.")
+            except (subprocess.CalledProcessError, OSError) as e:
+                 print(f"32-bit installation also failed: {e}")
     else:
         # For packages without specified architectures
         try:
             if _install_package_with_arch(package_name, package_data, "N/A"):
                 return
-        except subprocess.CalledProcessError:
-            print(f"Installation failed for {package_name}.")
+        except (subprocess.CalledProcessError, OSError) as e:
+            print(f"Installation failed for {package_name}: {e}")
 
     print(f"Could not install {package_name}.")
 
