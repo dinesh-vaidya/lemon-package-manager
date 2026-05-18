@@ -642,10 +642,18 @@ def _install_package_with_arch(package_name, package_data, arch):
 
     try:
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            'User-Agent': f'LemonPackageManager/{__version__}'
         }
         response = requests.get(url, headers=headers, stream=True)
         response.raise_for_status()
+
+        # Validation: Ensure we are not downloading an HTML page (e.g., a mirror's error page or bot detection)
+        content_type = response.headers.get('content-type', '').lower()
+        if 'text/html' in content_type:
+            print(f"\nERROR: The download URL returned an HTML page instead of a binary file.")
+            print(f"URL: {url}")
+            print("This can happen if the version is no longer available on the mirror or if the request was blocked.")
+            return False
 
         filename = url.split('/')[-1]
         temp_dir = tempfile.gettempdir()
