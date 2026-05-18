@@ -465,7 +465,7 @@
     "version": "26.2.3",
     "description": "A free and open-source office productivity software suite.",
     "type": "installer",
-    "category": "Utilities",
+    "category": "Office",
     "executable": "soffice.exe",
     "architectures": {
       "64": {
@@ -624,7 +624,7 @@
     ],
     "uninstall_command": "\"%LocalAppData%\\Notion\\Update.exe\" --uninstall -s",
     "type": "installer",
-    "category": "Utilities",
+    "category": "Office",
     "executable": null
   },
   "virtualbox": {
@@ -769,7 +769,7 @@
     ],
     "uninstall_command": "\"C:\\Program Files\\Bitwarden\\Uninstall Bitwarden.exe\" /allusers /S",
     "type": "installer",
-    "category": "Utilities",
+    "category": "Security",
     "executable": "Bitwarden.exe"
   },
   "autohotkey": {
@@ -829,7 +829,7 @@
     ],
     "uninstall_command": "msiexec /x {C564B54B-E675-4562-861A-286C336A0A9F} /quiet",
     "type": "installer",
-    "category": "Utilities",
+    "category": "Security",
     "executable": "KeePassXC.exe"
   },
   "inkscape": {
@@ -916,7 +916,7 @@
     ],
     "uninstall_command": "\"%LOCALAPPDATA%\\Ollama\\uninstall.exe\" /S",
     "type": "installer",
-    "category": "Development",
+    "category": "AI",
     "executable": "ollama.exe"
   },
   "krita": {
@@ -1056,7 +1056,7 @@
     ],
     "uninstall_command": "\"%LOCALAPPDATA%\\Programs\\Joplin\\uninstall.exe\" /S",
     "type": "installer",
-    "category": "Utilities",
+    "category": "Office",
     "executable": "Joplin.exe"
   },
   "figma": {
@@ -1112,7 +1112,7 @@
     ],
     "uninstall_command": "wmic product where \"name like 'Mozilla Thunderbird%'\" call uninstall /nointeractive",
     "type": "installer",
-    "category": "Utilities",
+    "category": "Office",
     "executable": "thunderbird.exe"
   },
   "vmware-player": {
@@ -1177,7 +1177,7 @@
     "version": "8.1.0",
     "description": "A deep work task manager for developers and other professionals.",
     "type": "installer",
-    "category": "Utilities",
+    "category": "Office",
     "executable": "superProductivity.exe",
     "architectures": {
       "64": {
@@ -1363,7 +1363,7 @@
     "version": "1.7.7",
     "description": "A powerful knowledge base on top of a local folder of plain text Markdown files.",
     "type": "installer",
-    "category": "Utilities",
+    "category": "Office",
     "executable": "Obsidian.exe",
     "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.7.7/Obsidian-1.7.7.exe",
     "install_command": [
@@ -1375,7 +1375,7 @@
     "version": "latest",
     "description": "A to-do list and task manager for professionals and teams.",
     "type": "installer",
-    "category": "Utilities",
+    "category": "Office",
     "executable": "Todoist.exe",
     "url": "https://electron-dl.todoist.com/windows/Todoist-Setup.exe",
     "install_command": [
@@ -1411,7 +1411,7 @@
     "version": "0.8.1",
     "description": "A personal Kanban board application.",
     "type": "installer",
-    "category": "Utilities",
+    "category": "Office",
     "executable": "Kanri.exe",
     "url": "https://github.com/kanriapp/kanri/releases/download/v0.8.1/Kanri-0.8.1-Windows.exe",
     "install_command": [
@@ -1455,7 +1455,7 @@
     "version": "1.6.1",
     "description": "A free and open-source desktop publishing software.",
     "type": "installer",
-    "category": "Media",
+    "category": "Office",
     "executable": "Scribus.exe",
     "url": "https://downloads.sourceforge.net/project/scribus/scribus/1.6.1/scribus-1.6.1-windows-x64.exe",
     "install_command": [
@@ -1757,7 +1757,7 @@
     "version": "2026.1.1",
     "description": "A small, fast, and feature rich PDF viewer which allows you to open, view, and print any PDF file.",
     "type": "installer",
-    "category": "Utilities",
+    "category": "Office",
     "executable": "FoxitPDFReader.exe",
     "url": "https://cdn01.foxitsoftware.com/product/reader/desktop/win/2026.1.1/FoxitPDFReader202611_L10N_Setup_Prom_x64.exe",
     "install_command": [
@@ -1770,7 +1770,7 @@
     "version": "3.6.1",
     "description": "Sumatra PDF is a free PDF, eBook (ePub, Mobi), XPS, DjVu, CHM, Comic Book (CBZ and CBR) viewer for Windows.",
     "type": "installer",
-    "category": "Utilities",
+    "category": "Office",
     "executable": "SumatraPDF.exe",
     "architectures": {
       "64": {
@@ -1787,7 +1787,7 @@
     "version": "4.0.1.3",
     "description": "CutePDF Writer is the free version of commercial PDF creation software.",
     "type": "installer",
-    "category": "Utilities",
+    "category": "Office",
     "executable": "CuteWriter.exe",
     "url": "https://www.cutepdf.com/download/CuteWriter.exe",
     "install_command": [
@@ -2096,7 +2096,7 @@
     "version": "11.16.3",
     "description": "Organize your notes, and your life.",
     "type": "installer",
-    "category": "Utilities",
+    "category": "Office",
     "executable": "Evernote.exe",
     "url": "https://evernote.com/download/get/win",
     "install_command": [
@@ -2268,7 +2268,7 @@
     "version": "3.4.17",
     "description": "The AI code editor.",
     "type": "installer",
-    "category": "Development",
+    "category": "AI",
     "executable": "Cursor.exe",
     "url": "https://downloads.cursor.com/windows/nsis/x64",
     "install_command": [
@@ -2446,5 +2446,65 @@
       "/qn"
     ],
     "uninstall_command": "wmic product where \"name like 'Open-Shell%'\" call uninstall /nointeractive"
+  },
+  "claude-desktop": {
+    "version": "latest",
+    "description": "The desktop application for Claude, an AI assistant from Anthropic.",
+    "type": "installer",
+    "category": "AI",
+    "executable": "Claude.exe",
+    "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe",
+    "install_command": [
+      "--silent"
+    ],
+    "uninstall_command": "\"%LocalAppData%\\AnthropicClaude\\Update.exe\" --uninstall -s"
+  },
+  "jan": {
+    "version": "0.7.9",
+    "description": "Jan is an open source alternative to ChatGPT that runs 100% offline on your computer.",
+    "type": "installer",
+    "category": "AI",
+    "executable": "Jan.exe",
+    "url": "https://github.com/janhq/jan/releases/download/v0.7.9/Jan_0.7.9_x64-setup.exe",
+    "install_command": [
+      "/S"
+    ],
+    "uninstall_command": "\"%LocalAppData%\\Programs\\jan\\Uninstall Jan.exe\" /S"
+  },
+  "gpt4all": {
+    "version": "3.10.0",
+    "description": "A free-to-use, locally running, privacy-aware chatbot. No GPU or internet required.",
+    "type": "installer",
+    "category": "AI",
+    "executable": "bin/gpt4all.exe",
+    "url": "https://gpt4all.io/installers/gpt4all-installer-win64.exe",
+    "install_command": [
+      "/S"
+    ],
+    "uninstall_command": "\"%ProgramFiles%\\gpt4all\\maintenancetool.exe\" --script \"%ProgramFiles%\\gpt4all\\uninstall_script.qs\""
+  },
+  "anything-llm": {
+    "version": "1.12.1",
+    "description": "The all-in-one local AI stack for everyone. Chat with your docs, use any LLM, and full control.",
+    "type": "installer",
+    "category": "AI",
+    "executable": "AnythingLLM.exe",
+    "url": "https://github.com/Mintplex-Labs/anything-llm/releases/download/v1.12.1/AnythingLLMDesktop.exe",
+    "install_command": [
+      "/S"
+    ],
+    "uninstall_command": "\"%LocalAppData%\\Programs\\anythingllm-desktop\\Uninstall AnythingLLM.exe\" /S"
+  },
+  "claude-code": {
+    "version": "2.1.143",
+    "description": "Claude Code is a command-line interface (CLI) for agentic coding with Claude.",
+    "type": "installer",
+    "category": "AI",
+    "executable": "claude.exe",
+    "url": "https://downloads.claude.ai/claude-code-releases/2.1.143/win32-x64/claude.exe",
+    "install_command": [
+      "install"
+    ],
+    "uninstall_command": null
   }
 }

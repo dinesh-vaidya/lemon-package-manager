@@ -1227,7 +1227,7 @@ def main():
     list_parser.add_argument('category', nargs='?', default=None, help='The category to filter by')
 
     # 'categories' command
-    categories_parser = subparsers.add_parser('categories', help='List all available package categories')
+    categories_parser = subparsers.add_parser('categories', aliases=['cat', 'cats'], help='List all available package categories')
 
     # 'run' command
     run_parser = subparsers.add_parser('run', help='Run an installed package')
@@ -1265,7 +1265,7 @@ def main():
         run_package(args.package_name)
     elif args.command == 'list':
         list_packages(args.category)
-    elif args.command == 'categories':
+    elif args.command in ['categories', 'cat', 'cats']:
         list_categories()
     elif args.command == 'version':
         print(f"Lemon Package Manager version {__version__} (status: {__status__})")
