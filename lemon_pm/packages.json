@@ -408,6 +408,13 @@
           "/S"
         ],
         "uninstall_command": "\"%ProgramFiles%\\qBittorrent\\uninst.exe\" /S"
+      },
+      "32": {
+        "url": "https://altushost-swe.dl.sourceforge.net/project/qbittorrent/qbittorrent-win32/qbittorrent-5.2.0/qbittorrent_5.2.0_setup.exe",
+        "install_command": [
+          "/S"
+        ],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\qBittorrent\\uninst.exe\" /S"
       }
     }
   },
@@ -1832,7 +1839,7 @@
     "type": "installer",
     "category": "Media",
     "executable": "Winamp.exe",
-    "url": "https://download.nullsoft.com/winamp/client/winamp592_10042_full_en-us.exe",
+    "url": "https://download.winamp.com/winamp/winamp_latest_full.exe",
     "install_command": [
       "/S"
     ],
@@ -1912,7 +1919,7 @@
     "uninstall_command": "%SystemRoot%\\SysWOW64\\OneDriveSetup.exe /uninstall"
   },
   "sugarsync": {
-    "version": "latest",
+    "version": "3.10.3.4",
     "description": "Cloud file sharing, online backup, and syncing service.",
     "type": "installer",
     "category": "Utilities",
@@ -1971,14 +1978,14 @@
     "executable": "iTunes.exe",
     "architectures": {
       "64": {
-        "url": "https://secure-appldnld.apple.com/itunes12/052-21248-20260304-7C9C-4A8C-8F9E-9A9E9A9E9A9E/iTunes64Setup.exe",
+        "url": "https://secure-appldnld.apple.com/itunes12/047-76416-20260302-fefe4356-211d-4da1-8bc4-058eb36ea803/iTunes64Setup.exe",
         "install_command": [
           "/quiet"
         ],
         "uninstall_command": "wmic product where \"name like 'iTunes%'\" call uninstall /nointeractive"
       },
       "32": {
-        "url": "https://secure-appldnld.apple.com/itunes12/052-21248-20260304-7C9C-4A8C-8F9E-9A9E9A9E9A9E/iTunesSetup.exe",
+        "url": "https://secure-appldnld.apple.com/itunes12/047-76416-20260302-fefe4356-211d-4da1-8bc4-058eb36ea803/iTunesSetup.exe",
         "install_command": [
           "/quiet"
         ],
@@ -1992,7 +1999,7 @@
     "type": "portable",
     "category": "Media",
     "executable_name": "MusicBee.exe",
-    "url": "https://getmusicbee.com/download/latest/MusicBeeSetup_3_6_9403.zip"
+    "url": "https://getmusicbee.com/download/latest/MusicBeeSetup.zip"
   },
   "cccp": {
     "version": "2015.10.19",
@@ -2029,7 +2036,7 @@
     "type": "installer",
     "category": "Security",
     "executable": "AvastUI.exe",
-    "url": "https://bits.avast.com/inst/avast_free_antivirus_setup_online.exe",
+    "url": "https://bits.avcdn.net/inst/avast_free_antivirus_setup_online.exe",
     "install_command": [
       "/silent"
     ],
@@ -2041,7 +2048,7 @@
     "type": "installer",
     "category": "Security",
     "executable": "avgui.exe",
-    "url": "https://bits.avast.com/inst/avg_antivirus_free_setup_online.exe",
+    "url": "https://install.avcdn.net/avg/iavs9x/avg_antivirus_free_setup.exe",
     "install_command": [
       "/silent"
     ],

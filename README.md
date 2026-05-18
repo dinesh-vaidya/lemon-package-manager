@@ -16,6 +16,10 @@ A simple, command-line package manager for Windows devices, designed to quickly 
 -   **Administrator Check:** Automatically detects if administrator privileges are needed and provides clear instructions.
 -   **Simple and Lightweight:** No complex dependencies or configuration required.
 
+## Development Note (Sandbox Context)
+
+The Lemon Package Manager is currently being developed in a **May 2026** sandbox environment. As such, software versions and download URLs in `packages.json` reflect the verified stable releases available as of May 2026 (e.g., Python 3.14.5, 7-Zip 26.01, VLC 3.0.23). These "futuristic" versions are intentionally included for development and testing within this timeframe.
+
 ## Installation
 
 ### Prerequisites
