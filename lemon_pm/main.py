@@ -553,6 +553,16 @@ def get_exe_version(filepath):
 
 def find_installed_executable(package_data):
     """Finds the path to an installed executable based on package data."""
+    package_type = package_data.get('type', 'installer')
+
+    if package_type == 'portable':
+        executable_name = package_data.get('executable_name')
+        if not executable_name:
+            return None
+        bin_dir = get_portable_bin_dir()
+        path = pathlib.Path(bin_dir) / executable_name
+        return str(path) if path.exists() else None
+
     arches_to_check = []
     if "architectures" in package_data:
         arches_to_check.extend(package_data["architectures"].keys())
@@ -892,75 +902,17 @@ def run_package(package_name):
         return
 
     package_data = packages[package_name]
-    package_type = package_data.get('type', 'installer')
 
     try:
-        executable_path = None
-        if package_type == 'portable':
-            executable_name = package_data.get('executable_name')
-            if not executable_name:
-                print(f"Error: No executable_name defined for portable package '{package_name}'.")
-                return
-            bin_dir = get_portable_bin_dir()
-            executable_path = pathlib.Path(bin_dir) / executable_name
-
-        else: # 'installer' type
-            executable = package_data.get('executable')
-            if not executable:
-                print(f"Error: No executable defined for '{package_name}'. Cannot run.")
-                return
-
-            uninstall_command = package_data.get('uninstall_command')
-            if not uninstall_command:
-                # If there's no uninstall command, we can't infer the path.
-                # This is a limitation for now.
-                print(f"Error: Cannot determine installation directory for '{package_name}' without an uninstall_command.")
-                return
-
-            # First, expand environment variables in the uninstall command path
-            if sys.platform == 'win32':
-                replacements = {
-                    '%ProgramFiles%': os.environ.get('ProgramW6432', os.environ.get('ProgramFiles')),
-                    '%ProgramFiles(x86)%': os.environ.get('ProgramFiles(x86)', os.environ.get('ProgramFiles')),
-                    '%LOCALAPPDATA%': os.environ.get('LOCALAPPDATA'),
-                    '%APPDATA%': os.environ.get('APPDATA')
-                }
-                for var, val in replacements.items():
-                    if val and uninstall_command:
-                        uninstall_command = uninstall_command.replace(var, val)
-
-            # Use shlex to handle quotes and split the command
-            parts = shlex.split(uninstall_command)
-            if not parts:
-                raise ValueError("Uninstall command is empty.")
-
-            # The first part is usually the path to the uninstaller
-            uninstaller_path = pathlib.Path(parts[0])
-            install_dir = uninstaller_path.parent
-
-            # For some apps, the uninstaller is in a sub-folder (e.g., .../Installer/setup.exe)
-            # We might need to go up one level. A simple check: if parent is "Installer", go up.
-            if install_dir.name.lower() == 'installer':
-                install_dir = install_dir.parent
-
-            executable_path = install_dir / executable
-
-            if not executable_path.exists():
-                # Second guess: maybe it's in a subdirectory like 'bin'
-                if (install_dir / 'bin' / executable).exists():
-                    executable_path = install_dir / 'bin' / executable
-                else:
-                    print(f"Error: Could not find executable '{executable}' at '{executable_path}'")
-                    print("The installation directory was inferred as:", install_dir)
-                    return
-
-        if not executable_path or not executable_path.exists():
-            print(f"Error: Executable path not found or does not exist: {executable_path}")
+        executable_path = find_installed_executable(package_data)
+        if not executable_path:
+            print(f"Error: Could not find installed executable for '{package_name}'.")
+            print("Make sure the package is installed and its path is correct.")
             return
 
-        print(f"Launching '{executable_path.name}' from '{executable_path}'...")
+        print(f"Launching '{package_name}' from '{executable_path}'...")
         # Use Popen to launch the process in the background without blocking the terminal.
-        subprocess.Popen([str(executable_path)], shell=False)
+        subprocess.Popen([executable_path], shell=False)
 
     except Exception as e:
         print(f"An error occurred while trying to run {package_name}: {e}")
