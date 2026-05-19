@@ -1,6 +1,6 @@
 # lemon package manager 🍋
 
-![version](https://img.shields.io/badge/version-1.1.1-blue) ![status](https://img.shields.io/badge/status-beta-orange) ![license](https://img.shields.io/badge/license-MIT-green)
+![version](https://img.shields.io/badge/version-1.1.2-blue) ![status](https://img.shields.io/badge/status-beta-orange) ![license](https://img.shields.io/badge/license-MIT-green)
 
 A simple, command-line package manager for Windows devices, designed to quickly install popular applications from the terminal.
 
@@ -10,7 +10,8 @@ A simple, command-line package manager for Windows devices, designed to quickly 
 -   **Uninstall Packages:** Silently uninstalls packages using robust, version-agnostic methods.
 -   **Run Applications:** Launch installed applications directly from the terminal.
 -   **Categorized Package List:** View all available software, neatly grouped by category, with real-time installation status.
--   **AI Chat Assistant:** Manage packages using natural language with built-in smart suggestions and fuzzy search.
+-   **AI Tools Support:** Native support for modern AI tools like Claude, GPT4All, and Jan.
+-   **AI Chat Assistant:** Manage packages using natural language with built-in smart suggestions, fuzzy search, and a friendly personality.
 -   **Software Detection:** Automatically detects software already installed on your system, even if not installed via LPM.
 -   **External Management:** LPM can 'adopt' manually installed software to handle future upgrades and uninstalls.
 -   **Administrator Check:** Automatically detects if administrator privileges are needed and provides clear instructions.
@@ -55,13 +56,17 @@ lemon list
 lpm list Development
 ```
 
-### `lemon categories` or `lpm categories`
+### `lemon categories` or `lpm categories` (Aliases: `cat`, `cats`)
 
 To see a list of all available package categories.
 
 ```bash
 # Example
 lemon categories
+
+# Using aliases
+lpm cat
+lpm cats
 ```
 
 ### `lemon install <package_name>[@version]` or `lpm install <package_name>[@version]`
@@ -133,7 +138,7 @@ To see the current version of the `lemon-pm` tool.
 ```bash
 # Example
 lemon version
-# Output: Lemon Package Manager version 1.1.1 (status: beta)
+# Output: Lemon Package Manager version 1.1.2 (status: beta)
 ```
 
 ### `lemon help` or `lpm help`
@@ -170,10 +175,11 @@ You can use the following commands in the chat:
 - `exit`: Close the chat session.
 
 The assistant also has some smart features:
-- **Smart Suggestions**: If you ask for a category (e.g., "browser" or "media player"), the assistant will suggest relevant packages from that category.
-- **Fuzzy Search**: If you misspell a package name during an `install` command, the assistant will try to guess what you meant and ask for confirmation.
+- **Smart Suggestions**: If you ask for a category (e.g., "browser" or "AI"), the assistant will suggest relevant packages from that category.
+- **Fuzzy Search & Command Aliases**: Understands natural language variations like "get", "add", "find", and "remove", and catches common misspellings.
+- **Help System**: Type "help" within the chat to see a structured overview of available features.
 - **Package Count**: You can ask "how many packages are there?" to get the total count.
-- **Conversational**: Responds politely to "thanks" or "ok".
+- **Conversational**: Responds politely to greetings and affirmations with a friendly personality.
 
 ```bash
 # Example

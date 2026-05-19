@@ -63,28 +63,30 @@ def sync_archive():
 def chat():
     """Starts an interactive chat session to manage packages."""
     console = Console()
-    console.print("--- Welcome to Lemon Package Manager Chat ---", style="bold yellow")
+    console.print("--- Welcome to Lemon Package Manager AI Chat ---", style="bold yellow")
 
     if sys.platform == 'win32' and not is_admin():
         console.print("WARNING: Running without administrator privileges. You will not be able to install or uninstall packages.", style="bold yellow")
 
     console.print("Assistant:", style="bold cyan", end=" ")
-    typewriter_effect("I can help you manage packages. Here are the commands you can use:", console, style="grey50")
-    console.print("  list, search <pkg>, install <pkg>[@version], check, upgrade [pkg], update, info <pkg>, uninstall <pkg>, exit", style="grey50")
+    typewriter_effect(f"Hello! I'm your Lemon PM assistant (version {__version__}).", console, style="grey50")
+    console.print("Assistant:", style="bold cyan", end=" ")
+    typewriter_effect("I can help you search, install, and manage your software. Try asking for a category like 'AI' or just 'list' everything.", console, style="grey50")
+    console.print("Available commands: list, search, install, check, upgrade, update, info, uninstall, exit", style="dim grey50")
 
     packages = get_packages()
-
     package_names = list(packages.keys())
+
     goodbye_messages = [
-        "Goodbye!",
-        "See you later!",
-        "Happy to help. Bye!",
-        "Take care!"
+        "Goodbye! Have a great day!",
+        "See you later! Happy computing!",
+        "Happy to help. Come back anytime!",
+        "Take care! Your system is now a little more lemony."
     ]
 
     while True:
         try:
-            console.print("User:", style="bold green", end=" ")
+            console.print("\nUser:", style="bold green", end=" ")
             user_input = input().lower().strip()
 
             if not user_input:
@@ -95,34 +97,51 @@ def chat():
                 typewriter_effect(random.choice(goodbye_messages), console)
                 break
 
-            if user_input in ["ok", "okay", "thanks", "thank you"]:
+            if user_input in ["ok", "okay", "thanks", "thank you", "hello", "hi"]:
                 console.print("Assistant:", style="bold cyan", end=" ")
-                typewriter_effect("You're welcome! Is there anything else I can help with?", console, style="grey50")
+                if user_input in ["hello", "hi"]:
+                    typewriter_effect("Hello! How can I assist you with your packages today?", console, style="grey50")
+                else:
+                    typewriter_effect("You're very welcome! Is there anything else you'd like to do?", console, style="grey50")
             elif any(p in user_input for p in ["how many", "number of", "total", "count"]) and "packages" in user_input:
                 handle_package_count(packages, console)
             elif handle_smart_suggestions(user_input, packages, console):
                 pass  # Handled in the function
-            elif user_input.startswith("list") or user_input.startswith("show me"):
+            elif user_input.startswith("list") or user_input.startswith("show me") or user_input == "ls":
                 handle_list_packages(packages, console)
-            elif user_input.startswith("search"):
+            elif user_input.startswith("search") or user_input.startswith("find"):
                 handle_search(user_input, package_names, console)
-            elif user_input.startswith("info"):
+            elif user_input.startswith("info") or user_input.startswith("about"):
                 handle_info(user_input, packages, console)
-            elif user_input.startswith("uninstall"):
+            elif user_input.startswith("uninstall") or user_input.startswith("remove"):
                 handle_uninstall(user_input, package_names, console)
-            elif user_input.startswith("install"):
+            elif user_input.startswith("install") or user_input.startswith("get") or user_input.startswith("add"):
                 handle_install(user_input, package_names, console)
             elif user_input.startswith("upgrade"):
                 handle_upgrade(user_input, console)
-            elif user_input.startswith("check"):
+            elif user_input.startswith("check") or "updates" in user_input:
                 check_updates()
-            elif user_input.startswith("update"):
+            elif user_input.startswith("update") or user_input == "sync":
                 sync_archive()
-            elif any(p in user_input for p in ["check for updates", "any updates", "available updates"]):
-                check_updates()
-            else:
+            elif user_input in ["help", "help me", "?"]:
                 console.print("Assistant:", style="bold cyan", end=" ")
-                typewriter_effect("I'm not sure how to help with that. You can ask me to 'list', 'search', 'install', 'check', 'upgrade', 'update', 'info', or 'uninstall'.", console)
+                typewriter_effect("I can help with the following tasks:", console, style="grey50")
+                console.print("  - [bold]List[/bold]: Show all packages or filtered by category.")
+                console.print("  - [bold]Search[/bold]: Find a specific package by name.")
+                console.print("  - [bold]Install[/bold]: Download and set up a new application.")
+                console.print("  - [bold]Info[/bold]: Get details about a specific software.")
+                console.print("  - [bold]Upgrade[/bold]: Update your installed apps to the latest version.")
+                console.print("  - [bold]Uninstall[/bold]: Remove software from your system.")
+            else:
+                # Fuzzy matching for common commands
+                commands = ["list", "install", "uninstall", "search", "info", "upgrade", "check", "update"]
+                closest = difflib.get_close_matches(user_input.split()[0], commands, n=1, cutoff=0.6)
+
+                console.print("Assistant:", style="bold cyan", end=" ")
+                if closest:
+                    typewriter_effect(f"I didn't quite catch that. Did you mean '{closest[0]}'? If not, you can type 'help' to see what I can do.", console)
+                else:
+                    typewriter_effect("I'm not sure how to help with that. You can ask me to 'list', 'search', 'install', or type 'help' for more options.", console)
 
         except (KeyboardInterrupt, EOFError):
             print("\n")
@@ -293,51 +312,59 @@ def demo():
     console = Console()
     console.print("--- Lemon Package Manager Demo ---", style="bold yellow")
 
-    typewriter_effect("\n1. List all available packages:", console)
+    typewriter_effect("\n1. List all available packages (Animated/Typewriter):", console)
     console.print("$ lemon list", style="cyan")
-    list_packages(animate=True)
+    console.print("[dim](Tip: Press Ctrl+C during the list animation to skip to the end)[/dim]")
+    try:
+        list_packages(animate=True)
+    except KeyboardInterrupt:
+        console.print("\n[yellow]List animation skipped by user.[/yellow]")
 
     typewriter_effect("\n2. List packages in a specific category:", console)
-    console.print("$ lemon list Utilities", style="cyan")
-    list_packages(category_filter="Utilities", animate=True)
+    console.print("$ lemon list AI", style="cyan")
+    list_packages(category_filter="AI", animate=False)
 
     typewriter_effect("\n3. Install a package (Supports EXE, MSI, MSIX, and Portable):", console)
-    console.print("$ lemon install 7-zip", style="cyan")
-    typewriter_effect("   (This will download and silently run the installer for 7-zip)", console)
+    console.print("$ lemon install claude-code", style="cyan")
+    typewriter_effect("   (This will download and silently run the installer for Claude Code)", console)
 
-    typewriter_effect("\n4. Uninstall a package:", console)
+    typewriter_effect("\n4. Install a specific version of a package:", console)
+    console.print("$ lemon install vscode@1.96.2", style="cyan")
+    typewriter_effect("   (Downloads and installs the exact version requested)", console)
+
+    typewriter_effect("\n5. Uninstall a package:", console)
     console.print("$ lemon uninstall 7-zip", style="cyan")
     typewriter_effect("   (This will silently run the uninstaller for 7-zip)", console)
 
-    typewriter_effect("\n5. Check for updates:", console)
+    typewriter_effect("\n6. Check for updates:", console)
     console.print("$ lemon check", style="cyan")
     typewriter_effect("   (Shows a table of packages with newer versions available)", console)
 
-    typewriter_effect("\n6. Upgrade packages interactively:", console)
+    typewriter_effect("\n7. Upgrade packages interactively:", console)
     console.print("$ lemon upgrade", style="cyan")
     typewriter_effect("   (Prompts to upgrade all or specific outdated packages)", console)
 
-    typewriter_effect("\n7. Sync the package archive:", console)
+    typewriter_effect("\n8. Sync the package archive:", console)
     console.print("$ lemon update", style="cyan")
     typewriter_effect("   (Fetches the latest package definitions from the remote repo)", console)
 
-    typewriter_effect("\n8. Run a package:", console)
-    console.print("$ lemon run 7-zip", style="cyan")
-    typewriter_effect("   (This will attempt to launch the main executable for 7-zip)", console)
+    typewriter_effect("\n9. Run a package:", console)
+    console.print("$ lemon run vscode", style="cyan")
+    typewriter_effect("   (This will attempt to launch the main executable for VS Code)", console)
 
-    typewriter_effect("\n9. List all available categories:", console)
-    console.print("$ lemon categories", style="cyan")
+    typewriter_effect("\n10. List all available categories (with aliases):", console)
+    console.print("$ lemon cat", style="cyan")
     list_categories()
 
-    typewriter_effect("\n10. Chat with the Assistant (Smart suggestions, fuzzy search):", console)
+    typewriter_effect("\n11. Chat with the AI Assistant (Smart suggestions, fuzzy search):", console)
     console.print("$ lemon chat", style="cyan")
     typewriter_effect("   (Starts an interactive session to manage packages with natural language)", console)
 
-    typewriter_effect("\n11. Show the version of lemon-pm:", console)
+    typewriter_effect("\n12. Show the version of lemon-pm:", console)
     console.print("$ lemon version", style="cyan")
     console.print(f"Lemon Package Manager version {__version__} (status: {__status__})")
 
-    typewriter_effect("\n12. Uninstall the lemon package manager itself:", console)
+    typewriter_effect("\n13. Uninstall the lemon package manager itself:", console)
     console.print("$ lemon uninstall-lpm", style="cyan")
     typewriter_effect("   (This will prompt for confirmation before uninstalling)", console)
 
@@ -449,7 +476,7 @@ def list_packages(category_filter=None, animate=False):
                 for pkg in categorized_packages[category]:
                     table.add_row(pkg['name'], pkg['version'], f"[{pkg['status_style']}]{pkg['status']}[/]", pkg['description'])
                     live.update(table)
-                    time.sleep(0.1)
+                    time.sleep(0.2)
 
     console.print("End of list.", style="bold white")
 
