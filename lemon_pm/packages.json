@@ -2507,18 +2507,37 @@
     ],
     "uninstall_command": null
   },
-  "scratch": {
-    "version": "3.30.0",
-    "description": "With Scratch, you can program your own interactive stories, games, and animations — and share your creations with others in the online community.",
+  "bun": {
+    "version": "1.1.38",
+    "description": "Bun is an incredibly fast JavaScript runtime, bundler, transpiler, and package manager \u2014 all in one.",
+    "type": "portable",
+    "category": "Development",
+    "executable_name": "bun.exe",
+    "url": "https://github.com/oven-sh/bun/releases/download/bun-v1.1.38/bun-windows-x64.zip"
+  },
+  "deno": {
+    "version": "2.1.4",
+    "description": "Deno is a simple, modern and secure runtime for JavaScript and TypeScript that uses V8 and is built in Rust.",
+    "type": "portable",
+    "category": "Development",
+    "executable_name": "deno.exe",
+    "url": "https://github.com/denoland/deno/releases/download/v2.1.4/deno-x86_64-pc-windows-msvc.zip"
+  },
+  "go": {
+    "version": "1.23.4",
+    "description": "Go is an open source programming language that makes it easy to build simple, reliable, and efficient software.",
     "type": "installer",
-    "category": "Education",
-    "executable": "Scratch.exe",
-    "url": "https://downloads.scratch.mit.edu/desktop/Scratch%20Setup.exe",
-    "install_command": [
-      "/allusers",
-      "/S"
-    ],
-    "uninstall_command": "\"%ProgramFiles%\\Scratch 3\\Uninstall Scratch 3.exe\" /S"
+    "category": "Development",
+    "executable": "go.exe",
+    "architectures": {
+      "64": {
+        "url": "https://dl.google.com/go/go1.23.4.windows-amd64.msi",
+        "install_command": [
+          "/qn"
+        ],
+        "uninstall_command": "wmic product where \"name like 'Go Programming Language%'\" call uninstall /nointeractive"
+      }
+    }
   },
   "godot": {
     "version": "4.3",
@@ -2536,6 +2555,29 @@
       }
     }
   },
+  "love": {
+    "version": "11.5",
+    "description": "L\u00d6VE is an *awesome* framework you can use to make 2D games in Lua. It's free, open-source, and works on Windows, macOS, Linux, Android and iOS.",
+    "type": "installer",
+    "category": "Development",
+    "executable": "love.exe",
+    "architectures": {
+      "64": {
+        "url": "https://github.com/love2d/love/releases/download/11.5/love-11.5-win64.exe",
+        "install_command": [
+          "/S"
+        ],
+        "uninstall_command": "\"%ProgramFiles%\\L\u00d6VE\\uninstall.exe\" /S"
+      },
+      "32": {
+        "url": "https://github.com/love2d/love/releases/download/11.5/love-11.5-win32.exe",
+        "install_command": [
+          "/S"
+        ],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\L\u00d6VE\\uninstall.exe\" /S"
+      }
+    }
+  },
   "lua": {
     "version": "5.4.2",
     "description": "A powerful, efficient, lightweight, embeddable scripting language.",
@@ -2550,5 +2592,99 @@
         "url": "https://sourceforge.net/projects/luabinaries/files/5.4.2/Tools%20Executables/lua-5.4.2_Win32_bin.zip/download"
       }
     }
+  },
+  "nodejs": {
+    "version": "23.5.0",
+    "description": "Node.js is a JavaScript runtime built on Chromes V8 JavaScript engine.",
+    "type": "installer",
+    "category": "Development",
+    "executable": "node.exe",
+    "architectures": {
+      "64": {
+        "url": "https://nodejs.org/dist/v23.5.0/node-v23.5.0-x64.msi",
+        "install_command": [
+          "/qn"
+        ],
+        "uninstall_command": "wmic product where \"name like 'Node.js%'\" call uninstall /nointeractive"
+      }
+    }
+  },
+  "ruby": {
+    "version": "3.3.1-1",
+    "description": "RubyInstaller is a self-contained Windows-based installer that includes the Ruby language, execution environment, important documentation, and more.",
+    "type": "installer",
+    "category": "Development",
+    "executable": "ruby.exe",
+    "architectures": {
+      "64": {
+        "url": "https://github.com/oneclick/rubyinstaller2/releases/download/RubyInstaller-3.3.1-1/rubyinstaller-3.3.1-1-x64.exe",
+        "install_command": [
+          "/verysilent",
+          "/tasks=\"assocfiles,modpath\""
+        ],
+        "uninstall_command": "\"%ProgramFiles%\\Ruby33-x64\\unins000.exe\" /verysilent"
+      },
+      "32": {
+        "url": "https://github.com/oneclick/rubyinstaller2/releases/download/RubyInstaller-3.3.1-1/rubyinstaller-3.3.1-1-x86.exe",
+        "install_command": [
+          "/verysilent",
+          "/tasks=\"assocfiles,modpath\""
+        ],
+        "uninstall_command": "\"%ProgramFiles(x86)%\\Ruby33\\unins000.exe\" /verysilent"
+      }
+    }
+  },
+  "rust": {
+    "version": "latest",
+    "description": "Rust is a multi-paradigm, general-purpose programming language. Rust emphasizes performance, type-safety, and concurrency.",
+    "type": "installer",
+    "category": "Development",
+    "executable": "rustc.exe",
+    "architectures": {
+      "64": {
+        "url": "https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe",
+        "install_command": [
+          "-y"
+        ],
+        "uninstall_command": "rustup self uninstall -y"
+      }
+    }
+  },
+  "scratch": {
+    "version": "3.30.0",
+    "description": "With Scratch, you can program your own interactive stories, games, and animations \u2014 and share your creations with others in the online community.",
+    "type": "installer",
+    "category": "Education",
+    "executable": "Scratch.exe",
+    "url": "https://downloads.scratch.mit.edu/desktop/Scratch%20Setup.exe",
+    "install_command": [
+      "/allusers",
+      "/S"
+    ],
+    "uninstall_command": "\"%ProgramFiles%\\Scratch 3\\Uninstall Scratch 3.exe\" /S"
+  },
+  "strawberry-perl": {
+    "version": "5.40.4.1",
+    "description": "Strawberry Perl is a perl environment for MS Windows containing all you need to run and develop perl applications.",
+    "type": "installer",
+    "category": "Development",
+    "executable": "perl.exe",
+    "architectures": {
+      "64": {
+        "url": "https://github.com/StrawberryPerl/Perl-Dist-Strawberry/releases/download/SP_54041_64bit/strawberry-perl-5.40.4.1-64bit.msi",
+        "install_command": [
+          "/qn"
+        ],
+        "uninstall_command": "msiexec /x {85C309C5-5A0D-4B9F-8975-B6D7A73F1C42} /qn"
+      }
+    }
+  },
+  "zig": {
+    "version": "0.13.0",
+    "description": "Zig is a general-purpose programming language and toolchain for maintaining robust, optimal and reusable software.",
+    "type": "portable",
+    "category": "Development",
+    "executable_name": "zig.exe",
+    "url": "https://ziglang.org/download/0.13.0/zig-windows-x86_64-0.13.0.zip"
   }
 }
