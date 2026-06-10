@@ -580,8 +580,8 @@
     "executable": null
   },
   "cpu-z": {
-    "url": "https://download.cpuid.com/cpu-z/cpu-z_2.10-en.exe",
-    "version": "2.10",
+    "url": "https://download.cpuid.com/cpu-z/cpu-z_2.11-en.exe",
+    "version": "2.11",
     "description": "A freeware system profiling and monitoring application for Microsoft Windows and Android that detects the central processing unit, RAM, motherboard chip-set, and other hardware features of a modern personal computer.",
     "install_command": [
       "/S"

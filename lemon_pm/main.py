@@ -556,12 +556,18 @@ def find_installed_executable(package_data):
     package_type = package_data.get('type', 'installer')
 
     if package_type == 'portable':
-        executable_name = package_data.get('executable_name')
-        if not executable_name:
-            return None
+        executable_names = [package_data.get('executable_name')]
+        if "architectures" in package_data:
+            for arch in package_data["architectures"].values():
+                if 'executable_name' in arch:
+                    executable_names.append(arch['executable_name'])
+
         bin_dir = get_portable_bin_dir()
-        path = pathlib.Path(bin_dir) / executable_name
-        return str(path) if path.exists() else None
+        for executable_name in filter(None, executable_names):
+            path = pathlib.Path(bin_dir) / executable_name
+            if path.exists():
+                return str(path)
+        return None
 
     arches_to_check = []
     if "architectures" in package_data:
@@ -728,7 +734,14 @@ def _install_package_with_arch(package_name, package_data, arch):
             return True
         elif package_type == 'portable':
             bin_dir = get_portable_bin_dir()
-            executable_name = package_data.get('executable_name', filename)
+            # Check architecture specific executable name first
+            executable_name = None
+            if "architectures" in package_data and arch in package_data["architectures"]:
+                executable_name = package_data["architectures"][arch].get('executable_name')
+
+            if not executable_name:
+                executable_name = package_data.get('executable_name', filename)
+
             final_filepath = os.path.join(bin_dir, executable_name)
             os.makedirs(os.path.dirname(final_filepath), exist_ok=True)
 
