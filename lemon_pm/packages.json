@@ -580,8 +580,8 @@
     "executable": null
   },
   "cpu-z": {
-    "url": "https://download.cpuid.com/cpu-z/cpu-z_2.10-en.exe",
-    "version": "2.10",
+    "url": "https://download.cpuid.com/cpu-z/cpu-z_2.11-en.exe",
+    "version": "2.11",
     "description": "A freeware system profiling and monitoring application for Microsoft Windows and Android that detects the central processing unit, RAM, motherboard chip-set, and other hardware features of a modern personal computer.",
     "install_command": [
       "/S"
@@ -2506,5 +2506,49 @@
       "install"
     ],
     "uninstall_command": null
+  },
+  "scratch": {
+    "version": "3.30.0",
+    "description": "With Scratch, you can program your own interactive stories, games, and animations — and share your creations with others in the online community.",
+    "type": "installer",
+    "category": "Education",
+    "executable": "Scratch.exe",
+    "url": "https://downloads.scratch.mit.edu/desktop/Scratch%20Setup.exe",
+    "install_command": [
+      "/allusers",
+      "/S"
+    ],
+    "uninstall_command": "\"%ProgramFiles%\\Scratch 3\\Uninstall Scratch 3.exe\" /S"
+  },
+  "godot": {
+    "version": "4.3",
+    "description": "Godot Engine is a free, all-in-one, cross-platform game engine that makes it easy for you to create 2D and 3D games.",
+    "type": "portable",
+    "category": "Development",
+    "architectures": {
+      "64": {
+        "url": "https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_win64.exe.zip",
+        "executable_name": "Godot_v4.3-stable_win64.exe"
+      },
+      "32": {
+        "url": "https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_win32.exe.zip",
+        "executable_name": "Godot_v4.3-stable_win32.exe"
+      }
+    }
+  },
+  "lua": {
+    "version": "5.4.2",
+    "description": "A powerful, efficient, lightweight, embeddable scripting language.",
+    "type": "portable",
+    "category": "Development",
+    "executable_name": "lua54.exe",
+    "architectures": {
+      "64": {
+        "url": "https://sourceforge.net/projects/luabinaries/files/5.4.2/Tools%20Executables/lua-5.4.2_Win64_bin.zip/download"
+      },
+      "32": {
+        "url": "https://sourceforge.net/projects/luabinaries/files/5.4.2/Tools%20Executables/lua-5.4.2_Win32_bin.zip/download"
+      }
+    }
   }
 }
