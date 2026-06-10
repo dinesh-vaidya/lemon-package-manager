@@ -963,16 +963,11 @@ def uninstall_package(package_name, from_chat=False):
     package_type = package_data.get('type', 'installer')
 
     if package_type == 'portable':
-        bin_dir = get_portable_bin_dir()
-        executable_name = package_data.get('executable_name')
-        if not executable_name:
-             print(f"Error: No executable_name defined for portable package '{package_name}'. Cannot uninstall.")
-             return
-
-        final_filepath = os.path.join(bin_dir, executable_name)
+        executable_path = find_installed_executable(package_data)
 
         print(f"Uninstalling portable package: {package_name}")
-        if os.path.exists(final_filepath):
+        if executable_path and os.path.exists(executable_path):
+            final_filepath = executable_path
             try:
                 os.remove(final_filepath)
                 print(f"Successfully removed '{final_filepath}'.")
