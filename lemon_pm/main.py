@@ -41,24 +41,142 @@ def get_packages():
     with importlib.resources.open_text('lemon_pm', 'packages.json') as f:
         return json.load(f)
 
-def sync_archive():
-    """Fetches the latest packages.json from the remote repository."""
-    # Using the primary repository URL for Priyanka's lemon-pm
-    url = "https://raw.githubusercontent.com/dinesh-vaidya/lemon-package-manager/main/lemon_pm/packages.json"
-    print("Syncing package archive...")
+def get_cache_file():
+    """Gets the path to the update cache file."""
+    return os.path.join(get_lemon_dir(), 'cache.json')
+
+def get_cache():
+    """Reads the update cache."""
+    cache_file = get_cache_file()
+    if os.path.exists(cache_file):
+        try:
+            with open(cache_file, 'r') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pass
+    return {}
+
+def update_cache(key, value):
+    """Updates a value in the update cache."""
+    cache = get_cache()
+    cache[key] = value
     try:
-        response = requests.get(url, timeout=10)
+        with open(get_cache_file(), 'w') as f:
+            json.dump(cache, f, indent=2)
+    except OSError:
+        pass
+
+def sync_archive(quiet=False):
+    """Fetches the latest packages.json from the remote repository efficiently."""
+    url = "https://raw.githubusercontent.com/dinesh-vaidya/lemon-package-manager/main/lemon_pm/packages.json"
+    if not quiet: print("Syncing package archive...")
+
+    cache = get_cache()
+    headers = {}
+    if 'packages_etag' in cache:
+        headers['If-None-Match'] = cache['packages_etag']
+    if 'packages_last_modified' in cache:
+        headers['If-Modified-Since'] = cache['packages_last_modified']
+
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+
+        if response.status_code == 304:
+            if not quiet: print("Package archive is already up to date (cached).")
+            return True
+
         response.raise_for_status()
         new_packages = response.json()
 
         local_archive = os.path.join(get_lemon_dir(), 'packages.json')
         with open(local_archive, 'w') as f:
             json.dump(new_packages, f, indent=2)
-        print("Successfully updated package archive.")
+
+        # Update cache with new ETag/Last-Modified
+        if 'ETag' in response.headers:
+            update_cache('packages_etag', response.headers['ETag'])
+        if 'Last-Modified' in response.headers:
+            update_cache('packages_last_modified', response.headers['Last-Modified'])
+
+        if not quiet: print("Successfully updated package archive.")
         return True
     except Exception as e:
-        print(f"Failed to sync archive: {e}")
+        if not quiet: print(f"Failed to sync archive: {e}")
         return False
+
+def self_update():
+    """Updates the package manager itself efficiently."""
+    base_url = "https://raw.githubusercontent.com/dinesh-vaidya/lemon-package-manager/main/lemon_pm/"
+    files_to_update = ["main.py", "_version.py", "__init__.py"]
+
+    print("Checking for Lemon Package Manager updates...")
+
+    # Get the directory where the current module is located
+    try:
+        module_dir = pathlib.Path(__file__).parent.resolve()
+    except NameError:
+        print("Error: Could not determine module directory for self-update.")
+        return False
+
+    cache = get_cache()
+    updated_files = 0
+
+    for filename in files_to_update:
+        url = base_url + filename
+        file_path = module_dir / filename
+
+        headers = {}
+        etag_key = f'file_etag_{filename}'
+        last_mod_key = f'file_last_mod_{filename}'
+
+        if etag_key in cache:
+            headers['If-None-Match'] = cache[etag_key]
+        if last_mod_key in cache:
+            headers['If-Modified-Since'] = cache[last_mod_key]
+
+        try:
+            response = requests.get(url, headers=headers, timeout=10)
+
+            if response.status_code == 304:
+                continue
+
+            response.raise_for_status()
+
+            # Write the new content to a temporary file first for atomicity
+            temp_fd, temp_path = tempfile.mkstemp(dir=module_dir)
+            try:
+                with os.fdopen(temp_fd, 'wb') as f:
+                    f.write(response.content)
+                # Atomic move
+                os.replace(temp_path, file_path)
+            except Exception:
+                if os.path.exists(temp_path):
+                    os.remove(temp_path)
+                raise
+
+            # Update cache
+            if 'ETag' in response.headers:
+                update_cache(etag_key, response.headers['ETag'])
+            if 'Last-Modified' in response.headers:
+                update_cache(last_mod_key, response.headers['Last-Modified'])
+
+            updated_files += 1
+            print(f"Updated {filename}.")
+
+        except Exception as e:
+            print(f"Failed to update {filename}: {e}")
+            return False
+
+    if updated_files > 0:
+        print(f"Successfully updated {updated_files} file(s). Changes will take effect on next run.")
+        # Also sync the archive to be sure
+        sync_archive(quiet=True)
+    else:
+        print("Lemon Package Manager is already up to date.")
+        # Still sync the archive if we are checking for updates
+        sync_archive()
+
+    return True
 
 def chat():
     """Starts an interactive chat session to manage packages."""
@@ -123,6 +241,8 @@ def chat():
                 check_updates()
             elif user_input.startswith("update") or user_input == "sync":
                 sync_archive()
+            elif user_input.startswith("self-update") or user_input == "upgrade-lpm":
+                self_update()
             elif user_input in ["help", "help me", "?"]:
                 console.print("Assistant:", style="bold cyan", end=" ")
                 typewriter_effect("I can help with the following tasks:", console, style="grey50")
@@ -556,18 +676,12 @@ def find_installed_executable(package_data):
     package_type = package_data.get('type', 'installer')
 
     if package_type == 'portable':
-        executable_names = [package_data.get('executable_name')]
-        if "architectures" in package_data:
-            for arch in package_data["architectures"].values():
-                if 'executable_name' in arch:
-                    executable_names.append(arch['executable_name'])
-
+        executable_name = package_data.get('executable_name')
+        if not executable_name:
+            return None
         bin_dir = get_portable_bin_dir()
-        for executable_name in filter(None, executable_names):
-            path = pathlib.Path(bin_dir) / executable_name
-            if path.exists():
-                return str(path)
-        return None
+        path = pathlib.Path(bin_dir) / executable_name
+        return str(path) if path.exists() else None
 
     arches_to_check = []
     if "architectures" in package_data:
@@ -734,14 +848,7 @@ def _install_package_with_arch(package_name, package_data, arch):
             return True
         elif package_type == 'portable':
             bin_dir = get_portable_bin_dir()
-            # Check architecture specific executable name first
-            executable_name = None
-            if "architectures" in package_data and arch in package_data["architectures"]:
-                executable_name = package_data["architectures"][arch].get('executable_name')
-
-            if not executable_name:
-                executable_name = package_data.get('executable_name', filename)
-
+            executable_name = package_data.get('executable_name', filename)
             final_filepath = os.path.join(bin_dir, executable_name)
             os.makedirs(os.path.dirname(final_filepath), exist_ok=True)
 
@@ -963,11 +1070,16 @@ def uninstall_package(package_name, from_chat=False):
     package_type = package_data.get('type', 'installer')
 
     if package_type == 'portable':
-        executable_path = find_installed_executable(package_data)
+        bin_dir = get_portable_bin_dir()
+        executable_name = package_data.get('executable_name')
+        if not executable_name:
+             print(f"Error: No executable_name defined for portable package '{package_name}'. Cannot uninstall.")
+             return
+
+        final_filepath = os.path.join(bin_dir, executable_name)
 
         print(f"Uninstalling portable package: {package_name}")
-        if executable_path and os.path.exists(executable_path):
-            final_filepath = executable_path
+        if os.path.exists(final_filepath):
             try:
                 os.remove(final_filepath)
                 print(f"Successfully removed '{final_filepath}'.")
@@ -1209,6 +1321,9 @@ def main():
     # 'update' command
     update_parser = subparsers.add_parser('update', help='Sync the package archive with remote repository')
 
+    # 'self-update' command
+    self_update_parser = subparsers.add_parser('self-update', help='Update the lemon package manager itself')
+
     # 'list' command
     list_parser = subparsers.add_parser('list', help='List available packages, optionally filtered by category')
     list_parser.add_argument('category', nargs='?', default=None, help='The category to filter by')
@@ -1248,6 +1363,8 @@ def main():
         check_updates()
     elif args.command == 'update':
         sync_archive()
+    elif args.command == 'self-update':
+        self_update()
     elif args.command == 'run':
         run_package(args.package_name)
     elif args.command == 'list':
