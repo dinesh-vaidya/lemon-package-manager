@@ -190,7 +190,7 @@ def chat():
     typewriter_effect(f"Hello! I'm your Lemon PM assistant (version {__version__}).", console, style="grey50")
     console.print("Assistant:", style="bold cyan", end=" ")
     typewriter_effect("I can help you search, install, and manage your software. Try asking for a category like 'AI' or just 'list' everything.", console, style="grey50")
-    console.print("Available commands: list, search, install, check, upgrade, update, info, uninstall, exit", style="dim grey50")
+    console.print("Available commands: list, search, install, check, upgrade, update, self-update, info, uninstall, exit", style="dim grey50")
 
     packages = get_packages()
     package_names = list(packages.keys())
@@ -240,9 +240,9 @@ def chat():
             elif user_input.startswith("check") or "updates" in user_input:
                 check_updates()
             elif user_input.startswith("update") or user_input == "sync":
-                if sync_archive():
-                    packages = get_packages()
-                    package_names = list(packages.keys())
+                sync_archive()
+            elif user_input.startswith("self-update") or user_input == "upgrade-lpm":
+                self_update()
             elif user_input in ["help", "help me", "?"]:
                 console.print("Assistant:", style="bold cyan", end=" ")
                 typewriter_effect("I can help with the following tasks:", console, style="grey50")
@@ -251,6 +251,8 @@ def chat():
                 console.print("  - [bold]Install[/bold]: Download and set up a new application.")
                 console.print("  - [bold]Info[/bold]: Get details about a specific software.")
                 console.print("  - [bold]Upgrade[/bold]: Update your installed apps to the latest version.")
+                console.print("  - [bold]Update[/bold]: Efficiently sync the package archive.")
+                console.print("  - [bold]Self-update[/bold]: Update the package manager tool itself.")
                 console.print("  - [bold]Uninstall[/bold]: Remove software from your system.")
             else:
                 # Fuzzy matching for common commands
@@ -464,27 +466,31 @@ def demo():
     console.print("$ lemon upgrade", style="cyan")
     typewriter_effect("   (Prompts to upgrade all or specific outdated packages)", console)
 
-    typewriter_effect("\n8. Sync the package archive:", console)
+    typewriter_effect("\n8. Sync the package archive (efficiently):", console)
     console.print("$ lemon update", style="cyan")
-    typewriter_effect("   (Fetches the latest package definitions from the remote repo)", console)
+    typewriter_effect("   (Fetches the latest package definitions only if they have changed)", console)
 
-    typewriter_effect("\n9. Run a package:", console)
+    typewriter_effect("\n9. Update the package manager itself:", console)
+    console.print("$ lemon self-update", style="cyan")
+    typewriter_effect("   (Efficiently downloads and updates the core source files)", console)
+
+    typewriter_effect("\n10. Run a package:", console)
     console.print("$ lemon run vscode", style="cyan")
     typewriter_effect("   (This will attempt to launch the main executable for VS Code)", console)
 
-    typewriter_effect("\n10. List all available categories (with aliases):", console)
+    typewriter_effect("\n11. List all available categories (with aliases):", console)
     console.print("$ lemon cat", style="cyan")
     list_categories()
 
-    typewriter_effect("\n11. Chat with the AI Assistant (Smart suggestions, fuzzy search):", console)
+    typewriter_effect("\n12. Chat with the AI Assistant (Smart suggestions, fuzzy search):", console)
     console.print("$ lemon chat", style="cyan")
     typewriter_effect("   (Starts an interactive session to manage packages with natural language)", console)
 
-    typewriter_effect("\n12. Show the version of lemon-pm:", console)
+    typewriter_effect("\n13. Show the version of lemon-pm:", console)
     console.print("$ lemon version", style="cyan")
     console.print(f"Lemon Package Manager version {__version__} (status: {__status__})")
 
-    typewriter_effect("\n13. Uninstall the lemon package manager itself:", console)
+    typewriter_effect("\n14. Uninstall the lemon package manager itself:", console)
     console.print("$ lemon uninstall-lpm", style="cyan")
     typewriter_effect("   (This will prompt for confirmation before uninstalling)", console)
 

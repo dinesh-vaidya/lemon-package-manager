@@ -104,11 +104,20 @@ lpm upgrade vlc
 
 ### `lemon update` or `lpm update`
 
-Syncs your local package archive with the remote repository to ensure you have the latest definitions and version information.
+Syncs your local package archive with the remote repository efficiently using HTTP caching headers (only downloads if changed).
 
 ```bash
 # Sync package archive
 lemon update
+```
+
+### `lemon self-update` or `lpm self-update`
+
+Efficiently updates the Lemon Package Manager tool itself by downloading and replacing core source files only if they have changed.
+
+```bash
+# Update the package manager
+lemon self-update
 ```
 
 ### `lemon uninstall <package_name>` or `lpm uninstall <package_name>`
