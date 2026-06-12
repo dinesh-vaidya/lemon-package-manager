@@ -240,9 +240,9 @@ def chat():
             elif user_input.startswith("check") or "updates" in user_input:
                 check_updates()
             elif user_input.startswith("update") or user_input == "sync":
-                sync_archive()
-            elif user_input.startswith("self-update") or user_input == "upgrade-lpm":
-                self_update()
+                if sync_archive():
+                    packages = get_packages()
+                    package_names = list(packages.keys())
             elif user_input in ["help", "help me", "?"]:
                 console.print("Assistant:", style="bold cyan", end=" ")
                 typewriter_effect("I can help with the following tasks:", console, style="grey50")
